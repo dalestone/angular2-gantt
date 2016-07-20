@@ -19,7 +19,7 @@ TBA
 TBA
 
 ## Demo
-TBA
+![Demo](Demo.gif)
 
 ## Compatibility (tested with)
 * Firefox (latest)
