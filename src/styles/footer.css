@@ -1,0 +1,9 @@
+.gantt-footer {
+    background-color: #FAFAFA;
+    height: 36px;    
+    border-top: 1px solid #CECECE;
+}
+
+.gantt-footer-actions {
+    float:right;
+}

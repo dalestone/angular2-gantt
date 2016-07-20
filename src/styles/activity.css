@@ -1,0 +1,120 @@
+  .gantt_activity {
+        /*overflow-x: hidden;*/
+        overflow-x: auto;
+        height: 250px;
+        overflow-y: hidden;
+        display: inline-block;
+        vertical-align: top;
+        position:relative;
+    }
+
+    .gantt_activity_area {
+        position: relative;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        -webkit-user-select: none;
+    }
+
+    .gantt_vertical_scroll {
+        background-color: transparent;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        position: absolute;
+        right: 0;
+        display: block;
+        height: 247px;
+        width: 18px;
+        top: 87px;
+    }
+
+    .gantt_activity {
+        /*overflow-x: hidden;*/
+        overflow-x: auto;
+        height: 250px;
+        overflow-y: hidden;
+        display: inline-block;
+        vertical-align: top;
+        position:relative;
+    }
+
+    .gantt_activity_area {
+        position: relative;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        -webkit-user-select: none;
+    }
+
+    .gantt_vertical_scroll {
+        background-color: transparent;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        position: absolute;
+        right: 0;
+        display: block;
+        height: 247px;
+        width: 18px;
+        top: 87px;
+    }
+
+        .grid {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    display: inline-block;
+    vertical-align: top;
+    border-right: 1px solid #cecece;
+}
+
+.grid_scale {
+    color: #6b6b6b;
+    font-size: 12px;
+    border-bottom: 1px solid #cecece;
+    background-color: #fff;
+}
+
+.grid_head_cell {
+    /*color: #a6a6a6;*/
+    border-top: none !important;
+    border-right: none !important;
+    line-height: inherit;
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: top;
+    border-right: 1px solid #cecece;
+    /*text-align: center;*/
+    position: relative;
+    cursor: default;
+    height: 100%;
+    -moz-user-select: -moz-none;
+    -webkit-user-select: none;
+     overflow: hidden;
+}
+
+.grid_data {
+    overflow:hidden;   
+}
+
+.grid_row {
+    box-sizing: border-box;
+    border-bottom: 1px solid #ebebeb;
+    background-color: #fff;
+    position: relative;
+    -webkit-user-select: none;
+}
+
+.grid_row:hover {
+    background-color: #eeeeee;
+}
+
+.grid_cell {
+    border-right: none;
+    color: #454545;
+    display: inline-block;
+    vertical-align: top;
+    padding-left: 6px;
+    padding-right: 6px;
+    height: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 13px;
+    box-sizing: border-box;
+}

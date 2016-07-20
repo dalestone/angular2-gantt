@@ -1,0 +1,18 @@
+.gantt-header {
+    background-color: #FAFAFA;
+    height: 50px;
+    border-bottom: 1px solid #CECECE;
+}
+
+.gantt-header-title {
+    padding: 15px;   
+    display: inline-block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+}
+
+.gantt-header-actions {
+    display: inline;
+    float: right;
+    padding: 6px;
+}

@@ -1,0 +1,8 @@
+.gantt_container {
+    font-family: Arial;
+    font-size: 13px;
+    border: 1px solid #cecece;
+    position: relative;
+    white-space: nowrap;   
+    margin-top: 20px;
+}

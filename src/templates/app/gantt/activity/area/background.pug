@@ -1,0 +1,3 @@
+.gantt_activity_bg([ngStyle]="{ 'height': containerHeight + 'px', 'width': containerWidth + 'px'}")
+  .gantt_activity_row(style='height: 35px', *ngFor='let row of rows')
+    .gantt_activity_cell([ngStyle]="{'width': cellWidth + 'px'}", *ngFor='let cell of cells; let l = last', [ngClass]="[(isDayWeekend(cell)) ? 'weekend' : '', l ? 'last_column_cell' : '']")

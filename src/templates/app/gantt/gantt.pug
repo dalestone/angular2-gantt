@@ -1,0 +1,6 @@
+div(style='width: 100%;')
+  .gantt_container((window:resize)='onResize($event)', [ngStyle]="{ 'width': ganttContainerWidth + 'px' }")
+    gantt-header([name]='project.name')
+    gantt-grid([project]='project')
+    gantt-activity([project]='project', [options]='options')
+    gantt-footer([project]='project')

@@ -1,0 +1,26 @@
+.weekend {
+    background-color:#FAFAFA;
+}
+
+.time_scale {
+    font-size: 12px;
+    border-bottom: 1px solid #cecece;
+    background-color: #fff;
+}
+
+.time_scale_line {
+    box-sizing: border-box;
+}
+
+.time_scale_line:first-child {
+    border-top: none;
+}
+
+.time_scale_cell {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 1px solid #cecece;
+    text-align: center;
+    height: 100%;
+}

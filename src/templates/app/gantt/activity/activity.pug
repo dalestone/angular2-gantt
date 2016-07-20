@@ -1,0 +1,16 @@
+.grid(#ganttGrid='', style='height: 300px; width: 300px')
+  .grid_scale(style='height: 35px; line-height: 35px; width: 300px')
+    .grid_head_cell(*ngFor='let column of gridColumns', [style.width]='column.width')
+      label {{column.name}}
+  .grid_data(#ganttGridData='', [ngStyle]="{ 'height': gridDataHeight + 'px'}")
+    .grid_row(style='height: 35px; line-height: 35px;', *ngFor='let data of gridData', [style.backgroundcolor]='rowHighlight(data)')
+      .grid_cell(style='width: 300px')
+        .gantt_tree_content
+          | {{data.name}} 
+.gantt_activity((window:resize)='onResize($event)', [ngStyle]="{ 'height': ganttActivityHeight + 'px', 'width': ganttActivityWidth + 'px'}")
+  time-scale([scale]='scale', [dimensions]='dimensions')
+  .gantt_activity_area(#ganttActivityArea='', [ngStyle]="{ 'height': containerHeight + 'px', 'width': containerWidth + 'px'}")
+    activity-background([scale]='scale', [grid]='grid', [dimensions]='dimensions')
+    activity-bars([scale]='scale', [dimensions]='dimensions', [data]='data')
+.gantt_vertical_scroll(#verticalscroll='', (scroll)='onVerticalScroll(verticalScroll, ganttGrid, ganttActivityArea)')
+  div([ngStyle]="{ 'height': containerHeight + 'px'}")
