@@ -5,6 +5,7 @@ import {
     beforeEachProviders,
     expect
 } from '@angular/core/testing';
+
 import { GanttService } from './gantt.service';
 describe('Gantt Service', () => {
     beforeEachProviders(() => [

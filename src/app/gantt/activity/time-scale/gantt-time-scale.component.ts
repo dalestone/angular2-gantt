@@ -1,6 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NgStyle} from '@angular/common';
-
 import { GanttService } from '../../gantt.service';
 
 @Component({
@@ -9,17 +7,11 @@ import { GanttService } from '../../gantt.service';
     styleUrls: [ './timescale.css' ],
     providers: [
         GanttService
-    ],
-    directives: [
-        NgStyle
     ]
 })
 export class GanttTimeScaleComponent implements OnInit {
-    @Input() 
-    scale;
-
-    @Input()
-    dimensions;
+    @Input() scale;
+    @Input() dimensions;
         
     private scaleLine: Date[];
     private cellWidth = 0;

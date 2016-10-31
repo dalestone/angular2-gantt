@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NgStyle} from '@angular/common';
 import { GanttService } from '../../gantt.service';
 
 @Component({
@@ -12,9 +11,7 @@ import { GanttService } from '../../gantt.service';
 })
 export class GanttActivityBarsComponent implements OnInit {
     @Input() scale;
-
     @Input() dimensions;
-
     @Input() data;
 
     private containerHeight: number = 0;

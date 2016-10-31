@@ -1,24 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgStyle} from '@angular/common';
-
-import { GanttHeaderComponent } from './header/gantt-header.component';
-import { GanttActivityComponent } from './activity/gantt-activity.component';
-import { GanttFooterComponent } from './footer/gantt-footer.component';
 import { GanttService } from './gantt.service';
 
 @Component({
     selector: 'gantt',
     templateUrl: './app/gantt/gantt.html',
     styleUrls: [ './gantt.css' ],
-    directives: [
-        NgStyle,
-        GanttHeaderComponent,
-        GanttActivityComponent,
-        GanttFooterComponent
-    ],
-    providers: [
-        GanttService
-    ]
+    providers: []
 })
 export class GanttComponent implements OnInit {
 

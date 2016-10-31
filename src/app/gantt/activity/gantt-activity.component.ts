@@ -1,9 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
-import { NgStyle} from '@angular/common';
 
-import { GanttTimeScaleComponent } from './time-scale/gantt-time-scale.component';
-import { GanttActivityBackgroundComponent } from './background/activity-background.component';
-import { GanttActivityBarsComponent } from './bars/activity-bars.component';
 import { GanttService } from '../gantt.service';
 import { GanttConfig } from '../gantt-config'; // Testing...
 
@@ -13,12 +9,6 @@ import { GanttConfig } from '../gantt-config'; // Testing...
     selector: 'gantt-activity',
     templateUrl: './app/gantt/activity/activity.html',
     styleUrls: [ './activity.css' ],
-    directives: [
-        NgStyle,
-        GanttTimeScaleComponent,
-        GanttActivityBackgroundComponent,
-        GanttActivityBarsComponent
-    ],
     providers: [
         GanttService,
         GanttConfig

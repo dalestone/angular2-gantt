@@ -1,6 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NgStyle} from '@angular/common';
-
 import { GanttService } from '../../gantt.service';
 
 @Component({
@@ -9,20 +7,12 @@ import { GanttService } from '../../gantt.service';
     styleUrls: [ './background.css' ],
     providers: [
         GanttService
-    ],
-    directives: [
-        NgStyle
     ]
 })
 export class GanttActivityBackgroundComponent implements OnInit {
-    @Input()
-    scale;
-
-    @Input()
-    grid;
-
-    @Input()
-    dimensions;
+    @Input() scale;
+    @Input() grid;
+    @Input() dimensions;
 
     private containerHeight;
     private containerWidth;
