@@ -12,5 +12,5 @@
   .gantt_activity_area(#ganttActivityArea='', [ngStyle]="{ 'height': containerHeight + 'px', 'width': containerWidth + 'px'}")
     activity-background([scale]='scale', [grid]='grid', [dimensions]='dimensions')
     activity-bars([scale]='scale', [dimensions]='dimensions', [data]='data')
-.gantt_vertical_scroll(#verticalscroll='', (scroll)='onVerticalScroll(verticalScroll, ganttGrid, ganttActivityArea)')
+.gantt_vertical_scroll(#verticalScroll='', (scroll)='onVerticalScroll(verticalScroll, ganttGrid, ganttActivityArea)')
   div([ngStyle]="{ 'height': containerHeight + 'px'}")

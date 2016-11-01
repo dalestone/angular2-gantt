@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { GanttConfig } from './gantt-config';
+import { GanttConfig } from '../gantt-config';
 
 @Injectable()
 export class GanttService {
-    
     public rowHeight: number = 0;
     public cellWidth: number = 0;
     public windowInnerWidth: number = 0;
@@ -14,7 +13,7 @@ export class GanttService {
     public barTop: number = 0;
 
     constructor() {
-        var _ganttConfig = new GanttConfig();
+        let _ganttConfig = new GanttConfig();
 
         this.rowHeight = _ganttConfig.rowHeight;
         this.cellWidth = _ganttConfig.cellWidth;
@@ -25,15 +24,15 @@ export class GanttService {
     }
 
     private calculateBarWidth(start: Date, end: Date): number {
-        var days = this.calculateDiffDays(start, end);
-        var width: number = days * this.cellWidth + days;
+        let days = this.calculateDiffDays(start, end);
+        let width: number = days * this.cellWidth + days;
 
         return width;
     }
 
     private calculateBarLeft(start: Date, scale: any[]): number {
-        var left = 0;
-        for (var i = 0; i < scale.length; i++) {
+        let left = 0;
+        for (let i = 0; i < scale.length; i++) {
             if (start.valueOf() === scale[i].valueOf()) {
                 left = i * this.cellWidth + i;
             }
@@ -42,11 +41,11 @@ export class GanttService {
     }
 
     public calculateBars(lines, scale) {
-        var top: number = 2;
-        var bars = [];
+        let top: number = 2;
+        let bars = [];
 
-        console.log(lines);
-        console.log(scale);
+        // console.log(lines);
+        // console.log(scale);
 
         for (let line of lines) {
             let barStyle = this.calculateBarStyle(line.resource);
@@ -54,10 +53,10 @@ export class GanttService {
             bars.push({
                 style: {
                     top: top,
-                    left: 76, //this.calculateBarLeft(line.start, scale),
+                    left: this.calculateBarLeft(line.start, scale), // 76
                     height: this.barHeight,
                     lineHeight: this.barLineHeight,
-                    width: 76, //this.calculateBarWidth(line.start, line.end),
+                    width: this.calculateBarWidth(line.start, line.end), // 76 
                     backgroundColour: barStyle.backgroundColour,
                     border: barStyle.border
                 },
@@ -68,7 +67,7 @@ export class GanttService {
                     start: line.start,
                     end: line.end
                 }
-            })
+            });
             top += this.barTop;
         }
 
@@ -76,26 +75,26 @@ export class GanttService {
     }
 
     private calculateBarStyle(resource: string) {
-        var lineStyle = { backgroundColour: "", border: "" };
+        let lineStyle = { backgroundColour: '', border: '' };
 
         return lineStyle;
     }
 
     public calculateBarProgress(width: number, percent: number) {
-        var progress = (width / 100) * percent - 2;
+        let progress = (width / 100) * percent - 2;
         return progress;
     }
 
     public calculateDiffDays(start: Date, end: Date): number {
-        var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds /ms
-        var diffDays = Math.abs((start.getTime() - end.getTime()) / (oneDay));
-        var days = Math.round(diffDays);
+        let oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds /ms
+        let diffDays = Math.abs((start.getTime() - end.getTime()) / (oneDay));
+        let days = Math.round(diffDays);
 
         return days;
     }
 
     public calculateScale(start: Date, end: Date) {
-        var scale = [];
+        let scale = [];
 
         while (start.getTime() <= end.getTime()) {
             scale.push(start);
@@ -106,7 +105,7 @@ export class GanttService {
     }
 
     public isDayWeekend(date: Date): boolean {
-        var day = date.getDay();
+        let day = date.getDay();
 
         if (day === 6 || day === 0) {
             return true;
@@ -115,13 +114,13 @@ export class GanttService {
     }
 
     public addDays(date, days) {
-        var result = new Date(date);
+        let result = new Date(date);
         result.setDate(result.getDate() + days);
         return result;
     }
 
     public removeDays(date, days) {
-        var result = new Date(date);
+        let result = new Date(date);
         result.setDate(result.getDate() - days);
         return result;
     }
@@ -146,7 +145,7 @@ export class GanttService {
     }
 
     public scrollTop(verticalScrollElem, ganttGridElem, ganttActivityAreaElem) {
-        var verticalScrollTop = verticalScrollElem.scrollTop;
+        let verticalScrollTop = verticalScrollElem.scrollTop;
 
         if (verticalScrollTop !== null && verticalScrollTop !== undefined) {
             this.setGridScrollTop(verticalScrollTop, ganttGridElem);

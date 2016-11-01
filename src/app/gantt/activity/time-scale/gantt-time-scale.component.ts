@@ -1,25 +1,17 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NgStyle} from '@angular/common';
-
-import { GanttService } from '../../gantt.service';
+import { GanttService } from '../../services/gantt.service';
 
 @Component({
     selector: 'time-scale',
-    templateUrl: './app/gantt/activity/area/timescale.html',
-    styleUrls: [ './timescale.css' ],
+    templateUrl: './gantt-time-scale.component.html',
+    styleUrls: [ './gantt-time-scale.component.css' ],
     providers: [
         GanttService
-    ],
-    directives: [
-        NgStyle
     ]
 })
 export class GanttTimeScaleComponent implements OnInit {
-    @Input() 
-    scale;
-
-    @Input()
-    dimensions;
+    @Input() scale;
+    @Input() dimensions;
         
     private scaleLine: Date[];
     private cellWidth = 0;
