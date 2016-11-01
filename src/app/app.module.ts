@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent }   from './app.component';
 import { GanttModule } from './gantt/gantt.module';
 
 @NgModule({
     imports: [
-        CommonModule, 
+        BrowserModule,
         GanttModule
     ],
     exports: [],
     declarations: [
+        AppComponent
     ],
     providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

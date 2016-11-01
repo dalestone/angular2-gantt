@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { GanttService } from '../../gantt.service';
+import { GanttService } from '../../services/gantt.service';
 
 @Component({
     selector: 'time-scale',
-    templateUrl: './app/gantt/activity/area/timescale.html',
-    styleUrls: [ './timescale.css' ],
+    templateUrl: './gantt-time-scale.component.html',
+    styleUrls: [ './gantt-time-scale.component.css' ],
     providers: [
         GanttService
     ]

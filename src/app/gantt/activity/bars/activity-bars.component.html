@@ -1,0 +1,14 @@
+
+<div class="gantt_activity_bars_area" [ngStyle]="{ 'height': containerHeight + 'px', 'width': containerWidth + 'px' }">
+  <div class="gantt_activity_line" *ngFor="let bar of bars" [ngStyle]="{ 'left': bar.style.left  + 'px', 'top': bar.style.top + 'px', 'height': bar.style.height + 'px', 'line-height': bar.style.lineHeight + 'px', 'width': bar.style.width + 'px', 'background-color': bar.style.backgroundColour, 'border': bar.style.border }" (mousedown)="move($event, bar)">
+    <div class="gantt_activity_progress" [ngStyle]="{'width': drawProgress(bar) + 'px'}"></div>
+    <div class="gantt_activity_progress_drag" style="left: 518px"></div>
+    <div class="gantt_activity_content"></div>
+    <div class="gantt_activity_link_control gantt_activity_right" (mousedown)="expandRight($event, bar)" style="height: 26px; line-height: 30px">
+      <div class="gantt_link_point"></div>
+    </div>
+    <div class="gantt_activity_link_control gantt_activity_left" (mousedown)="expandLeft($event, bar)" style="height: 26px; line-height: 30px">
+      <div class="gantt_link_point"></div>
+    </div>
+  </div>
+</div>
