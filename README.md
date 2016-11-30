@@ -3,12 +3,13 @@
 Work in progress!
 
 ## Description
-A simple Angular2 Gantt component. Uses "2.0.0-rc.1" of Angular2.
+A simple Angular2 Gantt component. Uses "2.1.0" of Angular2.
+This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.18.
 
 ## Getting Started
 1. Fork and clone this repo
 2. npm install
-3. npm run try-web
+3. ng serve
 
 ## Installation
 
@@ -28,4 +29,3 @@ TBA
 
 ## License
 * License: MIT
-

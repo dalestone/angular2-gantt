@@ -1,26 +1,15 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
-import { NgStyle} from '@angular/common';
 
-import { GanttTimeScaleComponent } from './time-scale/gantt-time-scale.component';
-import { GanttActivityBackgroundComponent } from './background/activity-background.component';
-import { GanttActivityBarsComponent } from './bars/activity-bars.component';
-import { GanttService } from '../gantt.service';
+import { GanttService } from '../services/gantt.service';
 import { GanttConfig } from '../gantt-config'; // Testing...
 
 // <activity-bars [scale]="scale" [dimensions]="dimensions" [data]="data"></activity-bars>
 
 @Component({
     selector: 'gantt-activity',
-    templateUrl: './app/gantt/activity/activity.html',
-    styleUrls: [ './activity.css' ],
-    directives: [
-        NgStyle,
-        GanttTimeScaleComponent,
-        GanttActivityBackgroundComponent,
-        GanttActivityBarsComponent
-    ],
+    templateUrl: './gantt-activity.component.html',
+    styleUrls: [ './gantt-activity.component.css' ],
     providers: [
-        GanttService,
         GanttConfig
     ]
 })
@@ -65,18 +54,18 @@ export class GanttActivityComponent implements OnInit {
     private gridData = [];
     private gridColumns = [];
     private gridDataHeight = 0;
-    
-    constructor(public elem: ElementRef,
-        private ganttService: GanttService) {
 
+    constructor(
+        public elem: ElementRef,
+        private ganttService: GanttService) {
     }
 
     ngOnInit() {
-        //TODO: this needs to be refactored as its very messy!
+        // TODO: this needs to be refactored as its very messy!
         this.start = this.options.scale.start;
         this.end = this.options.scale.end;
         this.dates = this.ganttService.calculateScale(this.start, this.end);
-        this.gridData = this.project.tasks;    
+        this.gridData = this.project.tasks;
         this.calculateRowsLength();
         this.calculateCellsLength();
         this.containerWidth = this.calculateContainerWidth() + this.ganttService.cellWidth;
@@ -87,8 +76,8 @@ export class GanttActivityComponent implements OnInit {
         this.setScale();
         this.setGrid();
         this.setDimensions();
-        this.setData();    
-        this.setSizes();                               
+        this.setData();
+        this.setSizes();
         this.setGridColumns();
         this.gridDataHeight = this.calculateGridDataHeight();
     }
@@ -96,21 +85,21 @@ export class GanttActivityComponent implements OnInit {
     onVerticalScroll(verticalScroll, ganttGrid, ganttActivityArea): void {
         this.ganttService.scrollTop(verticalScroll, ganttGrid, ganttActivityArea);
     }
-    
-    onWheel(verticalScroll, ganttGrid, ganttActivityArea) {                  
-         //this._ganttScrollService.scrollTop(verticalScroll, ganttGrid, ganttActivityArea);                 
-         //return false; // return false to stop page scrolling
-    }
-    
+
+    // onWheel(verticalScroll, ganttGrid, ganttActivityArea) {
+        //  this._ganttScrollService.scrollTop(verticalScroll, ganttGrid, ganttActivityArea);                 
+        //  return false; // return false to stop page scrolling
+        // console.log('wheel');
+    // }
+
     onResize(event): void {
-        var activityContainerSizes = this.ganttService.calculateActivityContainerDimensions();
+        let activityContainerSizes = this.ganttService.calculateActivityContainerDimensions();
         this.ganttActivityHeight = activityContainerSizes.height;
-        this.ganttActivityWidth = activityContainerSizes.width;     
+        this.ganttActivityWidth = activityContainerSizes.width;
     }
-    
+
     rowHighlight(data) {
-        var backgroundColour = '';
-    
+        let backgroundColour = '';
         return backgroundColour;
     }
 
@@ -134,13 +123,13 @@ export class GanttActivityComponent implements OnInit {
     }
 
     private calculateContainerHeight(): number {
-        var containerHeight = this.rowsCount * this.ganttService.rowHeight;
+        let containerHeight = this.rowsCount * this.ganttService.rowHeight;
 
         return containerHeight;
     }
 
     private calculateContainerWidth(): number {
-        var containerWidth = this.cellsCount * this.ganttService.cellWidth;
+        let containerWidth = this.cellsCount * this.ganttService.cellWidth;
 
         return containerWidth;
     }
@@ -160,11 +149,11 @@ export class GanttActivityComponent implements OnInit {
 
     private setGridColumns() {
         return this.gridColumns = [
-            { name: "Task", width: 346 }
+            { name: 'Task', width: 346 }
         ];
     }
 
-    private calculateGridDataHeight(): number {     
+    private calculateGridDataHeight(): number {
         return this.gridData.length * this.ganttService.barTop;
     }
 }

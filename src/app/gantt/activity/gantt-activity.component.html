@@ -1,0 +1,25 @@
+
+<div class="grid" #ganttGrid style="height: 300px; width: 300px">
+  <div class="grid_scale" style="height: 35px; line-height: 35px; width: 300px">
+    <div class="grid_head_cell" *ngFor="let column of gridColumns" [style.width]="column.width">
+      <label>{{column.name}}</label>
+    </div>
+  </div>
+  <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': gridDataHeight + 'px'}">
+    <div class="grid_row" style="height: 35px; line-height: 35px" *ngFor="let data of gridData" [style.backgroundcolor]="rowHighlight(data)">
+      <div class="grid_cell" style="width: 300px">
+        <div class="gantt_tree_content">{{data.name}} </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="gantt_activity" (window:resize)="onResize($event)" [ngStyle]="{ 'height': ganttActivityHeight + 'px', 'width': ganttActivityWidth + 'px'}">
+  <time-scale [scale]="scale" [dimensions]="dimensions"></time-scale>
+  <div class="gantt_activity_area" #ganttActivityArea [ngStyle]="{ 'height': containerHeight + 'px', 'width': containerWidth + 'px'}">
+    <activity-background [scale]="scale" [grid]="grid" [dimensions]="dimensions"></activity-background>
+    <activity-bars [scale]="scale" [dimensions]="dimensions" [data]="data"></activity-bars>
+  </div>
+</div>
+<div class="gantt_vertical_scroll" #verticalScroll (scroll)="onVerticalScroll(verticalScroll, ganttGrid, ganttActivityArea)">
+  <div [ngStyle]="{ 'height': containerHeight + 'px'}"></div>
+</div>

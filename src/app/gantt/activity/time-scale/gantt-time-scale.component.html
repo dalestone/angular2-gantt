@@ -1,0 +1,6 @@
+
+<div class="time_scale" [ngStyle]="{ 'width': dimensions.width + 'px'}">
+  <div class="time_scale_line" style="height:35px; line-height:35px; position:relative">
+    <div class="time_scale_cell" *ngFor="let date of scaleLine" [ngStyle]=" { 'width': cellWidth + 'px' }" [ngClass]="(isDayWeekend(date)) ? 'weekend' : ''">{{date | date: 'dd-MM-yyyy'}}</div>
+  </div>
+</div>

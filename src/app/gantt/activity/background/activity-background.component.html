@@ -1,0 +1,6 @@
+
+<div class="gantt_activity_bg" [ngStyle]="{ 'height': containerHeight + 'px', 'width': containerWidth + 'px'}">
+  <div class="gantt_activity_row" style="height: 35px" *ngFor="let row of rows">
+    <div class="gantt_activity_cell" [ngStyle]="{'width': cellWidth + 'px'}" *ngFor="let cell of cells; let l = last" [ngClass]="[(isDayWeekend(cell)) ? 'weekend' : '', l ? 'last_column_cell' : '']"></div>
+  </div>
+</div>
