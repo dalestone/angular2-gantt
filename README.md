@@ -1,31 +1,21 @@
-# Angular2-gantt v0.0.1
+# Angular 2 Gantt 
+[![npm version](https://badge.fury.io/js/angular2-gantt.svg)](hhttps://www.npmjs.com/package/angular2-gantt)
 
-Work in progress!
+This is the home for the Angular 2 gantt component. This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.18.
 
-## Description
-A simple Angular2 Gantt component. Uses "2.1.0" of Angular2.
-This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.18.
+The aim of this project is to make a material design angular 2 gantt component.
 
-## Getting Started
-1. Fork and clone this repo
+### Getting Started
+1. git clone https://github.com/dalestone/angular2-gantt.git
 2. npm install
-3. ng serve
+3. npm start
 
-## Installation
-
-To install this component to an external project:
-TBA
-
-## Usage
-TBA
+### Project status
+Angular 2 gantt is currently in alpha and under active development.
+During alpha, breaking API and behaviour changes will be occuring regularly.
 
 ## Demo
-![Demo](Demo.gif)
+![Demo](./docs/images/demo.gif)
 
-## Compatibility (tested with)
-* Firefox (latest)
-* Chromium (latest)
-* IE (latest)
-
-## License
-* License: MIT
+## Browser support
+Angular 2 Gantt supports the most recent versions of mahor browsers: Chrome (including Android), Firefox, Safari (including iOS), and IE11 / Edge.
