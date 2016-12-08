@@ -1,14 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { NgStyle} from '@angular/common';
-import { GanttService } from './services/gantt.service';
+import { Component } from '@angular/core';
 
 @Component({
-    selector: 'gantt',
-    templateUrl: './gantt.component.html',
-    styleUrls: [ './gantt.component.css' ],
-    providers: []
+    selector: 'demo-app',
+    templateUrl: './demo-app.component.html'
 })
-export class GanttComponent implements OnInit {
+export class DemoAppComponent {
+
+    constructor() {}
 
     // Default options
     options = {
@@ -53,19 +51,4 @@ export class GanttComponent implements OnInit {
                 ]
             };
 
-    ganttContainerWidth;
-
-    constructor(private ganttService: GanttService) { }
-
-    ngOnInit() {
-        this.setSizes();
-    }
-
-    setSizes() {
-        this.ganttContainerWidth = this.ganttService.calculateContainerWidth();
-    }
-
-    onResize($event) {
-        this.setSizes();
-    }
 }
