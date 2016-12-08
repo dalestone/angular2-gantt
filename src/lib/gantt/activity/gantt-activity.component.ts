@@ -1,19 +1,17 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 
-import { GanttService } from '../services/gantt.service';
-import { GanttConfig } from '../gantt-config'; // Testing...
-
-// <activity-bars [scale]="scale" [dimensions]="dimensions" [data]="data"></activity-bars>
+import { GanttService } from '../shared/services/gantt.service';
+import { GanttConfig } from '../shared/services/gantt-config.service'; 
 
 @Component({
     selector: 'gantt-activity',
     templateUrl: './gantt-activity.component.html',
     styleUrls: [ './gantt-activity.component.css' ],
-    providers: [
-        GanttConfig
-    ]
 })
 export class GanttActivityComponent implements OnInit {
+    @Input() project;
+    @Input() options;
+
     private timeScale;
     private background;
     private bars;
@@ -47,13 +45,11 @@ export class GanttActivityComponent implements OnInit {
 
     private data = [];
 
-    @Input() project;
-
-    @Input() options;
-
     private gridData = [];
     private gridColumns = [];
     private gridDataHeight = 0;
+
+    public gridScale;
 
     constructor(
         public elem: ElementRef,

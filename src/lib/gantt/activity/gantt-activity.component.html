@@ -1,5 +1,6 @@
 
 <div class="grid" #ganttGrid style="height: 300px; width: 300px">
+  <!--TODO(dale): the style should use the gantt-config -->
   <div class="grid_scale" style="height: 35px; line-height: 35px; width: 300px">
     <div class="grid_head_cell" *ngFor="let column of gridColumns" [style.width]="column.width">
       <label>{{column.name}}</label>

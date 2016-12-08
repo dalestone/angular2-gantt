@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { GanttService } from '../../services/gantt.service';
+import { GanttService } from '../../shared/services/gantt.service';
 
 @Component({
     selector: 'activity-bars',
@@ -28,6 +28,7 @@ export class GanttActivityBarsComponent implements OnInit {
         this.drawBars();
     }
 
+    //TODO(dale): the ability to move bars needs reviewing and there are a few quirks
     expandLeft($event, bar) {
         $event.stopPropagation();
 
@@ -117,7 +118,6 @@ export class GanttActivityBarsComponent implements OnInit {
 
     private drawBars(): void {
         this.bars = this.ganttService.calculateBars(this.data, this.timescale);
-        console.log(this.bars);
     }
 
     private addMouseEventListeners(dragFn) {

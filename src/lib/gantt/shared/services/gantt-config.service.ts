@@ -1,3 +1,6 @@
+import { Injectable } from '@angular/core';
+
+@Injectable()
 export class GanttConfig {
     //TODO(dale): these settings don't seem to apply to some elements when they should, look for hard-coded values and replace
     public cellHeight: number = 35;

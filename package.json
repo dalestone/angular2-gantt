@@ -1,6 +1,8 @@
 {
   "name": "angular2-gantt",
   "version": "1.0.0-alpha.0",
+  "description": "Gantt component for Angular 2",
+  "bugs": "https://github.com/dalestone/angular2-gantt/issues",
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
@@ -9,6 +11,10 @@
     "test": "ng test",
     "pree2e": "webdriver-manager update",
     "e2e": "protractor"
+  },
+  "repository": {
+    "type":"git",
+    "url": "https://github.com/dalestone/angular2-gantt.git"
   },
   "private": true,
   "dependencies": {

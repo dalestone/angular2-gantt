@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgStyle} from '@angular/common';
-import { GanttService } from './services/gantt.service';
+import { GanttService } from './shared/services/gantt.service';
 
 @Component({
     selector: 'gantt',

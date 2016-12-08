@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GanttConfig } from '../gantt-config';
+import { GanttConfig } from './gantt-config.service';
 
 @Injectable()
 export class GanttService {
@@ -43,9 +43,6 @@ export class GanttService {
     public calculateBars(lines, scale) {
         let top: number = 2;
         let bars = [];
-
-        // console.log(lines);
-        // console.log(scale);
 
         for (let line of lines) {
             let barStyle = this.calculateBarStyle(line.resource);
