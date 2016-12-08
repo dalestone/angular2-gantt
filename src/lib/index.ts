@@ -1,1 +1,1 @@
-export * from './gantt/index';
+export * from './gantt';
