@@ -1,0 +1,30 @@
+{
+    "name": "ng2-gantt",
+    "version": "0.0.2",
+    "description": "Angular 2 Gantt",
+    "main":"./gantt.umd.js",
+    "module": "./index.js",
+    "typings": "./index.d.ts",    
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/dalestone/angular2-gantt.git"
+    },
+    "keywords": [
+        "angular",
+        "material",
+        "gantt",
+        "angular2",
+        "gantt html"
+    ],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/dalestone/angular2-gantt/issues"
+    },
+    "homepage": "https://github.com/dalestone/angular2-gantt/#readme",
+    "peerDependencies": {
+        
+    },
+    "dependencies": {
+        
+    }
+}

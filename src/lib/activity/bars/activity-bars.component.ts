@@ -10,14 +10,14 @@ import { GanttService } from '../../shared/services/gantt.service';
     ]
 })
 export class GanttActivityBarsComponent implements OnInit {
-    @Input() scale;
-    @Input() dimensions;
-    @Input() data;
+    @Input() scale:any;
+    @Input() dimensions:any;
+    @Input() data:any;
 
     private containerHeight: number = 0;
     private containerWidth: number = 0;
-    private bars = [];
-    private timescale;
+    private bars: any[] = [];
+    private timescale: any;
 
     constructor(private ganttService: GanttService) { }
 
@@ -29,7 +29,7 @@ export class GanttActivityBarsComponent implements OnInit {
     }
 
     //TODO(dale): the ability to move bars needs reviewing and there are a few quirks
-    expandLeft($event, bar) {
+    expandLeft($event: any, bar: any) {
         $event.stopPropagation();
 
         let ganttService = this.ganttService;
@@ -37,7 +37,7 @@ export class GanttActivityBarsComponent implements OnInit {
         let startBarWidth = bar.style.width;
         let startBarLeft = bar.style.left;
 
-        function doDrag(e) {
+        function doDrag(e: any) {
             let cellWidth = ganttService.cellWidth;
             let barWidth = startBarWidth - e.clientX + startX;
             let days = Math.round(barWidth / cellWidth);
@@ -51,7 +51,7 @@ export class GanttActivityBarsComponent implements OnInit {
         return false;
     }
 
-    expandRight($event, bar) {
+    expandRight($event: any, bar: any) {
         $event.stopPropagation();
 
         let ganttService = this.ganttService;
@@ -60,7 +60,7 @@ export class GanttActivityBarsComponent implements OnInit {
         let startBarEndDate = bar.task.end;
         let startBarLeft = bar.style.left;
 
-        function doDrag(e) {
+        function doDrag(e: any) {
             let cellWidth = ganttService.cellWidth;
             let barWidth = startBarWidth + e.clientX - startX;
             let days = Math.round(barWidth / cellWidth);
@@ -77,14 +77,14 @@ export class GanttActivityBarsComponent implements OnInit {
         return false;
     }
 
-    move($event, bar) {
+    move($event: any, bar: any) {
         $event.stopPropagation();
 
         let ganttService = this.ganttService;
         let startX = $event.clientX;
         let startBarLeft = bar.style.left;
 
-        function doDrag(e) {
+        function doDrag(e: any) {
             let cellWidth = ganttService.cellWidth;
             let barLeft = startBarLeft + e.clientX - startX;
             let days = Math.round(barLeft / cellWidth);
@@ -108,7 +108,7 @@ export class GanttActivityBarsComponent implements OnInit {
         return false;
     }
 
-    private drawProgress(bar) {
+    private drawProgress(bar: any) {
         let width = bar.style.width;
         let percentComplete = bar.task.percentComplete;
         let progress = this.ganttService.calculateBarProgress(width, percentComplete);
@@ -120,7 +120,7 @@ export class GanttActivityBarsComponent implements OnInit {
         this.bars = this.ganttService.calculateBars(this.data, this.timescale);
     }
 
-    private addMouseEventListeners(dragFn) {
+    private addMouseEventListeners(dragFn: any) {
 
         function stopFn() {
             document.documentElement.removeEventListener('mousemove', dragFn, false);

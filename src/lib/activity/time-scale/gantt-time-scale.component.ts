@@ -10,8 +10,8 @@ import { GanttService } from '../../shared/services/gantt.service';
     ]
 })
 export class GanttTimeScaleComponent implements OnInit {
-    @Input() scale;
-    @Input() dimensions;
+    @Input() scale: any;
+    @Input() dimensions: any;
         
     private scaleLine: Date[];
     private cellWidth = 0;

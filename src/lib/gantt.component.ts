@@ -25,7 +25,7 @@ export class GanttComponent implements OnInit {
         this.ganttContainerWidth = this.ganttService.calculateContainerWidth();
     }
 
-    onResize($event): void {
+    onResize($event: any): void {
         this.setSizes();
     }
 }

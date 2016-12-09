@@ -40,9 +40,9 @@ export class GanttService {
         return left;
     }
 
-    public calculateBars(lines, scale) {
+    public calculateBars(lines: any, scale: any) {
         let top: number = 2;
-        let bars = [];
+        let bars: any[] = [];
 
         for (let line of lines) {
             let barStyle = this.calculateBarStyle(line.resource);
@@ -91,7 +91,7 @@ export class GanttService {
     }
 
     public calculateScale(start: Date, end: Date) {
-        let scale = [];
+        let scale: any[] = [];
 
         while (start.getTime() <= end.getTime()) {
             scale.push(start);
@@ -110,20 +110,20 @@ export class GanttService {
         return false;
     }
 
-    public addDays(date, days) {
+    public addDays(date: Date, days: number) {
         let result = new Date(date);
         result.setDate(result.getDate() + days);
         return result;
     }
 
-    public removeDays(date, days) {
+    public removeDays(date: Date, days: number) {
         let result = new Date(date);
         result.setDate(result.getDate() - days);
         return result;
     }
 
     // TESTING
-    public getComputedStyle(element, attribute) {
+    public getComputedStyle(element: any, attribute:any) {
         return parseInt(document.defaultView.getComputedStyle(element)[attribute], 10);
     }
 
@@ -141,7 +141,7 @@ export class GanttService {
         return { height: this.activityHeight, width: width };
     }
 
-    public scrollTop(verticalScrollElem, ganttGridElem, ganttActivityAreaElem) {
+    public scrollTop(verticalScrollElem: any, ganttGridElem: any, ganttActivityAreaElem: any) {
         let verticalScrollTop = verticalScrollElem.scrollTop;
 
         if (verticalScrollTop !== null && verticalScrollTop !== undefined) {
@@ -150,13 +150,13 @@ export class GanttService {
         }
     }
 
-    private setGridScrollTop(scrollTop: number, element): void {
+    private setGridScrollTop(scrollTop: number, element:any): void {
         if (element !== null && element !== undefined) {
             element.scrollTop = scrollTop;
         }
     }
 
-    private setAreaScrollTop(scrollTop: number, element): void {
+    private setAreaScrollTop(scrollTop: number, element:any): void {
         if (element !== null && element !== undefined) {
             element.scrollTop = scrollTop;
         }

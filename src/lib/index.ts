@@ -1,1 +1,1 @@
-export * from './gantt';
+export * from './gantt.module';

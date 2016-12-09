@@ -28,7 +28,7 @@ export interface Project {
     Tasks: Task[] 
 }
 
-interface Task {
+export interface Task {
     Id: string;
     Name: string;
     Resource: string;
@@ -36,7 +36,7 @@ interface Task {
     End: Date;
 }
 
-interface Scale {
+export interface Scale {
     Start: Date,
     End: Date
 }

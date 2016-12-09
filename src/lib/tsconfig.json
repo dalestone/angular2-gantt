@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": ["es6", "es2015", "dom"],
+    "mapRoot": "/",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noImplicitAny": true,
+    "outDir": "../../dist/",
+    "sourceMap": true,
+    "target": "es5",
+    "stripInternal": true,
+    "baseUrl": "",
+    "typeRoots": [
+      "../../node_modules/@types"
+    ],
+    "paths": {
+      "ng2-gantt": [
+        "../../dist/ng2-gantt"
+      ]
+    },
+    "types": [
+
+    ]
+  },
+  "angularCompilerOptions": {
+    "genDir": "../../dist",
+    "skipTemplateCodegen": true,
+    "debug": true
+  }
+}

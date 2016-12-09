@@ -7,6 +7,6 @@ import { Component, Input } from '@angular/core';
     providers: [ ]
 })
 export class GanttFooterComponent {
-    @Input() project;
+    @Input() project: any;
     constructor() { }
 }

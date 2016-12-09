@@ -9,31 +9,31 @@ import { GanttConfig } from '../shared/services/gantt-config.service';
     styleUrls: [ './gantt-activity.component.css' ],
 })
 export class GanttActivityComponent implements OnInit {
-    @Input() project;
-    @Input() options;
+    @Input() project: any;
+    @Input() options: any;
 
-    private timeScale;
-    private background;
-    private bars;
+    private timeScale: any;
+    private background: any;
+    private bars: any;
     private left = 0;
     private rowsCount: number = 0;
     private cellsCount: number = 0;
-    private dates = [];
+    private dates: any[] = [];
     private start: Date;
     private end: Date;
-    private containerHeight;
-    private containerWidth;
+    private containerHeight: any;
+    private containerWidth: any;
 
-    private activityContainerSizes;
-    private ganttActivityHeight;
-    private ganttActivityWidth;
+    private activityContainerSizes: any;
+    private ganttActivityHeight: any;
+    private ganttActivityWidth: any;
 
-    private scale = {
+    private scale: any = {
         start: null,
         end: null
     };
 
-    private grid = {
+    private grid: any = {
         rows: 0,
         cells: { dates: [] }
     };
@@ -43,13 +43,13 @@ export class GanttActivityComponent implements OnInit {
         width: 0
     };
 
-    private data = [];
+    private data: any[] = [];
 
-    private gridData = [];
-    private gridColumns = [];
+    private gridData: any[] = [];
+    private gridColumns: any[] = [];
     private gridDataHeight = 0;
 
-    public gridScale;
+    public gridScale: any;
 
     constructor(
         public elem: ElementRef,
@@ -78,7 +78,7 @@ export class GanttActivityComponent implements OnInit {
         this.gridDataHeight = this.calculateGridDataHeight();
     }
 
-    onVerticalScroll(verticalScroll, ganttGrid, ganttActivityArea): void {
+    onVerticalScroll(verticalScroll: any, ganttGrid: any, ganttActivityArea: any): void {
         this.ganttService.scrollTop(verticalScroll, ganttGrid, ganttActivityArea);
     }
 
@@ -88,13 +88,13 @@ export class GanttActivityComponent implements OnInit {
         // console.log('wheel');
     // }
 
-    onResize(event): void {
+    onResize(event: any): void {
         let activityContainerSizes = this.ganttService.calculateActivityContainerDimensions();
         this.ganttActivityHeight = activityContainerSizes.height;
         this.ganttActivityWidth = activityContainerSizes.width;
     }
 
-    rowHighlight(data) {
+    rowHighlight(data: any) {
         let backgroundColour = '';
         return backgroundColour;
     }

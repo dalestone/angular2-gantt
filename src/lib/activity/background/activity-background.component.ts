@@ -7,15 +7,15 @@ import { GanttService } from '../../shared/services/gantt.service';
     styleUrls: [ './activity-background.component.css' ]
 })
 export class GanttActivityBackgroundComponent implements OnInit {
-    @Input() scale;
-    @Input() grid;
-    @Input() dimensions;
+    @Input() scale:any;
+    @Input() grid:any;
+    @Input() dimensions:any;
 
-    private containerHeight;
-    private containerWidth;
-    private rows = [];
-    private cells = [];
-    private cellWidth;
+    private containerHeight:any;
+    private containerWidth:any;
+    private rows:any[] = [];
+    private cells:any[] = [];
+    private cellWidth:any;
 
     constructor(private ganttService: GanttService) {
         this.cellWidth = ganttService.cellWidth;

@@ -5,11 +5,10 @@
   },
   "apps": [
     {
-      "root": "src",
+      "root": "src/demo-app",
       "outDir": "dist",
       "assets": [
-        "assets",
-        "favicon.ico"
+
       ],
       "index": "index.html",
       "main": "main.ts",

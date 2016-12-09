@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class GanttHeaderComponent {
 
-    @Input() name;
+    @Input() name:any;
 }
