@@ -6,15 +6,31 @@ This is the home for the Angular 2 gantt component. This project was generated w
 
 The aim of this project is to make a material design angular 2 gantt component.
 
+### Project status
+Angular 2 gantt is currently in alpha and under active development.
+During alpha, breaking API and behaviour changes will be occuring regularly.
+
 ### Getting Started
+If you want to view the and modify the source directly do the following:
+
 1. git clone https://github.com/dalestone/angular2-gantt.git
 2. npm install -g angular-cli
 2. npm install
 3. npm start
 
-### Project status
-Angular 2 gantt is currently in alpha and under active development.
-During alpha, breaking API and behaviour changes will be occuring regularly.
+### Install Angular 2 Gantt
+`npm install --save ng2-gantt`
+
+Import the `ng2-gantt` NgModule into your app module
+
+```
+import { GanttModule } from 'ng2-gantt';
+// other improts
+@NgModule({
+    imports: [ GanttModule ]
+})
+export class AppModule { }
+```
 
 ## Demo
 ![Demo](./docs/images/demo.gif)
