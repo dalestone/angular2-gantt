@@ -1,13 +1,12 @@
 
 <div class="grid" #ganttGrid style="height: 300px; width: 300px">
-  <!--TODO(dale): the style should use the gantt-config -->
-  <div class="grid_scale" style="height: 35px; line-height: 35px; width: 300px">
+  <div class="grid_scale" [ngStyle]="setGridScaleStyle()">
     <div class="grid_head_cell" *ngFor="let column of gridColumns" [style.width]="column.width">
       <label>{{column.name}}</label>
     </div>
   </div>
   <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': gridDataHeight + 'px'}">
-    <div class="grid_row" style="height: 35px; line-height: 35px" *ngFor="let data of gridData" [style.backgroundcolor]="rowHighlight(data)">
+    <div class="grid_row" [ngStyle]="{ 'height': ganttService.rowHeight + 'px', 'line-height': ganttService.rowHeight + 'px'}" *ngFor="let data of gridData" [style.backgroundcolor]="rowHighlight(data)">
       <div class="grid_cell" style="width: 300px">
         <div class="gantt_tree_content">{{data.name}} </div>
       </div>

@@ -57,7 +57,7 @@ export class GanttActivityComponent implements OnInit {
     }
 
     ngOnInit() {
-        // TODO: this needs to be refactored as its very messy!
+        // TODO(dale): this needs to be refactored as its very messy!
         this.start = this.options.scale.start;
         this.end = this.options.scale.end;
         this.dates = this.ganttService.calculateScale(this.start, this.end);
@@ -116,6 +116,14 @@ export class GanttActivityComponent implements OnInit {
 
     setData() {
         this.data = this.gridData;
+    }
+
+    private setGridScaleStyle() {
+        return { 
+            'height': this.ganttService.rowHeight + 'px', 
+            'line-height': this.ganttService.rowHeight + 'px', 
+            'width': '300px'
+        };
     }
 
     private calculateContainerHeight(): number {

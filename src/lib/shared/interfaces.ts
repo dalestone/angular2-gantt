@@ -1,42 +1,22 @@
-export interface GridScale {
-    Height: number;
-    LineHeight: number;
-    Width: number;
-}
-
-export interface Bar {
-    Height: number;
-    LineHeight: number
-}
-
-export interface Cell {
-    Height: number;
-    Width: number;
-}
-
-export interface Row {
-    Height: number;
-}
-
-export interface Options {
-    Scale: Scale
-}
-
 export interface Project {
-    Id: string;
-    Name: string;
-    Tasks: Task[] 
+    id: string;
+    name: string;
+    tasks: Task[] 
 }
 
 export interface Task {
-    Id: string;
-    Name: string;
-    Resource: string;
-    Start: Date;
-    End: Date;
+    id: string;
+    name: string;
+    resource: string;
+    start: Date;
+    end: Date;
+}
+
+export interface Options {
+    scale: Scale;
 }
 
 export interface Scale {
-    Start: Date,
-    End: Date
+    start: Date;
+    end: Date;
 }

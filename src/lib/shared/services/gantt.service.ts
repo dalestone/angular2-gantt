@@ -7,10 +7,10 @@ export class GanttService {
     public cellWidth: number = 0;
     public windowInnerWidth: number = 0;
     public activityHeight: number = 0;
-    public activityWidth: number = 0;
     public barHeight: number = 0;
     public barLineHeight: number = 0;
     public barTop: number = 0;
+    public barMoveable: boolean = false;
 
     constructor() {
         let _ganttConfig = new GanttConfig();
@@ -21,6 +21,7 @@ export class GanttService {
         this.barHeight = _ganttConfig.barHeight;
         this.barLineHeight = _ganttConfig.barLineHeight;
         this.barTop = _ganttConfig.rowHeight;
+        this.barMoveable = _ganttConfig.barMoveable;
     }
 
     private calculateBarWidth(start: Date, end: Date): number {

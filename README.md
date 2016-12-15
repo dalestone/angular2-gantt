@@ -18,14 +18,14 @@ If you want to view the and modify the source directly do the following:
 2. npm install
 3. npm start
 
-### Install Angular 2 Gantt
-`npm install --save ng2-gantt`
+### Install Angular 2 Gantt (Webpack only)
+`npm install ng2-gantt --save`
 
 Import the `ng2-gantt` NgModule into your app module
 
 ```
 import { GanttModule } from 'ng2-gantt';
-// other improts
+// other imports
 @NgModule({
     imports: [ GanttModule ]
 })

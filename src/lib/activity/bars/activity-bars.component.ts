@@ -4,15 +4,15 @@ import { GanttService } from '../../shared/services/gantt.service';
 @Component({
     selector: 'activity-bars',
     templateUrl: './activity-bars.component.html',
-    styleUrls: [ './activity-bars.component.css' ],
+    styleUrls: ['./activity-bars.component.css'],
     providers: [
         GanttService
     ]
 })
 export class GanttActivityBarsComponent implements OnInit {
-    @Input() scale:any;
-    @Input() dimensions:any;
-    @Input() data:any;
+    @Input() scale: any;
+    @Input() dimensions: any;
+    @Input() data: any;
 
     private containerHeight: number = 0;
     private containerWidth: number = 0;
@@ -106,6 +106,18 @@ export class GanttActivityBarsComponent implements OnInit {
         this.addMouseEventListeners(doDrag);
 
         return false;
+    }
+
+    getActivityLineStyle(bar: any) {
+        return {
+            'left': bar.style.left + 'px',
+            'top': bar.style.top + 'px',
+            'height': bar.style.height + 'px',
+            'line-height': bar.style.lineHeight + 'px',
+            'width': bar.style.width + 'px',
+            'background-color': bar.style.backgroundColour,
+            'border': bar.style.border
+        };
     }
 
     private drawProgress(bar: any) {
