@@ -12,6 +12,7 @@ import { GanttService } from '../../shared/services/gantt.service';
 export class GanttTimeScaleComponent implements OnInit {
     @Input() scale: any;
     @Input() dimensions: any;
+    @Input() zoom: string;
 
     private scaleLine: Date[];
 
@@ -27,17 +28,18 @@ export class GanttTimeScaleComponent implements OnInit {
         };
     }
 
-    private setTimescaleLineStyle() {
+    private setTimescaleLineStyle(borderTop:string) {
         return {
             'height': this.ganttService.rowHeight + 'px',
             'line-height': this.ganttService.rowHeight + 'px',
-            'position': 'relative'
+            'position': 'relative',
+            'border-top': borderTop
         };
     }
 
     private setTimescaleCellStyle() {
         return { 
-            'width': this.ganttService.cellWidth + 'px' 
+            'width': 855 + 'px' 
         };
     }
 
@@ -47,5 +49,21 @@ export class GanttTimeScaleComponent implements OnInit {
 
     private isDayWeekend(date: Date): boolean {
         return this.ganttService.isDayWeekend(date);
+    }
+
+    private getHours() : string[] {
+        var hours:string[] = [];
+
+        while(hours.length <= this.scaleLine.length * 24) {
+            for (var i = 0; i <= 23; i++) {
+                if (i < 10) {
+                    hours.push('0' + i.toString());
+                } else {
+                    hours.push(i.toString());
+                }
+            }
+        }
+
+        return hours;
     }
 }

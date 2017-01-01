@@ -22,29 +22,29 @@ export class DemoAppComponent {
                 'name': 'Angular2 Gantt',
                 'tasks': [
                     {
-                        'id': '1', 'name':
-                        'TASK01',
+                        'id': '1', 
+                        'name':'Lorem ipsum dolor sit amet.',
                         'resource': 'res1',
                         'start': new Date('2016-02-10T00:00:00.0Z'),
                         'end': new Date('2016-02-22T00:00:00.0Z')
                     },
                     {
                         'id': '2',
-                        'name': 'TASK02',
+                        'name': 'Praesent molestie lobortis mi non tempor.',
                         'resource': 'res1',
                         'start': new Date('2016-02-22T00:00:00.0Z'),
                         'end': new Date('2016-02-23T00:00:00.0Z')
                     },
                     {
                         'id': '3',
-                        'name': 'TASK03',
+                        'name': 'Cras sollicitudin egestas velit sit amet aliquam.',
                         'resource': 'res2',
                         'start': new Date('2016-02-23T00:00:00.0Z'),
                         'end': new Date('2016-02-24T00:00:00.0Z')
                     },
                     {
                         'id': '4',
-                        'name': 'TASK04',
+                        'name': 'Donec ac augue est.',
                         'resource': 'res2',
                         'start': new Date('2016-02-24T00:00:00.0Z'),
                         'end': new Date('2016-02-26T00:00:00.0Z')

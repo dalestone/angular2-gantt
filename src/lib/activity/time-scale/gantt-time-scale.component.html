@@ -1,9 +1,8 @@
 <div class="time_scale" [ngStyle]="setTimescaleStyle()">
-  <div class="time_scale_line" [ngStyle]="setTimescaleLineStyle()">
+  <div class="time_scale_line" [ngStyle]="setTimescaleLineStyle('none')">
     <div class="time_scale_cell" *ngFor="let date of scaleLine" [ngStyle]="setTimescaleCellStyle()" [ngClass]="(isDayWeekend(date)) ? 'weekend' : ''">{{date | date: 'dd-MM-yyyy'}}</div>
   </div>
-  <!--TODO(dale): change based on the selected zoom -->
-  <!--<div class="time_scale_line" [ngStyle]="setTimescaleLineStyle()">
-    <div class="time_scale_cell" *ngFor="let date of scaleLine" [ngStyle]="setTimescaleCellStyle()" [ngClass]="(isDayWeekend(date)) ? 'weekend' : ''">{{date | date: 'dd-MM-yyyy'}}</div>
-  </div>-->
+  <div class="time_scale_line" [ngStyle]="setTimescaleLineStyle('1px solid #cecece')">
+    <div class="time_scale_cell" *ngFor="let hour of getHours()" [ngStyle]="{ 'width': '35px' }">{{hour}}</div>
+  </div>
 </div>

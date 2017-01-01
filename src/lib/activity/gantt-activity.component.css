@@ -129,6 +129,10 @@
     color: #494949;
     font-family: Arial, sans-serif;
     font-size: 13px;
-    padding-left: 10px;
+    padding-left: 15px;
     line-height: 25px;
+}
+
+.gantt_tree_content {
+    padding-left:15px;
 }
