@@ -118,6 +118,11 @@ export class GanttActivityComponent implements OnInit {
         this.data = this.gridData;
     }
 
+    zoomTasks(level: string) {
+        //TODO(dale): pass in tasks and zoom type
+        console.log('zoom', level);
+    }
+
     private setGridScaleStyle() {
         return { 
             'height': this.ganttService.rowHeight + 'px', 

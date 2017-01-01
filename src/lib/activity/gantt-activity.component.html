@@ -1,17 +1,29 @@
-
+<div class="actions_bar">
+  <strong> Zooming: &nbsp; </strong>
+  <label>
+    <input name="scales" (click)="zoomTasks('hours')" type="radio" value="week"><span>Hours</span>
+</label>
+<label>
+    <input name="scales" (click)="zoomTasks('days')" type="radio" value="trplweek" checked="true"><span>Days</span>
+</label>
+<!--<label>
+    <input name="scales" (click)="zoomTasks('months')" type="radio" value="year"><span>Months</span>
+</label>-->
+</div>
 <div class="grid" #ganttGrid style="height: 300px; width: 300px">
-  <div class="grid_scale" [ngStyle]="setGridScaleStyle()">
-    <div class="grid_head_cell" *ngFor="let column of gridColumns" [style.width]="column.width">
-      <label>{{column.name}}</label>
-    </div>
+<div class="grid_scale" [ngStyle]="setGridScaleStyle()">
+  <div class="grid_head_cell" *ngFor="let column of gridColumns" [style.width]="column.width">
+    <label>{{column.name}}</label>
   </div>
-  <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': gridDataHeight + 'px'}">
-    <div class="grid_row" [ngStyle]="{ 'height': ganttService.rowHeight + 'px', 'line-height': ganttService.rowHeight + 'px'}" *ngFor="let data of gridData" [style.backgroundcolor]="rowHighlight(data)">
-      <div class="grid_cell" style="width: 300px">
-        <div class="gantt_tree_content">{{data.name}} </div>
-      </div>
-    </div>
-  </div>
+</div>
+<div class="grid_data" #ganttGridData [ngStyle]="{ 'height': gridDataHeight + 'px'}">
+  <div class="grid_row" [ngStyle]="{ 'height': ganttService.rowHeight + 'px', 'line-height': ganttService.rowHeight + 'px'}"
+    *ngFor="let data of gridData" [style.backgroundcolor]="rowHighlight(data)">
+    <div class="grid_cell" style="width: 300px">
+<div class="gantt_tree_content">{{data.name}} </div>
+</div>
+</div>
+</div>
 </div><div class="gantt_activity" (window:resize)="onResize($event)" [ngStyle]="{ 'height': ganttActivityHeight + 'px', 'width': ganttActivityWidth + 'px'}">
   <time-scale [scale]="scale" [dimensions]="dimensions"></time-scale>
   <div class="gantt_activity_area" #ganttActivityArea [ngStyle]="{ 'height': containerHeight + 'px', 'width': containerWidth + 'px'}">

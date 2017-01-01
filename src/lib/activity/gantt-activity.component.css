@@ -51,9 +51,9 @@
         position: absolute;
         right: 0;
         display: block;
-        height: 247px;
+        height: 283px;
         width: 18px;
-        top: 87px;
+        top: 80px;
     }
 
         .grid {
@@ -117,4 +117,18 @@
     white-space: nowrap;
     font-size: 13px;
     box-sizing: border-box;
+}
+
+.actions_bar {
+    /*border-top: 1px solid #cecece;*/
+    border-bottom: 1px solid #cecece;
+    clear: both;
+    /*margin-top: 90px;*/
+    height: 28px;
+    background: #fafafa;
+    color: #494949;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    padding-left: 10px;
+    line-height: 25px;
 }
