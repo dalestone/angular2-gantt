@@ -134,14 +134,19 @@ export class GanttActivityComponent implements OnInit {
     zoomTasks(level: string) {
         this.zoomLevel = level;
         this.zoom.emit(this.zoomLevel);
+        document.querySelector('.gantt_activity').scrollLeft = 0 // reset scroll left
     }
 
-    private setGridScaleStyle() {
-        //TODO(dale): if zooming is days double row height
-        
+    private setGridScaleStyle() {        
+        var height = this.ganttService.rowHeight;
+
+        if (this.zoomLevel === 'hours') {
+            height *= 2;
+        }
+
         return { 
-            'height': this.ganttService.rowHeight + 'px', 
-            'line-height': this.ganttService.rowHeight + 'px', 
+            'height': height + 'px', 
+            'line-height': height + 'px', 
             'width': '300px'
         };
     }

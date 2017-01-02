@@ -12,8 +12,8 @@ export class DemoAppComponent {
     // Default options
     options: Options = {                
         scale: {
-            start: new Date(2016, 1, 1),
-            end: new Date(2016, 2, 30)
+            start: new Date(2017, 1, 1),
+            end: new Date(2017, 2, 30)
         }
     };
 
@@ -25,29 +25,29 @@ export class DemoAppComponent {
                         'id': '1', 
                         'name':'Lorem ipsum dolor sit amet.',
                         'resource': 'res1',
-                        'start': new Date('2016-02-10T00:00:00.0Z'),
-                        'end': new Date('2016-02-22T00:00:00.0Z')
+                        'start': new Date('2017-02-10T00:00:00.0Z'),
+                        'end': new Date('2017-02-22T00:00:00.0Z')
                     },
                     {
                         'id': '2',
                         'name': 'Praesent molestie lobortis mi non tempor.',
                         'resource': 'res1',
-                        'start': new Date('2016-02-22T00:00:00.0Z'),
-                        'end': new Date('2016-02-23T00:00:00.0Z')
+                        'start': new Date('2017-02-22T00:00:00.0Z'),
+                        'end': new Date('2017-02-23T00:00:00.0Z')
                     },
                     {
                         'id': '3',
                         'name': 'Cras sollicitudin egestas velit sit amet aliquam.',
                         'resource': 'res2',
-                        'start': new Date('2016-02-23T00:00:00.0Z'),
-                        'end': new Date('2016-02-24T00:00:00.0Z')
+                        'start': new Date('2017-02-23T00:00:00.0Z'),
+                        'end': new Date('2017-02-24T00:00:00.0Z')
                     },
                     {
                         'id': '4',
                         'name': 'Donec ac augue est.',
                         'resource': 'res2',
-                        'start': new Date('2016-02-24T00:00:00.0Z'),
-                        'end': new Date('2016-02-26T00:00:00.0Z')
+                        'start': new Date('2017-02-01T00:00:00.0Z'),
+                        'end': new Date('2017-02-26T00:00:00.0Z')
                     },
                 ]
             };

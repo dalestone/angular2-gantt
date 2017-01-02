@@ -26,12 +26,14 @@ export class GanttService {
 
     private calculateBarWidth(start: Date, end: Date): number {
         let days = this.calculateDiffDays(start, end);
+        //TODO(dale): cell width is related to zooming e.g hours is 35, days is 76
         let width: number = days * this.cellWidth + days;
 
         return width;
     }
 
     private calculateBarLeft(start: Date, scale: any[]): number {
+        //TODO(dale): cell width is related to zooming e.g hours, days and time
         let left = 0;
         for (let i = 0; i < scale.length; i++) {
             if (start.valueOf() === scale[i].valueOf()) {

@@ -16,11 +16,17 @@ export class GanttActivityBackgroundComponent implements OnInit {
     private containerWidth: any;
     private rows: any[] = [];
     private cells: any[] = [];
+    private zoomLevel: string = 'days';
 
     constructor(private ganttService: GanttService) { }
 
     ngOnInit() {
         this.drawGrid();
+
+        this.zoom.subscribe((zoomLevel: string) => {
+            this.zoomLevel = zoomLevel;
+            this.drawGrid();
+        });
     }
 
     isDayWeekend(date: Date): boolean {
@@ -41,22 +47,32 @@ export class GanttActivityBackgroundComponent implements OnInit {
     }
 
     private setCellStyle() {
-        //TODO(dale): add to gantt config service
+        var width = this.ganttService.cellWidth;
+
+        if (this.zoomLevel === 'hours') {
+            width = 35; //TODO(dale) add to gantt config
+        }
+
         return {
-            'width': this.ganttService.cellWidth + 'px'
+            'width': width + 'px'
         };
     }
 
+    //TODO(dale): improve performance, only render current view
     private drawGrid(): void {
         this.rows = new Array(this.grid.rows);
-        this.cells = this.grid.cells.dates;
 
-        //TESTING
-        // this.grid.cells.dates.forEach((date: any) => {
-        //     for (var i = 0; i < 23; i++) {
-        //         this.cells.push(date);
-        //     }
-        // });
+        if (this.zoomLevel === 'hours') {
+            this.cells = [];
+
+            this.grid.cells.dates.forEach((date: any) => {
+                for (var i = 0; i < 23; i++) {
+                    this.cells.push(date);
+                }
+            });
+        } else {
+            this.cells = this.grid.cells.dates;
+        }
 
         this.containerHeight = this.dimensions.height;
         this.containerWidth = this.dimensions.width;
