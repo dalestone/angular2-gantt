@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, ViewChild } from '@angular/core';
 import { GanttService } from '../../shared/services/gantt.service';
 
 @Component({
@@ -12,14 +12,19 @@ import { GanttService } from '../../shared/services/gantt.service';
 export class GanttTimeScaleComponent implements OnInit {
     @Input() scale: any;
     @Input() dimensions: any;
-    @Input() zoom: string;
+    @Input() zoom: any;
 
     private scaleLine: Date[];
+    private zoomLevel: string;
 
-    constructor(private ganttService: GanttService) { }
+    constructor(private ganttService: GanttService) {}
 
     ngOnInit() {
         this.drawScale(this.scale.start, this.scale.end);
+
+        this.zoom.subscribe((zoomLevel: string) => {
+            this.zoomLevel = zoomLevel;            
+        });;
     }
 
     private setTimescaleStyle() {
@@ -28,7 +33,7 @@ export class GanttTimeScaleComponent implements OnInit {
         };
     }
 
-    private setTimescaleLineStyle(borderTop:string) {
+    private setTimescaleLineStyle(borderTop: string) {
         return {
             'height': this.ganttService.rowHeight + 'px',
             'line-height': this.ganttService.rowHeight + 'px',
@@ -38,8 +43,8 @@ export class GanttTimeScaleComponent implements OnInit {
     }
 
     private setTimescaleCellStyle() {
-        return { 
-            'width': 855 + 'px' 
+        return {
+            'width': this.ganttService.cellWidth + 'px'
         };
     }
 
@@ -51,19 +56,7 @@ export class GanttTimeScaleComponent implements OnInit {
         return this.ganttService.isDayWeekend(date);
     }
 
-    private getHours() : string[] {
-        var hours:string[] = [];
-
-        while(hours.length <= this.scaleLine.length * 24) {
-            for (var i = 0; i <= 23; i++) {
-                if (i < 10) {
-                    hours.push('0' + i.toString());
-                } else {
-                    hours.push(i.toString());
-                }
-            }
-        }
-
-        return hours;
+    private getHours(): string[] {
+        return this.ganttService.getHours(this.scaleLine.length);
     }
 }

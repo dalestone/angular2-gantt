@@ -12,6 +12,8 @@ export class GanttActivityComponent implements OnInit {
     @Input() project: any;
     @Input() options: any;
 
+    private zoom: EventEmitter<string> = new EventEmitter<string>();
+
     private timeScale: any;
     private background: any;
     private bars: any;
@@ -27,7 +29,7 @@ export class GanttActivityComponent implements OnInit {
     private activityContainerSizes: any;
     private ganttActivityHeight: any;
     private ganttActivityWidth: any;
-    private zoomLevel: string;
+    private zoomLevel: string = 'days';
 
     private scale: any = {
         start: null,
@@ -55,6 +57,9 @@ export class GanttActivityComponent implements OnInit {
     constructor(
         public elem: ElementRef,
         private ganttService: GanttService) {
+
+            // set the zoom level to days
+            this.zoom.emit(this.zoomLevel);
     }
 
     ngOnInit() {
@@ -119,17 +124,23 @@ export class GanttActivityComponent implements OnInit {
         this.data = this.gridData;
     }
 
+    setGridRowStyle() {
+        return {
+            'height': this.ganttService.rowHeight + 'px',
+            'line-height': this.ganttService.rowHeight + 'px'
+        };
+    }
+
     zoomTasks(level: string) {
-        //TODO(dale): pass in tasks and zoom type
-        console.log('zoom', level);
         this.zoomLevel = level;
+        this.zoom.emit(this.zoomLevel);
     }
 
     private setGridScaleStyle() {
         //TODO(dale): if zooming is days double row height
         
         return { 
-            'height': this.ganttService.rowHeight + 35 + 'px', 
+            'height': this.ganttService.rowHeight + 'px', 
             'line-height': this.ganttService.rowHeight + 'px', 
             'width': '300px'
         };

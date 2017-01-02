@@ -10,6 +10,7 @@ export class GanttActivityBackgroundComponent implements OnInit {
     @Input() scale: any;
     @Input() grid: any;
     @Input() dimensions: any;
+    @Input() zoom: any
 
     private containerHeight: any;
     private containerWidth: any;
@@ -35,11 +36,12 @@ export class GanttActivityBackgroundComponent implements OnInit {
 
     private setRowStyle() {
         return {
-            'height': this.ganttService.rowHeight + 'px'            
+            'height': this.ganttService.rowHeight + 'px'
         };
     }
 
     private setCellStyle() {
+        //TODO(dale): add to gantt config service
         return {
             'width': this.ganttService.cellWidth + 'px'
         };
@@ -48,6 +50,14 @@ export class GanttActivityBackgroundComponent implements OnInit {
     private drawGrid(): void {
         this.rows = new Array(this.grid.rows);
         this.cells = this.grid.cells.dates;
+
+        //TESTING
+        // this.grid.cells.dates.forEach((date: any) => {
+        //     for (var i = 0; i < 23; i++) {
+        //         this.cells.push(date);
+        //     }
+        // });
+
         this.containerHeight = this.dimensions.height;
         this.containerWidth = this.dimensions.width;
     }

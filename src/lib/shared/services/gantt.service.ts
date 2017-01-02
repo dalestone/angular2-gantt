@@ -123,7 +123,22 @@ export class GanttService {
         return result;
     }
 
-    // TESTING
+    public getHours(cols: number): string[] {
+        var hours: string[] = [];
+
+        while(hours.length <= cols * 24) {
+            for (var i = 0; i <= 23; i++) {
+                if (i < 10) {
+                    hours.push('0' + i.toString());
+                } else {
+                    hours.push(i.toString());
+                }
+            }
+        }
+
+        return hours;
+    }
+
     public getComputedStyle(element: any, attribute:any) {
         return parseInt(document.defaultView.getComputedStyle(element)[attribute], 10);
     }

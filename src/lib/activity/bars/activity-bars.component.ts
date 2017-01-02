@@ -13,6 +13,7 @@ export class GanttActivityBarsComponent implements OnInit {
     @Input() scale: any;
     @Input() dimensions: any;
     @Input() data: any;
+    @Input() zoom: any;
 
     private containerHeight: number = 0;
     private containerWidth: number = 0;
