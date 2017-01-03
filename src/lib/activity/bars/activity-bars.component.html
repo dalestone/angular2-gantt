@@ -3,7 +3,7 @@
   <div class="gantt_activity_line" *ngFor="let bar of bars" [ngStyle]="getActivityLineStyle(bar)" (mousedown)="!ganttService.barMoveable||move($event, bar)">
     <div class="gantt_activity_progress" [ngStyle]="{'width': drawProgress(bar) + 'px'}"></div>
     <div class="gantt_activity_progress_drag" style="left: 518px"></div>
-    <div class="gantt_activity_content"></div>
+    <div class="gantt_activity_content"><span *ngIf="bar.task?.percentComplete">{{bar.task.percentComplete}}%</span></div>
     <div class="gantt_activity_link_control gantt_activity_right" (mousedown)="!ganttService.barMoveable||expandRight($event, bar)" style="height: 26px; line-height: 30px">
       <div class="gantt_link_point"></div>
     </div>

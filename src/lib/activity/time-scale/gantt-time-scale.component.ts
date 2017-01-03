@@ -42,12 +42,12 @@ export class GanttTimeScaleComponent implements OnInit {
         };
     }
 
+    //TODO(dale): this should be read from gantt config
     private setTimescaleCellStyle() {
         var width = this.ganttService.cellWidth;
 
-        //TODO(dale): this should be read from gantt config
         if(this.zoomLevel === 'hours') {
-            width = 35 * 24 + 15;
+            width = 20 * 24 + 22;
         }
 
         return {

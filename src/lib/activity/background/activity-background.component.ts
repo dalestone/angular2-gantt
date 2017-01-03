@@ -12,8 +12,8 @@ export class GanttActivityBackgroundComponent implements OnInit {
     @Input() dimensions: any;
     @Input() zoom: any
 
-    private containerHeight: any;
-    private containerWidth: any;
+    // private containerHeight: any;
+    // private containerWidth: any;
     private rows: any[] = [];
     private cells: any[] = [];
     private zoomLevel: string = 'days';
@@ -33,24 +33,18 @@ export class GanttActivityBackgroundComponent implements OnInit {
         return this.ganttService.isDayWeekend(date);
     }
 
-    private setBackgroundStyle() {
-        return {
-            'height': this.containerHeight + 'px',
-            'width': this.containerWidth + 'px'
-        };
-    }
-
     private setRowStyle() {
         return {
             'height': this.ganttService.rowHeight + 'px'
         };
     }
 
+    //TODO(dale) add to gantt config
     private setCellStyle() {
         var width = this.ganttService.cellWidth;
 
         if (this.zoomLevel === 'hours') {
-            width = 35; //TODO(dale) add to gantt config
+            width = 20; 
         }
 
         return {
@@ -74,7 +68,7 @@ export class GanttActivityBackgroundComponent implements OnInit {
             this.cells = this.grid.cells.dates;
         }
 
-        this.containerHeight = this.dimensions.height;
-        this.containerWidth = this.dimensions.width;
+        // this.containerHeight = this.dimensions.height;
+        // this.containerWidth = this.dimensions.width;
     }
 }

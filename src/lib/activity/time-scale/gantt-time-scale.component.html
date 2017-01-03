@@ -3,6 +3,6 @@
     <div class="time_scale_cell" *ngFor="let date of scaleLine" [ngStyle]="setTimescaleCellStyle()" [ngClass]="(isDayWeekend(date)) ? 'weekend' : ''">{{date | date: 'dd-MM-yyyy'}}</div>
   </div>
   <div *ngIf="zoomLevel === 'hours'" class="time_scale_line" [ngStyle]="setTimescaleLineStyle('1px solid #cecece')">
-    <div class="time_scale_cell" *ngFor="let hour of getHours()" [ngStyle]="{ 'width': '35px' }">{{hour}}</div>
+    <div class="time_scale_cell" *ngFor="let hour of getHours()" [ngStyle]="{ 'width': '20px' }">{{hour}}</div>
   </div>
 </div>

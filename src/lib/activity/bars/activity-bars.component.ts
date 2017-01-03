@@ -19,6 +19,9 @@ export class GanttActivityBarsComponent implements OnInit {
     private containerWidth: number = 0;
     private bars: any[] = [];
     private timescale: any;
+    private zoomLevel: string;
+
+    //TODO(dale): this needs to be able to handle passes, e.g show multiple lines? last 3?
 
     constructor(private ganttService: GanttService) { }
 
@@ -27,6 +30,12 @@ export class GanttActivityBarsComponent implements OnInit {
         this.containerHeight = this.dimensions.height;
         this.containerWidth = this.dimensions.width;
         this.drawBars();
+
+        this.zoom.subscribe((zoomLevel: string) => {
+            this.zoomLevel = zoomLevel;
+
+            this.drawBars();
+        });;
     }
 
     //TODO(dale): the ability to move bars needs reviewing and there are a few quirks
@@ -130,7 +139,11 @@ export class GanttActivityBarsComponent implements OnInit {
     }
 
     private drawBars(): void {
-        this.bars = this.ganttService.calculateBars(this.data, this.timescale);
+        if (this.zoomLevel === 'hours') {
+            this.bars = this.ganttService.calculateBars(this.data, this.timescale, true);
+        } else {
+            this.bars = this.ganttService.calculateBars(this.data, this.timescale);
+        }
     }
 
     private addMouseEventListeners(dragFn: any) {

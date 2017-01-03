@@ -10,6 +10,7 @@ export interface Task {
     resource: string;
     start: Date;
     end: Date;
+    percentComplete?: number;
 }
 
 export interface Options {

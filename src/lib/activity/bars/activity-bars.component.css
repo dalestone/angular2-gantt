@@ -1,9 +1,9 @@
-        .gantt_activity_line {
-    border-radius: 2px;
+.gantt_activity_line {
+    /*border-radius: 2px;*/
     position: absolute;
     box-sizing: border-box;
-    background-color: rgb(255,64,129);
-    border: 1px solid rgb(255,64,129);
+    background-color: rgb(18,195,244);
+    border: 1px solid #2196F3;
     -webkit-user-select: none;
 }
 
@@ -14,11 +14,11 @@
 .gantt_activity_progress {
     text-align: center;
     z-index: 0;
-    background: lightpink;
+    background: #2196F3;
     position: absolute;
-    min-height: 28px;
+    min-height: 18px;
     display: block;
-    height: 28px;
+    height: 18px;
 }
 
 .gantt_activity_progress_drag {

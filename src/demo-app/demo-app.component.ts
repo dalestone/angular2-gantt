@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { Project, Options } from 'ng2-gantt';
+//import { Project, Options } from 'ng2-gantt';
+
+import { Project, Options } from '../lib';
 
 @Component({
     selector: 'demo-app',
@@ -13,7 +15,7 @@ export class DemoAppComponent {
     options: Options = {
         scale: {
             start: new Date(2017, 1, 1),
-            end: new Date(2017, 2, 30)
+            end: new Date(2017, 1, 26)
         }
     };
 
@@ -26,35 +28,40 @@ export class DemoAppComponent {
                 'name': 'Lorem ipsum dolor sit amet.',
                 'resource': 'res1',
                 'start': new Date('2017-02-01T00:00:00.0Z'),
-                'end': new Date('2017-02-03T00:00:00.0Z')
+                'end': new Date('2017-02-03T00:00:00.0Z'),
+                'percentComplete': 10
             },
             {
                 'id': '2',
                 'name': 'Praesent molestie lobortis mi non tempor.',
                 'resource': 'res1',
                 'start': new Date('2017-02-03T00:00:00.0Z'),
-                'end': new Date('2017-02-05T00:00:00.0Z')
+                'end': new Date('2017-02-05T00:00:00.0Z'),
+                'percentComplete': 25
             },
             {
                 'id': '3',
                 'name': 'Cras sollicitudin egestas velit sit amet aliquam.',
                 'resource': 'res2',
                 'start': new Date('2017-02-05T00:00:00.0Z'),
-                'end': new Date('2017-02-06T00:00:00.0Z')
+                'end': new Date('2017-02-06T00:00:00.0Z'),
+                'percentComplete': 50
             },
             {
                 'id': '4',
                 'name': 'Donec ac augue est.',
                 'resource': 'res2',
                 'start': new Date('2017-02-06T00:00:00.0Z'),
-                'end': new Date('2017-02-07T00:00:00.0Z')
+                'end': new Date('2017-02-07T00:00:00.0Z'),
+                'percentComplete': 75
             },
             {
                 'id': '5',
                 'name': 'Lorem ipsum dolor sit amet.',
                 'resource': 'res1',
                 'start': new Date('2017-02-07T00:00:00.0Z'),
-                'end': new Date('2017-02-22T00:00:00.0Z')
+                'end': new Date('2017-02-22T00:00:00.0Z'),
+                'percentComplete': 100
             },
             {
                 'id': '6',

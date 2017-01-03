@@ -24,26 +24,33 @@ export class GanttService {
         this.barMoveable = _ganttConfig.barMoveable;
     }
 
-    private calculateBarWidth(start: Date, end: Date): number {
+    //TODO(dale): cell width is related to zooming e.g hours is 20, days is 76
+    private calculateBarWidth(start: Date, end: Date, hours?: boolean): number {
         let days = this.calculateDiffDays(start, end);
-        //TODO(dale): cell width is related to zooming e.g hours is 35, days is 76
         let width: number = days * this.cellWidth + days;
+
+        if (hours) {
+            width = days * 20 * 24 + days;
+        }
 
         return width;
     }
 
-    private calculateBarLeft(start: Date, scale: any[]): number {
-        //TODO(dale): cell width is related to zooming e.g hours, days and time
+    private calculateBarLeft(start: Date, scale: any[], hours?: boolean): number {
         let left = 0;
         for (let i = 0; i < scale.length; i++) {
             if (start.valueOf() === scale[i].valueOf()) {
-                left = i * this.cellWidth + i;
+                if (hours) {
+                    left = i * 20 * 24 + i;
+                } else {
+                    left = i * this.cellWidth + i;
+                }
             }
         }
         return left;
     }
 
-    public calculateBars(lines: any, scale: any) {
+    public calculateBars(lines: any, scale: any, hours?: boolean) {
         let top: number = 2;
         let bars: any[] = [];
 
@@ -53,10 +60,10 @@ export class GanttService {
             bars.push({
                 style: {
                     top: top,
-                    left: this.calculateBarLeft(line.start, scale), // 76
+                    left: this.calculateBarLeft(line.start, scale, hours), // 76
                     height: this.barHeight,
                     lineHeight: this.barLineHeight,
-                    width: this.calculateBarWidth(line.start, line.end), // 76 
+                    width: this.calculateBarWidth(line.start, line.end, hours), // 76 
                     backgroundColour: barStyle.backgroundColour,
                     border: barStyle.border
                 },
@@ -128,7 +135,7 @@ export class GanttService {
     public getHours(cols: number): string[] {
         var hours: string[] = [];
 
-        while(hours.length <= cols * 24) {
+        while (hours.length <= cols * 24) {
             for (var i = 0; i <= 23; i++) {
                 if (i < 10) {
                     hours.push('0' + i.toString());
@@ -141,7 +148,7 @@ export class GanttService {
         return hours;
     }
 
-    public getComputedStyle(element: any, attribute:any) {
+    public getComputedStyle(element: any, attribute: any) {
         return parseInt(document.defaultView.getComputedStyle(element)[attribute], 10);
     }
 
@@ -168,13 +175,13 @@ export class GanttService {
         }
     }
 
-    private setGridScrollTop(scrollTop: number, element:any): void {
+    private setGridScrollTop(scrollTop: number, element: any): void {
         if (element !== null && element !== undefined) {
             element.scrollTop = scrollTop;
         }
     }
 
-    private setAreaScrollTop(scrollTop: number, element:any): void {
+    private setAreaScrollTop(scrollTop: number, element: any): void {
         if (element !== null && element !== undefined) {
             element.scrollTop = scrollTop;
         }
