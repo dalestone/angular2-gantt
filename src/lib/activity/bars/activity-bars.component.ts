@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { GanttService } from '../../shared/services/gantt.service';
 
 @Component({
@@ -12,12 +12,11 @@ import { GanttService } from '../../shared/services/gantt.service';
 export class GanttActivityBarsComponent implements OnInit {
     @Input() scale: any;
     @Input() dimensions: any;
-    @Input() data: any;
+    @Input() project: any;
     @Input() zoom: any;
 
     private containerHeight: number = 0;
     private containerWidth: number = 0;
-    private bars: any[] = [];
     private timescale: any;
     private zoomLevel: string;
 
@@ -29,12 +28,9 @@ export class GanttActivityBarsComponent implements OnInit {
         this.timescale = this.ganttService.calculateScale(this.scale.start, this.scale.end);
         this.containerHeight = this.dimensions.height;
         this.containerWidth = this.dimensions.width;
-        this.drawBars();
 
         this.zoom.subscribe((zoomLevel: string) => {
             this.zoomLevel = zoomLevel;
-
-            this.drawBars();
         });;
     }
 
@@ -118,32 +114,19 @@ export class GanttActivityBarsComponent implements OnInit {
         return false;
     }
 
-    getActivityLineStyle(bar: any) {
-        return {
-            'left': bar.style.left + 'px',
-            'top': bar.style.top + 'px',
-            'height': bar.style.height + 'px',
-            'line-height': bar.style.lineHeight + 'px',
-            'width': bar.style.width + 'px',
-            'background-color': bar.style.backgroundColour,
-            'border': bar.style.border
-        };
-    }
+    private drawBar(task: any, index: number) {
+        let style = {};
 
-    private drawProgress(bar: any) {
-        let width = bar.style.width;
-        let percentComplete = bar.task.percentComplete;
-        let progress = this.ganttService.calculateBarProgress(width, percentComplete);
-
-        return progress;
-    }
-
-    private drawBars(): void {
         if (this.zoomLevel === 'hours') {
-            this.bars = this.ganttService.calculateBars(this.data, this.timescale, true);
+            style = this.ganttService.calculateBar(task, index, this.timescale, true);
         } else {
-            this.bars = this.ganttService.calculateBars(this.data, this.timescale);
+            style = this.ganttService.calculateBar(task, index, this.timescale);
         }
+        return style;
+    }
+
+    private drawProgress(task: any, bar: any) {
+        return this.ganttService.calculateBarProgress(this.ganttService.getComputedStyle(bar, 'width'), task.percentComplete);
     }
 
     private addMouseEventListeners(dragFn: any) {

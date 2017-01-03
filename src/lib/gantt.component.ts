@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter } from '@angular/core';
 import { NgStyle} from '@angular/common';
 import { GanttService } from './shared/services/gantt.service';
 
@@ -13,7 +13,7 @@ export class GanttComponent implements OnInit {
     @Input() options: any;
     @Input() project: any;
 
-    ganttContainerWidth: number;
+    private ganttContainerWidth: number;
 
     constructor(private ganttService: GanttService) { }
 

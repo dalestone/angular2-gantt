@@ -50,46 +50,20 @@ export class GanttService {
         return left;
     }
 
-    public calculateBars(lines: any, scale: any, hours?: boolean) {
-        let top: number = 2;
-        let bars: any[] = [];
-
-        for (let line of lines) {
-            let barStyle = this.calculateBarStyle(line.resource);
-
-            bars.push({
-                style: {
-                    top: top,
-                    left: this.calculateBarLeft(line.start, scale, hours), // 76
-                    height: this.barHeight,
-                    lineHeight: this.barLineHeight,
-                    width: this.calculateBarWidth(line.start, line.end, hours), // 76 
-                    backgroundColour: barStyle.backgroundColour,
-                    border: barStyle.border
-                },
-                task: {
-                    id: line.id,
-                    name: line.name,
-                    percentComplete: line.percentComplete,
-                    start: line.start,
-                    end: line.end
-                }
-            });
-            top += this.barTop;
+    public calculateBar(task: any, index: number, scale: any, hours?: boolean) {
+        return {
+            'top': this.barTop * index + 2 + 'px',
+            'left': this.calculateBarLeft(task.start, scale, hours) + 'px',
+            'height': this.barHeight + 'px',
+            'line-height': this.barLineHeight + 'px',
+            'width': this.calculateBarWidth(task.start, task.end, hours) + 'px',
+            'background-color': '',
+            'border': ''
         }
-
-        return bars;
-    }
-
-    private calculateBarStyle(resource: string) {
-        let lineStyle = { backgroundColour: '', border: '' };
-
-        return lineStyle;
     }
 
     public calculateBarProgress(width: number, percent: number) {
-        let progress = (width / 100) * percent - 2;
-        return progress;
+        return (width / 100) * percent - 2 + 'px';        
     }
 
     public calculateDiffDays(start: Date, end: Date): number {
