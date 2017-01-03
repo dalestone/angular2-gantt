@@ -47,7 +47,7 @@ export class GanttTimeScaleComponent implements OnInit {
         var width = this.ganttService.cellWidth;
 
         if(this.zoomLevel === 'hours') {
-            width = 20 * 24 + 22;
+            width = 20 * 24 + 15;
         }
 
         return {
