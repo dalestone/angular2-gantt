@@ -1,1 +1,0 @@
-///TODO(dale): think about how to offer the ability to theme the gantt

@@ -4,8 +4,25 @@ import { GanttService } from './shared/services/gantt.service';
 
 @Component({
     selector: 'gantt',
-    templateUrl: './gantt.component.html',
-    styleUrls: [ './gantt.component.css' ],
+    template: `
+        <div style="width: 100%">
+            <div class="gantt_container" (window:resize)="onResize($event)" [ngStyle]="{ 'width': ganttContainerWidth + 'px' }">
+                <gantt-header [name]="project.name"></gantt-header>
+                <gantt-activity [project]="project" [options]="options"></gantt-activity>
+                <gantt-footer [project]="project"></gantt-footer>
+            </div>
+        </div>
+    `,
+    styleUrls: [`
+        .gantt_container {
+            font-family: Arial;
+            font-size: 13px;
+            border: 1px solid #cecece;
+            position: relative;
+            white-space: nowrap;   
+            margin-top: 20px;
+        }
+    `],
     providers: []
 })
 export class GanttComponent implements OnInit {

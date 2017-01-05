@@ -3,8 +3,42 @@ import { GanttService } from '../../shared/services/gantt.service';
 
 @Component({
     selector: 'time-scale',
-    templateUrl: './gantt-time-scale.component.html',
-    styleUrls: ['./gantt-time-scale.component.css'],
+    template: `
+    <div class="time_scale" [ngStyle]="setTimescaleStyle()">
+  <div class="time_scale_line" [ngStyle]="setTimescaleLineStyle('none')">
+    <div class="time_scale_cell" *ngFor="let date of scaleLine" [ngStyle]="setTimescaleCellStyle()" [ngClass]="(isDayWeekend(date)) ? 'weekend' : ''">{{date | date: 'dd-MM-yyyy'}}</div>
+  </div>
+  <div *ngIf="zoomLevel === 'hours'" class="time_scale_line" [ngStyle]="setTimescaleLineStyle('1px solid #cecece')">
+    <div class="time_scale_cell" *ngFor="let hour of getHours()" [ngStyle]="{ 'width': '20px' }">{{hour}}</div>
+  </div>
+</div>
+    `,
+    styleUrls: [`.weekend {
+    background-color:#FAFAFA;
+}
+
+.time_scale {
+    font-size: 12px;
+    border-bottom: 1px solid #cecece;
+    background-color: #fff;
+}
+
+.time_scale_line {
+    box-sizing: border-box;
+}
+
+.time_scale_line:first-child {
+    border-top: none;
+}
+
+.time_scale_cell {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 1px solid #cecece;
+    text-align: center;
+    height: 100%;
+    }`],
     providers: [
         GanttService
     ]

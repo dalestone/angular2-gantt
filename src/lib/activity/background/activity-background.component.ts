@@ -3,8 +3,34 @@ import { GanttService } from '../../shared/services/gantt.service';
 
 @Component({
     selector: 'activity-background',
-    templateUrl: './activity-background.component.html',
-    styleUrls: ['./activity-background.component.css']
+    template: `
+    <div class="gantt_activity_bg">
+  <div class="gantt_activity_row" [ngStyle]="setRowStyle()" *ngFor="let row of rows">
+    <div class="gantt_activity_cell" [ngStyle]="setCellStyle()" *ngFor="let cell of cells; let l = last" [ngClass]="[(isDayWeekend(cell)) ? 'weekend' : '', l ? 'last_column_cell' : '']"></div>
+  </div>
+</div>
+    `,
+    styleUrls: [`
+    .gantt_activity_bg {
+    overflow: hidden;    
+}
+
+.gantt_activity_row {
+    border-bottom: 1px solid #ebebeb;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.gantt_activity_cell {
+    display: inline-block;
+    height: 100%;
+    border-right: 1px solid #ebebeb;
+}
+
+.weekend {
+    background-color:#FAFAFA;
+}
+    `]
 })
 export class GanttActivityBackgroundComponent implements OnInit {
     @Input() scale: any;

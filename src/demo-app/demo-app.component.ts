@@ -29,7 +29,7 @@ export class DemoAppComponent {
                 'resource': 'res1',
                 'start': new Date('2017-02-01T00:00:00.0Z'),
                 'end': new Date('2017-02-03T00:00:00.0Z'),
-                'percentComplete': 10
+                'percentComplete': 0
             },
             {
                 'id': '2',
@@ -37,7 +37,7 @@ export class DemoAppComponent {
                 'resource': 'res1',
                 'start': new Date('2017-02-03T00:00:00.0Z'),
                 'end': new Date('2017-02-05T00:00:00.0Z'),
-                'percentComplete': 25
+                'percentComplete': 0
             },
             {
                 'id': '3',
@@ -45,7 +45,7 @@ export class DemoAppComponent {
                 'resource': 'res2',
                 'start': new Date('2017-02-05T00:00:00.0Z'),
                 'end': new Date('2017-02-06T00:00:00.0Z'),
-                'percentComplete': 50
+                'percentComplete': 0
             },
             {
                 'id': '4',
@@ -53,7 +53,7 @@ export class DemoAppComponent {
                 'resource': 'res2',
                 'start': new Date('2017-02-06T00:00:00.0Z'),
                 'end': new Date('2017-02-07T00:00:00.0Z'),
-                'percentComplete': 75
+                'percentComplete': 0
             },
             {
                 'id': '5',
@@ -61,7 +61,7 @@ export class DemoAppComponent {
                 'resource': 'res1',
                 'start': new Date('2017-02-07T00:00:00.0Z'),
                 'end': new Date('2017-02-22T00:00:00.0Z'),
-                'percentComplete': 100
+                'percentComplete': 0
             },
             {
                 'id': '6',
@@ -94,4 +94,41 @@ export class DemoAppComponent {
         ]
     };
 
+    createTask() {
+        var task = {
+            'id': '',
+            'name': 'new task',
+            'percentComplete': 0,
+            'start': new Date('2017-02-01T00:00:00.0Z'),
+            'end': new Date('2017-02-03T00:00:00.0Z'),
+        }
+        this.project.tasks.push(task);
+    }
+
+    updateTasks() {    
+        //var taskIndex = this.project.tasks.findIndex(function(task) {
+            //return task.id == '1'
+        //});
+        //let task = this.project.tasks[taskIndex];
+
+        // var progress = setInterval(function() {
+        //     if (task.percentComplete === 100) {
+        //         clearInterval(progress);
+        //     } else {
+        //         task.percentComplete += 1;
+        //     }
+        // }, 200);
+
+        for (var i = 0; i < this.project.tasks.length; i++) {
+            let task = this.project.tasks[i];
+
+            let progress = setInterval(function() {
+                if (task.percentComplete === 100) {
+                    clearInterval(progress);
+                } else {
+                    task.percentComplete += 1;
+                }
+            }, 200);
+        }
+    }
 }

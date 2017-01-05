@@ -7,10 +7,11 @@ export interface Project {
 export interface Task {
     id: string;
     name: string;
-    resource: string;
+    resource?: string;
     start: Date;
-    end: Date;
+    end: Date; //TODO(dale): rename to finish
     percentComplete?: number;
+    color?: string;
 }
 
 export interface Options {
