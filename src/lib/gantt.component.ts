@@ -6,7 +6,7 @@ import { GanttService } from './shared/services/gantt.service';
     selector: 'gantt',
     template: `
         <div style="width: 100%">
-            <div class="gantt_container" (window:resize)="onResize($event)" [ngStyle]="{ 'width': ganttContainerWidth + 'px' }">
+            <div class="gantt_container" (window:resize)="onResize($event)" [ngStyle]="{ 'width': ganttContainerWidth - 18 + 'px' }">
                 <gantt-header [name]="project.name"></gantt-header>
                 <gantt-activity [project]="project" [options]="options"></gantt-activity>
                 <gantt-footer [project]="project"></gantt-footer>

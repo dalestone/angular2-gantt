@@ -15,11 +15,12 @@ import { GanttConfig } from '../shared/services/gantt-config.service';
         <input name="scales" (click)="zoomTasks('days')" type="radio" checked="true"><span>Days</span>
     </label>
     </div>
-    <div class="grid" #ganttGrid style="height: 300px; width: 300px">
+    <div class="grid" #ganttGrid [ngStyle]="{ 'height': ganttActivityHeight + 'px', 'width': 300 + 'px'}">
     <div class="grid_scale" [ngStyle]="setGridScaleStyle()">
         <div class="grid_head_cell" *ngFor="let column of gridColumns" [style.width]="column.width">
             <label style="padding-left:15px">{{column.name}}</label>
         </div>
+
     </div>
     <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': project.tasks * ganttService.barTop + 'px'}">
         <div class="grid_row" [ngStyle]="setGridRowStyle()"
@@ -29,9 +30,9 @@ import { GanttConfig } from '../shared/services/gantt-config.service';
     </div>
     </div>
     </div>
-    </div><div class="gantt_activity" (window:resize)="onResize($event)" [ngStyle]="{ 'height': ganttActivityHeight + 'px', 'width': ganttActivityWidth + 'px'}">
+    </div><div class="gantt_activity" (window:resize)="onResize($event)" [ngStyle]="{ 'height': ganttActivityHeight + 'px', 'width': ganttActivityWidth - 18 + 'px'}">
         <time-scale [zoom]="zoom" [scale]="scale" [dimensions]="dimensions"></time-scale>
-        <div class="gantt_activity_area" #ganttActivityArea [ngStyle]="{ 'height': project.tasks * ganttService.rowHeight + 'px', 'width': containerWidth + 'px'}">
+        <div class="gantt_activity_area" #ganttActivityArea [ngStyle]="{ 'height': project.tasks.length * ganttService.rowHeight + 'px', 'width': containerWidth + 'px'}">
             <activity-background [zoom]="zoom" [scale]="scale" [grid]="grid" [dimensions]="dimensions" [project]="project"></activity-background>
             <activity-bars [zoom]="zoom" [scale]="scale" [dimensions]="dimensions" [project]="project"></activity-bars>
         </div>
