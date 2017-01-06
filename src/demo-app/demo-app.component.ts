@@ -83,42 +83,7 @@ export class DemoAppComponent {
                 'resource': 'res2',
                 'start': new Date('2017-02-24T00:00:00.0Z'),
                 'end': new Date('2017-02-26T00:00:00.0Z')
-            },
-            {
-                'id': '9',
-                'name': 'Donec ac augue est.',
-                'resource': 'res2',
-                'start': new Date('2017-02-25T00:00:00.0Z'),
-                'end': new Date('2017-02-26T00:00:00.0Z')
-            },
-            {
-                'id': '10',
-                'name': 'Donec ac augue est.',
-                'resource': 'res2',
-                'start': new Date('2017-02-24T00:00:00.0Z'),
-                'end': new Date('2017-02-26T00:00:00.0Z')
-            },
-            {
-                'id': '11',
-                'name': 'Donec ac augue est.',
-                'resource': 'res2',
-                'start': new Date('2017-02-25T00:00:00.0Z'),
-                'end': new Date('2017-02-26T00:00:00.0Z')
-            },
-                        {
-                'id': '12',
-                'name': 'Donec ac augue est.',
-                'resource': 'res2',
-                'start': new Date('2017-02-24T00:00:00.0Z'),
-                'end': new Date('2017-02-26T00:00:00.0Z')
-            },
-            {
-                'id': '13',
-                'name': 'Donec ac augue est.',
-                'resource': 'res2',
-                'start': new Date('2017-02-25T00:00:00.0Z'),
-                'end': new Date('2017-02-26T00:00:00.0Z')
-            },
+            }
         ]
     };
 
