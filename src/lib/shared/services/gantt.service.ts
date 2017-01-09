@@ -62,16 +62,28 @@ export class GanttService {
         }
     }
 
-    public calculateBarProgress(width: number, percent: number) {
-        return (width / 100) * percent - 2 + 'px';        
+    public calculateBarProgress(width: number, percent: number): string {
+        if (typeof percent === "number") {
+            if (percent > 100) {
+                percent = 100;
+            }
+            let progress: number = (width / 100) * percent - 2;
+
+            return `${progress}px`;
+        }
+        return `${0}px`;
     }
 
     public calculateDiffDays(start: Date, end: Date): number {
-        let oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds /ms
-        let diffDays = Math.abs((start.getTime() - end.getTime()) / (oneDay));
-        let days = Math.round(diffDays);
+        try {
+            let oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds /ms
+            let diffDays = Math.abs((start.getTime() - end.getTime()) / (oneDay));
+            let days = Math.round(diffDays);
 
-        return days;
+            return days;
+        } catch (err) {
+            return 0;
+        }
     }
 
     public calculateScale(start: Date, end: Date) {

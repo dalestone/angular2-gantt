@@ -9,7 +9,7 @@ export interface Task {
     name: string;
     resource?: string;
     start: Date;
-    end: Date; //TODO(dale): rename to finish
+    end?: Date; 
     percentComplete?: number;
     color?: string;
 }

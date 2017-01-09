@@ -15,7 +15,7 @@ export class DemoAppComponent {
     options: Options = {
         scale: {
             start: new Date(2017, 1, 1),
-            end: new Date(2017, 1, 26)
+            end: new Date(2017, 1, 5)
         }
     };
 
@@ -93,25 +93,13 @@ export class DemoAppComponent {
             'name': 'new task',
             'percentComplete': 0,
             'start': new Date('2017-02-01T00:00:00.0Z'),
-            'end': new Date('2017-02-03T00:00:00.0Z'),
+            'end': new Date('2017-02-02T00:00:00.0Z'),
         }
+
         this.project.tasks.push(task);
     }
 
     updateTasks() {    
-        //var taskIndex = this.project.tasks.findIndex(function(task) {
-            //return task.id == '1'
-        //});
-        //let task = this.project.tasks[taskIndex];
-
-        // var progress = setInterval(function() {
-        //     if (task.percentComplete === 100) {
-        //         clearInterval(progress);
-        //     } else {
-        //         task.percentComplete += 1;
-        //     }
-        // }, 200);
-
         for (var i = 0; i < this.project.tasks.length; i++) {
             let task = this.project.tasks[i];
 
