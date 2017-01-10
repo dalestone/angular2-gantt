@@ -84,9 +84,7 @@ export class DemoAppComponent {
         ]
     };
 
-    constructor() {
-
-    }
+    constructor() {}
 
     createTask() {
         var task = {
@@ -94,7 +92,7 @@ export class DemoAppComponent {
             'name': 'new task',
             'percentComplete': 0,
             'start': new Date('2017-02-01T00:00:00.0Z'),
-            'end': new Date('2017-02-02T00:00:00.0Z'),
+            'end': new Date('2017-02-02T00:00:00.0Z')
         }
 
         this.project.tasks.push(task);
