@@ -22,7 +22,7 @@ import { GanttConfig } from '../shared/services/gantt-config.service';
         </div>
 
     </div>
-    <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': project.tasks * ganttService.barTop + 'px'}">
+    <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': project.tasks.length * ganttService.barTop + 'px'}">
         <div class="grid_row" [ngStyle]="setGridRowStyle()"
             *ngFor="let data of project.tasks" [style.backgroundcolor]="rowHighlight(data)">
             <div class="grid_cell" style="width: 300px">

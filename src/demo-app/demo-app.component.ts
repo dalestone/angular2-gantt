@@ -8,9 +8,6 @@ import { Project, IGanttOptions } from '../lib';
     templateUrl: './demo-app.component.html'
 })
 export class DemoAppComponent {
-
-    constructor() { }
-
     // Default options
     options: IGanttOptions = {
         scale: {
@@ -87,6 +84,10 @@ export class DemoAppComponent {
         ]
     };
 
+    constructor() {
+
+    }
+
     createTask() {
         var task = {
             'id': '',
@@ -99,11 +100,11 @@ export class DemoAppComponent {
         this.project.tasks.push(task);
     }
 
-    updateTasks() {    
+    updateTasks() {
         for (var i = 0; i < this.project.tasks.length; i++) {
             let task = this.project.tasks[i];
 
-            let progress = setInterval(function() {
+            let progress = setInterval(function () {
                 if (task.percentComplete === 100) {
                     clearInterval(progress);
                 } else {
