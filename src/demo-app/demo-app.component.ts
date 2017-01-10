@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 //import { Project, Options } from 'ng2-gantt';
 
-import { Project, Options } from '../lib';
+import { Project, IGanttOptions } from '../lib';
 
 @Component({
     selector: 'demo-app',
@@ -12,7 +12,7 @@ export class DemoAppComponent {
     constructor() { }
 
     // Default options
-    options: Options = {
+    options: IGanttOptions = {
         scale: {
             start: new Date(2017, 1, 1),
             end: new Date(2017, 1, 5)

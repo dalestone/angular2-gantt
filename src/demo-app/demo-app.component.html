@@ -1,31 +1,34 @@
 <h1>Angular 2 Gantt Demo</h1>
 <gantt [project]="project" [options]="options"></gantt>
 
-<h1>Project</h1>
-<input type="text" [(ngModel)]="project.name"/>
-<table>
-    <thead>
-        <tr>
-            <td>Name</td>
-            <td>Percent Complete</td>
-            <td>Start Date</td>
-            <td>End Date</td>
-            <td></td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let task of project.tasks">
-            <td><input type="text" [(ngModel)]="task.name"/></td>
-            <td><input type="number" [(ngModel)]="task.percentComplete" min="0" max="100"/>
-            <td><input type="text" [(ngModel)]="task.start"/></td>
-            <td><input type="text" [(ngModel)]="task.end"/></td>
-        </tr>
-    </tbody>
-</table>
+<div *ngIf="project">
+    <h1>Project</h1>
+    <input type="text" [(ngModel)]="project.name"/>
+    <table>
+        <thead>
+            <tr>
+                <td>Name</td>
+                <td>Percent Complete</td>
+                <td>Start Date</td>
+                <td>End Date</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let task of project.tasks">
+                <td><input type="text" [(ngModel)]="task.name"/></td>
+                <td><input type="number" [(ngModel)]="task.percentComplete" min="0" max="100"/>
+                <td><input type="text" [(ngModel)]="task.start"/></td>
+                <td><input type="text" [(ngModel)]="task.end"/></td>
+            </tr>
+        </tbody>
+    </table>
 
-<h1>Playground</h1>
-<button (click)="createTask()">Create Task</button>
-<button (click)="updateTasks()">Update Tasks</button>
+    <h1>Playground</h1>
+    <button (click)="createTask()">Create Task</button>
+    <button (click)="updateTasks()">Update Tasks</button>
 
-<h1>Output</h1>
-<p>{{ project | json }}</p>
+    <h1>Output</h1>
+    <p>{{ project | json }}</p>
+
+</div>

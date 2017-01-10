@@ -86,15 +86,19 @@ export class GanttService {
         }
     }
 
-    public calculateScale(start: Date, end: Date) {
+    public calculateScale(start: Date = new Date(), end: Date = this.addDays(start, 7)) {
         let scale: any[] = [];
 
-        while (start.getTime() <= end.getTime()) {
-            scale.push(start);
+        try {
+            while (start.getTime() <= end.getTime()) {
+                scale.push(start);
+                start = this.addDays(start, 1);
+            }
+            return scale;
 
-            start = this.addDays(start, 1);
+        } catch (err) {
+            return scale;
         }
-        return scale;
     }
 
     public isDayWeekend(date: Date): boolean {

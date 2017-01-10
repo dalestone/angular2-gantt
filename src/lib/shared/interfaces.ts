@@ -14,11 +14,11 @@ export interface Task {
     color?: string;
 }
 
-export interface Options {
-    scale: Scale;
+export interface IGanttOptions {
+    scale: IScale;
 }
 
-export interface Scale {
-    start: Date;
-    end: Date;
+export interface IScale {
+    start?: Date;
+    end?: Date;
 }
