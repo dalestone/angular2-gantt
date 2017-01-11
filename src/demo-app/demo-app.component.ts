@@ -89,7 +89,6 @@ export class DemoAppComponent {
     createTask(element:any) {
         var selectedStatus = element.options[element.selectedIndex].value;
 
-        console.log(status);
         var task = {
             'id': '',
             'name': 'new task',

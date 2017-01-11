@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GanttConfig } from './gantt-config.service';
+import { IBarStyle } from '../interfaces';
 
 @Injectable()
 export class GanttService {
@@ -11,6 +12,12 @@ export class GanttService {
     public barLineHeight: number = 0;
     public barTop: number = 0;
     public barMoveable: boolean = false;
+    private barStyles: IBarStyle[] = [
+        { status: "information", backgroundColor: "rgb(18,195, 244)", border: "1px solid #2196F3", progressBackgroundColor: "#2196F3" },
+        { status: "warning", backgroundColor: "#FFA726", border: "1px solid #EF6C00", progressBackgroundColor: "#EF6C00" },
+        { status: "error", backgroundColor: "#EF5350", border: "1px solid #C62828", progressBackgroundColor: "#C62828" },
+        { status: "completed", backgroundColor: "#66BB6A", border: "1px solid #2E7D32", progressBackgroundColor: "#2E7D32" }
+    ];
 
     constructor() {
         let _ganttConfig = new GanttConfig();
@@ -65,31 +72,31 @@ export class GanttService {
         }
     }
 
-    private getBarColour(status: string = ""): any {
+    private getBarColour(taskStatus: string = ""): any {
         var style = {};
  
         try {
-            status = status.toLowerCase();
+            taskStatus = taskStatus.toLowerCase();
         } catch (err)  {
-            status = "";
+            taskStatus = "";
         }
 
-        switch (status) {
-            case "information":
-                style["background-color"] = "rgb(18,195, 244)";
-                style["border"] = "1px solid #2196F3";
+        switch (taskStatus) {
+            case "information":                
+                style["background-color"] = this.barStyles[0].backgroundColor;
+                style["border"] = this.barStyles[0].border;
                 break;
             case "warning":
-                style["background-color"] = "#FFA726 ";
-                style["border"] = "1px solid #EF6C00";
+                style["background-color"] = this.barStyles[1].backgroundColor;
+                style["border"] = this.barStyles[1].border;
                 break;
             case "error":
-                style["background-color"] = "#EF5350";
-                style["border"] = "1px solid #C62828";
+                style["background-color"] = this.barStyles[2].backgroundColor;
+                style["border"] = this.barStyles[2].border;
                 break;
             case "completed":
-                style["background-color"] = "#66BB6A";
-                style["border"] = "1px solid #2E7D32";
+                style["background-color"] = this.barStyles[3].backgroundColor;
+                style["border"] = this.barStyles[3].border;
                 break;
             default:
                 style["background-color"] = "rgb(18,195, 244)";
@@ -100,21 +107,27 @@ export class GanttService {
         return style;
     }
 
-    public getBarProgressColour(status: string = ""): any {
+    public getBarProgressColour(taskStatus: string = ""): any {
         var style = {};
 
-        switch (status.toLowerCase()) {
+        try {
+            taskStatus = taskStatus.toLowerCase();
+        } catch (err)  {
+            taskStatus = "";
+        }
+
+        switch (taskStatus) {
             case "information":
-                style["background-color"] = "rgb(18,195, 244)";
+                style["background-color"] = this.barStyles[0].progressBackgroundColor;
                 break;
             case "warning":
-                style["background-color"] = "#EF6C00";
+                style["background-color"] = this.barStyles[1].progressBackgroundColor;
                 break;
             case "error":
-                style["background-color"] = "#C62828";
+                style["background-color"] = this.barStyles[2].progressBackgroundColor;
                 break;
             case "completed":
-                style["background-color"] = "#2E7D32";
+                style["background-color"] = this.barStyles[3].progressBackgroundColor;
                 break;
             default:
                 style["background-color"] = "rgb(18,195, 244)";

@@ -22,3 +22,10 @@ export interface IScale {
     start?: Date;
     end?: Date;
 }
+
+export interface IBarStyle {
+    status: string;
+    backgroundColor: string;
+    border: string;
+    progressBackgroundColor: string;
+}
