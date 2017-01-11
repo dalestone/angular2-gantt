@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 //import { Project, Options } from 'ng2-gantt';
 
-import { Project, IGanttOptions } from '../lib';
+import { Project, IGanttOptions, Zooming} from '../lib';
 
 @Component({
     selector: 'demo-app',
@@ -11,9 +11,10 @@ export class DemoAppComponent {
     // Default options
     options: IGanttOptions = {
         scale: {
-            start: new Date(2017, 1, 1),
-            end: new Date(2017, 1, 5)
-        }
+            start: new Date(2017, 0, 1),
+            end: new Date(2017, 1, 1)
+        },
+        zooming: Zooming[Zooming.hours]
     };
 
     project: Project = {
@@ -24,62 +25,62 @@ export class DemoAppComponent {
                 'id': '1',
                 'name': 'Lorem ipsum dolor sit amet.',
                 'resource': 'res1',
-                'start': new Date('2017-02-01T00:00:00.0Z'),
-                'end': new Date('2017-02-03T00:00:00.0Z'),
+                'start': new Date('2017-01-01T12:00:00.0Z'),
+                'end': new Date('2017-01-03T00:00:00.0Z'),
                 'percentComplete': 0
             },
             {
                 'id': '2',
                 'name': 'Praesent molestie lobortis mi non tempor.',
                 'resource': 'res1',
-                'start': new Date('2017-02-03T00:00:00.0Z'),
-                'end': new Date('2017-02-05T00:00:00.0Z'),
+                'start': new Date('2017-01-03T00:00:00.0Z'),
+                'end': new Date('2017-01-05T00:00:00.0Z'),
                 'percentComplete': 0
             },
             {
                 'id': '3',
                 'name': 'Cras sollicitudin egestas velit sit amet aliquam.',
                 'resource': 'res2',
-                'start': new Date('2017-02-05T00:00:00.0Z'),
-                'end': new Date('2017-02-06T00:00:00.0Z'),
+                'start': new Date('2017-01-05T00:00:00.0Z'),
+                'end': new Date('2017-01-06T00:00:00.0Z'),
                 'percentComplete': 0
             },
             {
                 'id': '4',
                 'name': 'Donec ac augue est.',
                 'resource': 'res2',
-                'start': new Date('2017-02-06T00:00:00.0Z'),
-                'end': new Date('2017-02-07T00:00:00.0Z'),
+                'start': new Date('2017-01-06T00:00:00.0Z'),
+                'end': new Date('2017-01-07T00:00:00.0Z'),
                 'percentComplete': 0
             },
             {
                 'id': '5',
                 'name': 'Lorem ipsum dolor sit amet.',
                 'resource': 'res1',
-                'start': new Date('2017-02-07T00:00:00.0Z'),
-                'end': new Date('2017-02-22T00:00:00.0Z'),
+                'start': new Date('2017-01-07T00:00:00.0Z'),
+                'end': new Date('2017-01-22T00:00:00.0Z'),
                 'percentComplete': 0
             },
             {
                 'id': '6',
                 'name': 'Praesent molestie lobortis mi non tempor.',
                 'resource': 'res1',
-                'start': new Date('2017-02-22T00:00:00.0Z'),
-                'end': new Date('2017-02-23T00:00:00.0Z')
+                'start': new Date('2017-01-22T00:00:00.0Z'),
+                'end': new Date('2017-01-23T00:00:00.0Z')
             },
             {
                 'id': '7',
                 'name': 'Cras sollicitudin egestas velit sit amet aliquam.',
                 'resource': 'res2',
-                'start': new Date('2017-02-23T00:00:00.0Z'),
-                'end': new Date('2017-02-24T00:00:00.0Z')
+                'start': new Date('2017-01-23T00:00:00.0Z'),
+                'end': new Date('2017-01-24T00:00:00.0Z')
             },
             {
                 'id': '8',
                 'name': 'Donec ac augue est.',
                 'resource': 'res2',
-                'start': new Date('2017-02-24T00:00:00.0Z'),
-                'end': new Date('2017-02-26T00:00:00.0Z')
+                'start': new Date('2017-01-24T00:00:00.0Z'),
+                'end': new Date('2017-01-26T00:00:00.0Z')
             }
         ]
     };
@@ -93,8 +94,8 @@ export class DemoAppComponent {
             'id': '',
             'name': 'new task',
             'percentComplete': 0,
-            'start': new Date('2017-02-01T00:00:00.0Z'),
-            'end': new Date('2017-02-02T00:00:00.0Z'),
+            'start': new Date('2017-01-01T12:00:00.0Z'),
+            'end': new Date('2017-01-01T13:00:00.0Z'),
             'status': selectedStatus
         }
 

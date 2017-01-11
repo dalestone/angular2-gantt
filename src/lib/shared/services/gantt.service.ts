@@ -31,7 +31,6 @@ export class GanttService {
         this.barMoveable = _ganttConfig.barMoveable;
     }
 
-    //TODO(dale): cell width is related to zooming e.g hours is 20, days is 76
     private calculateBarWidth(start: Date, end: Date, hours?: boolean): number {
         let days = this.calculateDiffDays(start, end);
         let width: number = days * this.cellWidth + days;
@@ -46,19 +45,38 @@ export class GanttService {
     private calculateBarLeft(start: Date, scale: any[], hours?: boolean): number {
         let left = 0;
         for (let i = 0; i < scale.length; i++) {
-            if (start.valueOf() === scale[i].valueOf()) {
-                if (hours) {
-                    left = i * 20 * 24 + i;
+            if (start.getDate() === scale[i].getDate()) {
+                var index: number = 0;
+                if (i === 0) {
+                    index = 1;
                 } else {
-                    left = i * this.cellWidth + i;
+                    index = i;
                 }
-            }
+
+                if (hours) {
+                    left = (index * 20 * 25 + index) - this.calculateBarLeftOffset(start, hours);
+                } else {
+                    left = (index * this.cellWidth  + index) - this.calculateBarLeftOffset(start, hours);
+                }
+                break;
+            }             
         }
         return left;
     }
 
-    public calculateBar(task: any, index: number, scale: any, hours?: boolean) {
+    private calculateBarLeftOffset(start: Date, hours?: boolean) {
+        var offset: number = 0;
+        var dayInHours: number = 24; // a day
 
+        if (hours) {
+            offset = 20 * 25 / dayInHours * start.getHours();
+        } else {
+            offset = this.cellWidth / dayInHours * start.getHours(); 
+        }
+        return offset;
+    }
+
+    public calculateBar(task: any, index: number, scale: any, hours?: boolean) {
         var barColour = this.getBarColour(task.status);
 
         return {
@@ -153,8 +171,8 @@ export class GanttService {
         try {
             let oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds /ms
             let diffDays = Math.abs((start.getTime() - end.getTime()) / (oneDay));
-            let days = Math.round(diffDays);
-
+            let days = diffDays; // don't use Math.round as it will draw an incorrect bar
+            
             return days;
         } catch (err) {
             return 0;

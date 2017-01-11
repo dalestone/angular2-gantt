@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
 
 import { GanttService } from '../shared/services/gantt.service';
 import { GanttConfig } from '../shared/services/gantt-config.service';
+// import { IGanttOptions } from '../shared/interfaces';
 
 @Component({
     selector: 'gantt-activity',
@@ -182,7 +183,7 @@ import { GanttConfig } from '../shared/services/gantt-config.service';
         }
     `]
 })
-export class GanttActivityComponent implements OnInit {
+export class GanttActivityComponent implements OnInit, AfterViewInit {
     @Input() project: any;
     @Input() options: any;
 
@@ -243,7 +244,7 @@ export class GanttActivityComponent implements OnInit {
         this.dates = this.ganttService.calculateScale(this.start, this.end);
         this.gridData = this.project.tasks;
         this.calculateRowsLength();
-        this.calculateCellsLength();        
+        this.calculateCellsLength();
         this.containerWidth = this.calculateContainerWidth();
         this.containerHeight = this.calculateContainerHeight();
         this.activityContainerSizes = this.ganttService.calculateActivityContainerDimensions();
@@ -258,15 +259,14 @@ export class GanttActivityComponent implements OnInit {
         this.gridDataHeight = this.calculateGridDataHeight();
     }
 
+    ngAfterViewInit() {
+        //TODO(dale): determine the best way to set default zoom level based on options passed
+        //this.zoomTasks(this.options.zooming);
+    }
+
     onVerticalScroll(verticalScroll: any, ganttGrid: any, ganttActivityArea: any): void {
         this.ganttService.scrollTop(verticalScroll, ganttGrid, ganttActivityArea);
     }
-
-    // onWheel(verticalScroll, ganttGrid, ganttActivityArea) {
-    //  this._ganttScrollService.scrollTop(verticalScroll, ganttGrid, ganttActivityArea);                 
-    //  return false; // return false to stop page scrolling
-    // console.log('wheel');
-    // }
 
     onResize(event: any): void {
         let activityContainerSizes = this.ganttService.calculateActivityContainerDimensions();
@@ -367,4 +367,5 @@ export class GanttActivityComponent implements OnInit {
         return this.gridData.length * this.ganttService.barTop;
     }
 }
+
 

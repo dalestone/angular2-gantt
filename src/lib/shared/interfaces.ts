@@ -16,6 +16,7 @@ export interface Task {
 
 export interface IGanttOptions {
     scale: IScale;
+    zooming: string
 }
 
 export interface IScale {
@@ -28,4 +29,9 @@ export interface IBarStyle {
     backgroundColor: string;
     border: string;
     progressBackgroundColor: string;
+}
+
+export enum Zooming {
+    hours,
+    days
 }
