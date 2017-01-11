@@ -67,8 +67,14 @@ export class GanttService {
 
     private getBarColour(status: string = ""): any {
         var style = {};
+ 
+        try {
+            status = status.toLowerCase();
+        } catch (err)  {
+            status = "";
+        }
 
-        switch (status.toLowerCase()) {
+        switch (status) {
             case "information":
                 style["background-color"] = "rgb(18,195, 244)";
                 style["border"] = "1px solid #2196F3";
