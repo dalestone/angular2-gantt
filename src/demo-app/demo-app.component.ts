@@ -86,13 +86,17 @@ export class DemoAppComponent {
 
     constructor() {}
 
-    createTask() {
+    createTask(element:any) {
+        var selectedStatus = element.options[element.selectedIndex].value;
+
+        console.log(status);
         var task = {
             'id': '',
             'name': 'new task',
             'percentComplete': 0,
             'start': new Date('2017-02-01T00:00:00.0Z'),
-            'end': new Date('2017-02-02T00:00:00.0Z')
+            'end': new Date('2017-02-02T00:00:00.0Z'),
+            'status': selectedStatus
         }
 
         this.project.tasks.push(task);
@@ -104,8 +108,17 @@ export class DemoAppComponent {
 
             let progress = setInterval(function () {
                 if (task.percentComplete === 100) {
+                    task.status = "Completed";
                     clearInterval(progress);
                 } else {
+                    if (task.percentComplete === 25) {
+                        task.status = "Warning";
+                    } else if (task.percentComplete === 50) {
+                        task.status = "Error";
+                    } else if (task.percentComplete === 75) {
+                        task.status = "Information";
+                    }
+
                     task.percentComplete += 1;
                 }
             }, 200);

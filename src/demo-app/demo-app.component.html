@@ -25,7 +25,14 @@
     </table>
 
     <h1>Playground</h1>
-    <button (click)="createTask()">Create Task</button>
+    Task Status: 
+    <select #taskStatus>
+        <option>Error</option>
+        <option>Warning</option>
+        <option>Information</option>
+        <option>Completed</option>
+    </select>
+    <button (click)="createTask(taskStatus)">Create Task</button>
     <button (click)="updateTasks()">Update Tasks</button>
 
     <h1>Output</h1>

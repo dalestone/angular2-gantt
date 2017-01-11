@@ -51,15 +51,71 @@ export class GanttService {
     }
 
     public calculateBar(task: any, index: number, scale: any, hours?: boolean) {
+
+        var barColour = this.getBarColour(task.status);
+
         return {
             'top': this.barTop * index + 2 + 'px',
             'left': this.calculateBarLeft(task.start, scale, hours) + 'px',
             'height': this.barHeight + 'px',
             'line-height': this.barLineHeight + 'px',
             'width': this.calculateBarWidth(task.start, task.end, hours) + 'px',
-            'background-color': '',
-            'border': ''
+            'background-color': barColour["background-color"],
+            'border': barColour["border"]
         }
+    }
+
+    private getBarColour(status: string = ""): any {
+        var style = {};
+
+        switch (status.toLowerCase()) {
+            case "information":
+                style["background-color"] = "rgb(18,195, 244)";
+                style["border"] = "1px solid #2196F3";
+                break;
+            case "warning":
+                style["background-color"] = "#FFA726 ";
+                style["border"] = "1px solid #EF6C00";
+                break;
+            case "error":
+                style["background-color"] = "#EF5350";
+                style["border"] = "1px solid #C62828";
+                break;
+            case "completed":
+                style["background-color"] = "#66BB6A";
+                style["border"] = "1px solid #2E7D32";
+                break;
+            default:
+                style["background-color"] = "rgb(18,195, 244)";
+                style["border"] = "1px solid #2196F3";
+                break;
+        }
+
+        return style;
+    }
+
+    public getBarProgressColour(status: string = ""): any {
+        var style = {};
+
+        switch (status.toLowerCase()) {
+            case "information":
+                style["background-color"] = "rgb(18,195, 244)";
+                break;
+            case "warning":
+                style["background-color"] = "#EF6C00";
+                break;
+            case "error":
+                style["background-color"] = "#C62828";
+                break;
+            case "completed":
+                style["background-color"] = "#2E7D32";
+                break;
+            default:
+                style["background-color"] = "rgb(18,195, 244)";
+                break;
+        }
+
+        return style;
     }
 
     public calculateBarProgress(width: number, percent: number): string {

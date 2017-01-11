@@ -11,7 +11,7 @@ export interface Task {
     start: Date;
     end?: Date; 
     percentComplete?: number;
-    color?: string;
+    status?: string;
 }
 
 export interface IGanttOptions {

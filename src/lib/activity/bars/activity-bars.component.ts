@@ -6,7 +6,7 @@ import { GanttService } from '../../shared/services/gantt.service';
     template: `
     <div class="gantt_activity_bars_area" [ngStyle]="{ 'height': containerHeight + 'px', 'width': containerWidth + 'px' }">
   <div #bar class="gantt_activity_line" *ngFor="let task of project.tasks; let i = index" [ngStyle]="drawBar(task, i)">
-    <div class="gantt_activity_progress" [ngStyle]="{'width': drawProgress(task, bar)}"></div>
+    <div class="gantt_activity_progress" [ngStyle]="drawProgress(task, bar)"></div>
     <div class="gantt_activity_progress_drag" style="left: 518px"></div>
     <div class="gantt_activity_content"><span *ngIf="task?.percentComplete">{{task.percentComplete}}%</span></div>
     <div class="gantt_activity_link_control gantt_activity_right" style="height: 26px; line-height: 30px">
@@ -208,8 +208,14 @@ export class GanttActivityBarsComponent implements OnInit {
         return style;
     }
 
-    private drawProgress(task: any, bar: any) {
-        return this.ganttService.calculateBarProgress(this.ganttService.getComputedStyle(bar, 'width'), task.percentComplete);
+    private drawProgress(task: any, bar: any):any {
+        var barColour = this.ganttService.getBarProgressColour(task.status);
+        var width = this.ganttService.calculateBarProgress(this.ganttService.getComputedStyle(bar, 'width'), task.percentComplete);
+
+        return {
+            'width': width,
+            'background-color': barColour["background-color"],
+        };
     }
 
     private addMouseEventListeners(dragFn: any) {
