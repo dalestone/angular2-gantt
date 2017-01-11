@@ -43,35 +43,38 @@ export class GanttService {
     }
 
     private calculateBarLeft(start: Date, scale: any[], hours?: boolean): number {
-        let left = 0;
-        for (let i = 0; i < scale.length; i++) {
+        var left: number = 0;
+        var columnPos: number = 0;
+
+        for (var i = 0; i < scale.length; i++) {
             if (start.getDate() === scale[i].getDate()) {
-                var index: number = 0;
                 if (i === 0) {
-                    index = 1;
+                    columnPos = 1;
                 } else {
-                    index = i;
+                    columnPos = i;
                 }
 
                 if (hours) {
-                    left = (index * 20 * 25 + index) - this.calculateBarLeftOffset(start, hours);
+                    //TODO(dale): cell width * columns, this needs to be a variable
+                    left = (columnPos * 20 * 25 + columnPos) - this.calculateBarLeftOffset(start, hours);
                 } else {
-                    left = (index * this.cellWidth  + index) - this.calculateBarLeftOffset(start, hours);
+                    left = (columnPos * this.cellWidth + columnPos) - this.calculateBarLeftOffset(start, hours);
                 }
                 break;
-            }             
+            }
         }
+
         return left;
     }
 
     private calculateBarLeftOffset(start: Date, hours?: boolean) {
         var offset: number = 0;
-        var dayInHours: number = 24; // a day
+        var hoursInDay: number = 24; // a day
 
         if (hours) {
-            offset = 20 * 25 / dayInHours * start.getHours();
+            offset = 20 * 25 / hoursInDay * (start.getHours() - (start.getMinutes() / 60));
         } else {
-            offset = this.cellWidth / dayInHours * start.getHours(); 
+            offset = this.cellWidth / hoursInDay * (start.getHours() - (start.getMinutes() / 60));
         }
         return offset;
     }
@@ -92,15 +95,15 @@ export class GanttService {
 
     private getBarColour(taskStatus: string = ""): any {
         var style = {};
- 
+
         try {
             taskStatus = taskStatus.toLowerCase();
-        } catch (err)  {
+        } catch (err) {
             taskStatus = "";
         }
 
         switch (taskStatus) {
-            case "information":                
+            case "information":
                 style["background-color"] = this.barStyles[0].backgroundColor;
                 style["border"] = this.barStyles[0].border;
                 break;
@@ -130,7 +133,7 @@ export class GanttService {
 
         try {
             taskStatus = taskStatus.toLowerCase();
-        } catch (err)  {
+        } catch (err) {
             taskStatus = "";
         }
 
@@ -172,7 +175,7 @@ export class GanttService {
             let oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds /ms
             let diffDays = Math.abs((start.getTime() - end.getTime()) / (oneDay));
             let days = diffDays; // don't use Math.round as it will draw an incorrect bar
-            
+
             return days;
         } catch (err) {
             return 0;
