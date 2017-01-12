@@ -25,7 +25,7 @@ export class DemoAppComponent {
                 'id': '1',
                 'name': 'Lorem ipsum dolor sit amet.',
                 'resource': 'res1',
-                'start': new Date('2017-01-01T12:00:00.0Z'),
+                'start': new Date('2017-01-01T00:00:00.0Z'),
                 'end': new Date('2017-01-03T00:00:00.0Z'),
                 'percentComplete': 0
             },
@@ -94,8 +94,8 @@ export class DemoAppComponent {
             'id': '',
             'name': 'new task',
             'percentComplete': 0,
-            'start': new Date('2017-01-01T12:45:10.0Z'),
-            'end': new Date('2017-01-01T20:30:00.0Z'),
+            'start': new Date('2017-01-01T03:30:00.0Z'),
+            'end': new Date('2017-01-03T15:30:00.0Z'),
             'status': selectedStatus
         }
 

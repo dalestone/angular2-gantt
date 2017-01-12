@@ -36,7 +36,7 @@ export class GanttService {
         let width: number = days * this.cellWidth + days;
 
         if (hours) {
-            width = days * 20 * 24 + days;
+            width = days * 20 * 24 + days * 24;
         }
 
         return width;
@@ -48,17 +48,10 @@ export class GanttService {
 
         for (var i = 0; i < scale.length; i++) {
             if (start.getDate() === scale[i].getDate()) {
-                if (i === 0) {
-                    columnPos = 1;
-                } else {
-                    columnPos = i;
-                }
-
                 if (hours) {
-                    //TODO(dale): cell width * columns, this needs to be a variable
-                    left = (columnPos * 20 * 25 + columnPos) - this.calculateBarLeftOffset(start, hours);
+                    left = (start.getDate() * 20 * 25 + start.getDate()) + this.calculateBarLeftOffset(start, hours);
                 } else {
-                    left = (columnPos * this.cellWidth + columnPos) - this.calculateBarLeftOffset(start, hours);
+                    left = start.getDate() * this.cellWidth + start.getDate() + this.calculateBarLeftOffset(start, hours);
                 }
                 break;
             }
@@ -67,14 +60,17 @@ export class GanttService {
         return left;
     }
 
+    //TODO(dale): this needs to be named better...
     private calculateBarLeftOffset(start: Date, hours?: boolean) {
         var offset: number = 0;
-        var hoursInDay: number = 24; // a day
+        var hoursInDay: number = 24;
+        var minutesInHour: number = 60;
+        var secondsInHour: number = 3600;
 
         if (hours) {
-            offset = 20 * 25 / hoursInDay * (start.getHours() - (start.getMinutes() / 60));
+            offset = 20 * 25 / hoursInDay * (start.getHours() + start.getMinutes() / minutesInHour + start.getSeconds() / secondsInHour) + 3;
         } else {
-            offset = this.cellWidth / hoursInDay * (start.getHours() - (start.getMinutes() / 60));
+            offset = this.cellWidth / hoursInDay * (start.getHours() + start.getMinutes() / minutesInHour + start.getSeconds() / secondsInHour);
         }
         return offset;
     }

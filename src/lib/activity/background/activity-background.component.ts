@@ -81,14 +81,11 @@ export class GanttActivityBackgroundComponent implements OnInit {
 
     //TODO(dale): improve performance, only render current view
     private drawGrid(): void {
-        //this.rows = new Array(this.project.tasks.length);
-        //console.log(this.project.tasks.length);
-
         if (this.zoomLevel === 'hours') {
             this.cells = [];
 
             this.grid.cells.dates.forEach((date: any) => {
-                for (var i = 0; i < 23; i++) {
+                for (var i = 0; i <= 23; i++) {
                     this.cells.push(date);
                 }
             });

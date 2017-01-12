@@ -23,7 +23,7 @@ import { GanttConfig } from '../shared/services/gantt-config.service';
         </div>
 
     </div>
-    <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': project.tasks.length * ganttService.barTop + 'px'}">
+    <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': project.tasks.length * ganttService.barTop + ganttService.rowHeight + 'px'}">
         <div class="grid_row" [ngStyle]="setGridRowStyle()"
             *ngFor="let data of project.tasks" [style.backgroundcolor]="rowHighlight(data)">
             <div class="grid_cell" style="width: 300px">
@@ -39,7 +39,7 @@ import { GanttConfig } from '../shared/services/gantt-config.service';
         </div>
     </div>
     <div class="gantt_vertical_scroll" #verticalScroll (scroll)="onVerticalScroll(verticalScroll, ganttGrid, ganttActivityArea)">
-        <div [ngStyle]="{ 'height': project.tasks.length * ganttService.rowHeight + 'px'}"></div>
+        <div [ngStyle]="{ 'height': project.tasks.length * ganttService.rowHeight + ganttService.rowHeight + 'px'}"></div>
     </div>
     `,
     styleUrls: [`
