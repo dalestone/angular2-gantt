@@ -5,6 +5,7 @@ import { IBarStyle } from '../interfaces';
 @Injectable()
 export class GanttService {
     public rowHeight: number = 0;
+    public hoursCellWidth: number = 20 * 25;
     public cellWidth: number = 0;
     public windowInnerWidth: number = 0;
     public activityHeight: number = 0;
@@ -44,33 +45,31 @@ export class GanttService {
 
     private calculateBarLeft(start: Date, scale: any[], hours?: boolean): number {
         var left: number = 0;
-        var columnPos: number = 0;
 
         for (var i = 0; i < scale.length; i++) {
             if (start.getDate() === scale[i].getDate()) {
                 if (hours) {
-                    left = (start.getDate() * 20 * 25 + start.getDate()) + this.calculateBarLeftOffset(start, hours);
+                    left = start.getDate() * this.hoursCellWidth + start.getDate() + this.calculateBarLeftDelta(start, hours);
                 } else {
-                    left = start.getDate() * this.cellWidth + start.getDate() + this.calculateBarLeftOffset(start, hours);
+                    left = start.getDate() * this.cellWidth + start.getDate() + this.calculateBarLeftDelta(start, hours);
                 }
                 break;
             }
         }
-
         return left;
     }
 
-    //TODO(dale): this needs to be named better...
-    private calculateBarLeftOffset(start: Date, hours?: boolean) {
+    private calculateBarLeftDelta(start: Date, hours?: boolean) {
         var offset: number = 0;
         var hoursInDay: number = 24;
         var minutesInHour: number = 60;
         var secondsInHour: number = 3600;
+        var startHours: number = start.getHours() + start.getMinutes() / minutesInHour + start.getSeconds() / secondsInHour;
 
         if (hours) {
-            offset = 20 * 25 / hoursInDay * (start.getHours() + start.getMinutes() / minutesInHour + start.getSeconds() / secondsInHour) + 3;
+            offset = this.hoursCellWidth / hoursInDay * startHours + 3;
         } else {
-            offset = this.cellWidth / hoursInDay * (start.getHours() + start.getMinutes() / minutesInHour + start.getSeconds() / secondsInHour);
+            offset = this.cellWidth / hoursInDay * startHours;
         }
         return offset;
     }
