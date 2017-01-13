@@ -33,6 +33,15 @@ export class GanttService {
     }
 
     private calculateBarWidth(start: Date, end: Date, hours?: boolean): number {
+
+        if (typeof start === "string") {
+            start = new Date(start);
+        }
+
+        if (typeof end === "string") {
+            end = new Date(end);
+        }
+
         let days = this.calculateDiffDays(start, end);
         let width: number = days * this.cellWidth + days;
 
