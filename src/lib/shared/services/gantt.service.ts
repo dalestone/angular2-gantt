@@ -49,9 +49,9 @@ export class GanttService {
         for (var i = 0; i < scale.length; i++) {
             if (start.getDate() === scale[i].getDate()) {
                 if (hours) {
-                    left = start.getDate() * this.hoursCellWidth + start.getDate() + this.calculateBarLeftDelta(start, hours);
+                    left = i * this.hoursCellWidth + i + this.calculateBarLeftDelta(start, hours);
                 } else {
-                    left = start.getDate() * this.cellWidth + start.getDate() + this.calculateBarLeftDelta(start, hours);
+                    left = i * this.cellWidth + i + this.calculateBarLeftDelta(start, hours);
                 }
                 break;
             }
@@ -67,7 +67,7 @@ export class GanttService {
         var startHours: number = start.getHours() + start.getMinutes() / minutesInHour + start.getSeconds() / secondsInHour;
 
         if (hours) {
-            offset = this.hoursCellWidth / hoursInDay * startHours + 3;
+            offset = this.hoursCellWidth / hoursInDay * startHours;
         } else {
             offset = this.cellWidth / hoursInDay * startHours;
         }
