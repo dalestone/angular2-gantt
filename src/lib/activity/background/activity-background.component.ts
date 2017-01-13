@@ -71,7 +71,7 @@ export class GanttActivityBackgroundComponent implements OnInit {
         var width = this.ganttService.cellWidth;
 
         if (this.zoomLevel === 'hours') {
-            width = 20; 
+            width = this.ganttService.hourCellWidth; 
         }
 
         return {

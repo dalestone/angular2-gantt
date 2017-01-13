@@ -337,7 +337,7 @@ export class GanttActivityComponent implements OnInit, AfterViewInit {
         let containerWidth = 0;
 
         if (this.zoomLevel === 'hours') {
-            containerWidth = this.cellsCount * 20 * 24 + 20;
+            containerWidth = this.cellsCount * this.ganttService.hourCellWidth * 24 + this.ganttService.hourCellWidth
         } else {
             containerWidth = this.cellsCount * this.ganttService.cellWidth + this.ganttService.cellWidth;
         }

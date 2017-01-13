@@ -5,7 +5,8 @@ import { IBarStyle } from '../interfaces';
 @Injectable()
 export class GanttService {
     public rowHeight: number = 0;
-    public hoursCellWidth: number = 20 * 25;
+    public hourCellWidth: number = 60; // change to 60 so minutes can been seen more easily
+    public hoursCellWidth: number = this.hourCellWidth * 25;
     public cellWidth: number = 0;
     public windowInnerWidth: number = 0;
     public activityHeight: number = 0;
@@ -46,7 +47,7 @@ export class GanttService {
         let width: number = days * this.cellWidth + days;
 
         if (hours) {
-            width = days * 20 * 24 + days * 24;
+            width = days * this.hourCellWidth * 24 + days * 24;
         }
 
         return width;

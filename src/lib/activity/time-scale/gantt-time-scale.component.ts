@@ -9,7 +9,7 @@ import { GanttService } from '../../shared/services/gantt.service';
     <div class="time_scale_cell" *ngFor="let date of scaleLine" [ngStyle]="setTimescaleCellStyle()" [ngClass]="(isDayWeekend(date)) ? 'weekend' : ''">{{date | date: 'dd-MM-yyyy'}}</div>
   </div>
   <div *ngIf="zoomLevel === 'hours'" class="time_scale_line" [ngStyle]="setTimescaleLineStyle('1px solid #cecece')">
-    <div class="time_scale_cell" *ngFor="let hour of getHours()" [ngStyle]="{ 'width': '20px' }">{{hour}}</div>
+    <div class="time_scale_cell" *ngFor="let hour of getHours()" [ngStyle]="{ 'width': ganttService.hourCellWidth + 'px' }">{{hour}}</div>
   </div>
 </div>
     `,
@@ -76,12 +76,13 @@ export class GanttTimeScaleComponent implements OnInit {
         };
     }
 
-    //TODO(dale): this should be read from gantt config
     private setTimescaleCellStyle() {
         var width = this.ganttService.cellWidth;
+        var hoursInDay = 24;
+        var hourSeperatorPixels = 23; // we don't include the first 
 
         if(this.zoomLevel === 'hours') {
-            width = 20 * 24 + 20 + 3;
+            width = this.ganttService.hourCellWidth * hoursInDay + hourSeperatorPixels; 
         }
 
         return {            
