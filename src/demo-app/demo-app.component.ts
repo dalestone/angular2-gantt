@@ -95,7 +95,7 @@ export class DemoAppComponent {
             'name': 'new task',
             'percentComplete': 0,
             'start': new Date('2017-01-01T03:30:00.0Z'),
-            'end': new Date('2017-01-03T15:30:00.0Z'),
+            'end': new Date('2017-01-01T12:45:00.0Z'),
             'status': selectedStatus
         }
 

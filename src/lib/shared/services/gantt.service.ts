@@ -55,11 +55,12 @@ export class GanttService {
 
     private calculateBarLeft(start: Date, scale: any[], hours?: boolean): number {
         var left: number = 0;
+        var hoursInDay: number = 24;
 
         for (var i = 0; i < scale.length; i++) {
             if (start.getDate() === scale[i].getDate()) {
                 if (hours) {
-                    left = i * this.hoursCellWidth + i + this.calculateBarLeftDelta(start, hours);
+                    left = i * hoursInDay * this.hourCellWidth + hoursInDay * i + this.calculateBarLeftDelta(start, hours);
                 } else {
                     left = i * this.cellWidth + i + this.calculateBarLeftDelta(start, hours);
                 }
@@ -77,7 +78,7 @@ export class GanttService {
         var startHours: number = start.getHours() + start.getMinutes() / minutesInHour + start.getSeconds() / secondsInHour;
 
         if (hours) {
-            offset = this.hoursCellWidth / hoursInDay * startHours;
+            offset = this.hoursCellWidth / hoursInDay * startHours - startHours;
         } else {
             offset = this.cellWidth / hoursInDay * startHours;
         }
