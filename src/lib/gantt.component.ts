@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter } from '@angular/core';
 import { NgStyle } from '@angular/common';
 import { GanttService } from './shared/services/gantt.service';
+import { IGanttOptions, Project } from './shared/interfaces';
 
 @Component({
     selector: 'gantt',
@@ -26,18 +27,8 @@ import { GanttService } from './shared/services/gantt.service';
     providers: []
 })
 export class GanttComponent implements OnInit {
-    private _options: any;
-    private _project: any;
-
-    @Input()
-    set options(options: any) {
-        if (options) {
-            this._options = options;
-        } else {
-            this.setDefaultOptions();
-        }
-    }
-    get options() { return this._options };
+    private _project: Project;
+    private _options: IGanttOptions;
 
     @Input()
     set project(project: any) {
@@ -48,6 +39,16 @@ export class GanttComponent implements OnInit {
         }
     }
     get project() { return this._project };
+
+    @Input()
+    set options(options: any) {
+        if (options.scale) {
+            this._options = options;
+        } else {
+            this.setDefaultOptions();
+        }
+    }
+    get options() { return this._options };
 
     private ganttContainerWidth: number;
 
@@ -60,14 +61,10 @@ export class GanttComponent implements OnInit {
     }
 
     setDefaultOptions() {
-        let start = new Date();
-        let end = this.ganttService.addDays(start, 7);
+        var scale = this.ganttService.calculateGridScale(this._project.tasks);
 
         this._options = {
-            scale: {
-                start: start,
-                end: end
-            }
+            scale: scale
         }
     }
 

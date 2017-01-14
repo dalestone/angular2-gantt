@@ -15,8 +15,8 @@ export interface Task {
 }
 
 export interface IGanttOptions {
-    scale: IScale;
-    zooming: string
+    scale?: IScale;
+    zooming?: string
 }
 
 export interface IScale {

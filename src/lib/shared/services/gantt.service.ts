@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GanttConfig } from './gantt-config.service';
-import { IBarStyle } from '../interfaces';
+import { IBarStyle, Task, IScale } from '../interfaces';
 
 @Injectable()
 export class GanttService {
@@ -70,7 +70,7 @@ export class GanttService {
         return left;
     }
 
-    private calculateBarLeftDelta(start: Date, hours?: boolean) {
+    private calculateBarLeftDelta(start: Date, hours?: boolean): number {
         var offset: number = 0;
         var hoursInDay: number = 24;
         var minutesInHour: number = 60;
@@ -164,6 +164,7 @@ export class GanttService {
         return style;
     }
 
+    /** Calculates the bar progress width in pixels given task percent complete */
     public calculateBarProgress(width: number, percent: number): string {
         if (typeof percent === "number") {
             if (percent > 100) {
@@ -176,6 +177,7 @@ export class GanttService {
         return `${0}px`;
     }
 
+    /** Calculates the difference in two dates and returns number of days */
     public calculateDiffDays(start: Date, end: Date): number {
         try {
             let oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds /ms
@@ -203,6 +205,7 @@ export class GanttService {
         }
     }
 
+    /** Determines whether given date is a weekend */
     public isDayWeekend(date: Date): boolean {
         let day = date.getDay();
 
@@ -212,16 +215,43 @@ export class GanttService {
         return false;
     }
 
-    public addDays(date: Date, days: number) {
+    /** Add x number of days to a date object */
+    public addDays(date: Date, days: number): Date {
         let result = new Date(date);
         result.setDate(result.getDate() + days);
         return result;
     }
 
-    public removeDays(date: Date, days: number) {
+    //** Remove x number of days from a date object */
+    public removeDays(date: Date, days: number): Date {
         let result = new Date(date);
         result.setDate(result.getDate() - days);
         return result;
+    }
+
+    /** Calculates the grid scale for gantt based on tasks start and end dates */
+    public calculateGridScale(tasks: Task[]): IScale {
+        var start: Date;
+        var end: Date;
+        var dates = tasks.map((task) => {
+            return {
+                start: new Date(task.start),
+                end: new Date(task.end)
+            }
+        });
+
+        start = new Date(Math.min.apply(null, dates.map(function(t) {
+            return t.start;
+        })));
+
+        end = new Date(Math.max.apply(null, dates.map(function(t) {
+            return t.end;
+        })));
+
+        return {
+            start: start,
+            end: end
+        }
     }
 
     public getHours(cols: number): string[] {
