@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GanttConfig } from './gantt-config.service';
-import { IBarStyle, Task, IScale } from '../interfaces';
+import { IBarStyle, Task, IScale, Zooming } from '../interfaces';
 
 @Injectable()
 export class GanttService {
@@ -14,6 +14,7 @@ export class GanttService {
     public barLineHeight: number = 0;
     public barTop: number = 0;
     public barMoveable: boolean = false;
+    public gridWidth: number = 500;
     private barStyles: IBarStyle[] = [
         { status: "information", backgroundColor: "rgb(18,195, 244)", border: "1px solid #2196F3", progressBackgroundColor: "#2196F3" },
         { status: "warning", backgroundColor: "#FFA726", border: "1px solid #EF6C00", progressBackgroundColor: "#EF6C00" },
@@ -85,8 +86,9 @@ export class GanttService {
         return offset;
     }
 
+    /** Calculate the bar styles */
     public calculateBar(task: any, index: number, scale: any, hours?: boolean) {
-        var barColour = this.getBarColour(task.status);
+        var barStyle = this.getBarStyle(task.status);
 
         return {
             'top': this.barTop * index + 2 + 'px',
@@ -94,12 +96,13 @@ export class GanttService {
             'height': this.barHeight + 'px',
             'line-height': this.barLineHeight + 'px',
             'width': this.calculateBarWidth(task.start, task.end, hours) + 'px',
-            'background-color': barColour["background-color"],
-            'border': barColour["border"]
+            'background-color': barStyle["background-color"],
+            'border': barStyle["border"]
         }
     }
 
-    private getBarColour(taskStatus: string = ""): any {
+    /** Get the bar style based on task status */
+    private getBarStyle(taskStatus: string = ""): any {
         var style = {};
 
         try {
@@ -134,7 +137,8 @@ export class GanttService {
         return style;
     }
 
-    public getBarProgressColour(taskStatus: string = ""): any {
+    /** Get the progresss bar background colour based on task status */
+    public getBarProgressStyle(taskStatus: string = ""): any {
         var style = {};
 
         try {
@@ -157,7 +161,7 @@ export class GanttService {
                 style["background-color"] = this.barStyles[3].progressBackgroundColor;
                 break;
             default:
-                style["background-color"] = "rgb(18,195, 244)";
+                style["background-color"] = this.barStyles[0].progressBackgroundColor;
                 break;
         }
 
@@ -190,6 +194,7 @@ export class GanttService {
         }
     }
 
+    /** Calculate the gantt scale range given the start and end date of tasks*/
     public calculateScale(start: Date = new Date(), end: Date = this.addDays(start, 7)) {
         let scale: any[] = [];
 
@@ -254,6 +259,7 @@ export class GanttService {
         }
     }
 
+    /** Create an hours array for use in time scale component */
     public getHours(cols: number): string[] {
         var hours: string[] = [];
 
@@ -282,28 +288,25 @@ export class GanttService {
     }
 
     public calculateActivityContainerDimensions(): any {
+        var scrollWidth:number = 18;
         this.windowInnerWidth = window.innerWidth;
-        let width = (this.windowInnerWidth - 319); // (-18) if you want to take into account scroll bar width
+        let width = this.windowInnerWidth - this.gridWidth - scrollWidth;
 
         return { height: this.activityHeight, width: width };
     }
 
+    /** Set the vertical scroll top positions for gantt */
     public scrollTop(verticalScrollElem: any, ganttGridElem: any, ganttActivityAreaElem: any) {
         let verticalScrollTop = verticalScrollElem.scrollTop;
 
         if (verticalScrollTop !== null && verticalScrollTop !== undefined) {
-            this.setGridScrollTop(verticalScrollTop, ganttGridElem);
-            this.setAreaScrollTop(verticalScrollTop, ganttActivityAreaElem);
+            this.setScrollTop(verticalScrollTop, ganttGridElem);
+            this.setScrollTop(verticalScrollTop, ganttActivityAreaElem);
         }
     }
 
-    private setGridScrollTop(scrollTop: number, element: any): void {
-        if (element !== null && element !== undefined) {
-            element.scrollTop = scrollTop;
-        }
-    }
-
-    private setAreaScrollTop(scrollTop: number, element: any): void {
+    /** Set the scroll top property of a native DOM element */
+    private setScrollTop(scrollTop: number, element: any): void {
         if (element !== null && element !== undefined) {
             element.scrollTop = scrollTop;
         }

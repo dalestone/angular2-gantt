@@ -1,92 +1,93 @@
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { GanttService } from '../../shared/services/gantt.service';
+import { Zooming } from '../../shared/interfaces';
 
 @Component({
     selector: 'activity-bars',
     template: `
     <div class="gantt_activity_bars_area" [ngStyle]="{ 'height': containerHeight + 'px', 'width': containerWidth + 'px' }">
-  <div #bar class="gantt_activity_line" *ngFor="let task of project.tasks; let i = index" [ngStyle]="drawBar(task, i)">
-    <div class="gantt_activity_progress" [ngStyle]="drawProgress(task, bar)"></div>
-    <div class="gantt_activity_progress_drag" style="left: 518px"></div>
-    <div class="gantt_activity_content"><span *ngIf="task?.percentComplete">{{task.percentComplete}}%</span></div>
-    <div class="gantt_activity_link_control gantt_activity_right" style="height: 26px; line-height: 30px">
-      <div class="gantt_link_point"></div>
+    <div #bar class="gantt_activity_line" *ngFor="let task of project.tasks; let i = index" [ngStyle]="drawBar(task, i)">
+        <div class="gantt_activity_progress" [ngStyle]="drawProgress(task, bar)"></div>
+        <div class="gantt_activity_progress_drag" style="left: 518px"></div>
+        <div class="gantt_activity_content"><span *ngIf="task?.percentComplete">{{task.percentComplete}}%</span></div>
+        <div class="gantt_activity_link_control gantt_activity_right" style="height: 26px; line-height: 30px">
+        <div class="gantt_link_point"></div>
+        </div>
+        <div  class="gantt_activity_link_control gantt_activity_left" style="height: 26px; line-height: 30px">
+        <div class="gantt_link_point"></div>
+        </div>
     </div>
-    <div  class="gantt_activity_link_control gantt_activity_left" style="height: 26px; line-height: 30px">
-      <div class="gantt_link_point"></div>
     </div>
-  </div>
-</div>
     `,
     styleUrls: [`
     .gantt_activity_line {
-    /*border-radius: 2px;*/
-    position: absolute;
-    box-sizing: border-box;
-    background-color: rgb(18,195,244);
-    border: 1px solid #2196F3;
-    -webkit-user-select: none;
-}
+        /*border-radius: 2px;*/
+        position: absolute;
+        box-sizing: border-box;
+        background-color: rgb(18,195,244);
+        border: 1px solid #2196F3;
+        -webkit-user-select: none;
+    }
 
-.gantt_activity_line:hover {
-    cursor: move;
-}
+    .gantt_activity_line:hover {
+        cursor: move;
+    }
 
-.gantt_activity_progress {
-    text-align: center;
-    z-index: 0;
-    background: #2196F3;
-    position: absolute;
-    min-height: 18px;
-    display: block;
-    height: 18px;
-}
+    .gantt_activity_progress {
+        text-align: center;
+        z-index: 0;
+        background: #2196F3;
+        position: absolute;
+        min-height: 18px;
+        display: block;
+        height: 18px;
+    }
 
-.gantt_activity_progress_drag {
-    height: 8px;
-    width: 8px;
-    bottom: -4px;
-    margin-left: 4px;
-    background-position: bottom;
-    background-image: "";
-    background-repeat: no-repeat;
-    z-index: 2;
-}
+    .gantt_activity_progress_drag {
+        height: 8px;
+        width: 8px;
+        bottom: -4px;
+        margin-left: 4px;
+        background-position: bottom;
+        background-image: "";
+        background-repeat: no-repeat;
+        z-index: 2;
+    }
 
-.gantt_activity_content {
-    font-size: 12px;
-    color: #fff;
-    width: 100%;
-    top: 0;
-    position: absolute;
-    white-space: nowrap;
-    text-align: center;
-    line-height: inherit;
-    overflow: hidden;
-    height: 100%;
-}
+    .gantt_activity_content {
+        font-size: 12px;
+        color: #fff;
+        width: 100%;
+        top: 0;
+        position: absolute;
+        white-space: nowrap;
+        text-align: center;
+        line-height: inherit;
+        overflow: hidden;
+        height: 100%;
+    }
 
-.gantt_activity_link_control {
-    position: absolute;
-    width: 13px;
-    top: 0;   
-}
+    .gantt_activity_link_control {
+        position: absolute;
+        width: 13px;
+        top: 0;   
+    }
 
-.gantt_activity_right {
-    right: 0;
-}
+    .gantt_activity_right {
+        right: 0;
+    }
 
-.gantt_activity_left {
-    left: 0;
-}
+    .gantt_activity_left {
+        left: 0;
+    }
 
-.gantt_activity_right:hover {
-    cursor:w-resize;
-}
+    .gantt_activity_right:hover {
+        cursor:w-resize;
+    }
 
-.gantt_activity_left:hover {
-    cursor:w-resize;
-}
+    .gantt_activity_left:hover {
+        cursor:w-resize;
+    }
     `],
     providers: [
         GanttService
@@ -97,15 +98,15 @@ export class GanttActivityBarsComponent implements OnInit {
     @Input() dimensions: any;
     @Input() project: any;
     @Input() zoom: any;
+    @Input() zoomLevel: any;
 
     private containerHeight: number = 0;
     private containerWidth: number = 0;
     private timescale: any;
-    private zoomLevel: string;
 
-    //TODO(dale): this needs to be able to handle passes, e.g show multiple lines? last 3?
+    constructor(private ganttService: GanttService) { 
 
-    constructor(private ganttService: GanttService) { }
+    }
 
     ngOnInit() {
         this.timescale = this.ganttService.calculateScale(this.scale.start, this.scale.end);
@@ -200,7 +201,7 @@ export class GanttActivityBarsComponent implements OnInit {
     private drawBar(task: any, index: number) {
         let style = {};
 
-        if (this.zoomLevel === 'hours') {
+        if (this.zoomLevel === Zooming[Zooming.hours]) {
             style = this.ganttService.calculateBar(task, index, this.timescale, true);
         } else {
             style = this.ganttService.calculateBar(task, index, this.timescale);
@@ -209,12 +210,12 @@ export class GanttActivityBarsComponent implements OnInit {
     }
 
     private drawProgress(task: any, bar: any):any {
-        var barColour = this.ganttService.getBarProgressColour(task.status);
+        var barStyle = this.ganttService.getBarProgressStyle(task.status);
         var width = this.ganttService.calculateBarProgress(this.ganttService.getComputedStyle(bar, 'width'), task.percentComplete);
 
         return {
             'width': width,
-            'background-color': barColour["background-color"],
+            'background-color': barStyle["background-color"],
         };
     }
 

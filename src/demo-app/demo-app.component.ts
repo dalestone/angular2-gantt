@@ -14,7 +14,7 @@ export class DemoAppComponent {
             start: new Date(2017, 0, 1),
             end: new Date(2017, 1, 1)
         },
-        zooming: Zooming[Zooming.hours]
+        zooming: Zooming[Zooming.days]
     };
 
     project: Project = {

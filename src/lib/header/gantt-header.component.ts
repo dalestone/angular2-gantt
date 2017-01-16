@@ -26,7 +26,7 @@ import { Component, Input } from '@angular/core';
             float: right;
             padding: 6px;
         }
-    `]
+    `] 
 })
 export class GanttHeaderComponent {
     @Input() name:any;

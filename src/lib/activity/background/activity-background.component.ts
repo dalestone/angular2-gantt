@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { GanttService } from '../../shared/services/gantt.service';
+import { Zooming } from '../../shared/interfaces';
 
 @Component({
     selector: 'activity-background',
@@ -33,19 +34,17 @@ import { GanttService } from '../../shared/services/gantt.service';
     `]
 })
 export class GanttActivityBackgroundComponent implements OnInit {
-    @Input() scale: any;
-    @Input() grid: any;
-    @Input() dimensions: any;
-    @Input() zoom: any
     @Input() project: any;
+    @Input() grid: any;
+    @Input() zoom: any;
+    @Input() zoomLevel: string;
 
-    // private containerHeight: any;
-    // private containerWidth: any;
     private rows: any[] = [];
     private cells: any[] = [];
-    private zoomLevel: string = 'days';
 
-    constructor(private ganttService: GanttService) { }
+    constructor(private ganttService: GanttService) {
+
+    }
 
     ngOnInit() {
         this.drawGrid();
@@ -66,11 +65,10 @@ export class GanttActivityBackgroundComponent implements OnInit {
         };
     }
 
-    //TODO(dale) add to gantt config
     private setCellStyle() {
         var width = this.ganttService.cellWidth;
 
-        if (this.zoomLevel === 'hours') {
+        if (this.zoomLevel === Zooming[Zooming.hours]) {
             width = this.ganttService.hourCellWidth; 
         }
 
@@ -79,9 +77,8 @@ export class GanttActivityBackgroundComponent implements OnInit {
         };
     }
 
-    //TODO(dale): improve performance, only render current view
     private drawGrid(): void {
-        if (this.zoomLevel === 'hours') {
+        if (this.zoomLevel === Zooming[Zooming.hours]) {
             this.cells = [];
 
             this.grid.cells.dates.forEach((date: any) => {

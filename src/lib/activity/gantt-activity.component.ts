@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef, AfterViewIn
 
 import { GanttService } from '../shared/services/gantt.service';
 import { GanttConfig } from '../shared/services/gantt-config.service';
-// import { IGanttOptions } from '../shared/interfaces';
+import { IGanttOptions, Zooming } from '../shared/interfaces';
 
 @Component({
     selector: 'gantt-activity',
@@ -13,29 +13,30 @@ import { GanttConfig } from '../shared/services/gantt-config.service';
         <input name="scales" (click)="zoomTasks('hours')" type="radio"><span>Hours</span>
     </label>
     <label>
-        <input name="scales" (click)="zoomTasks('days')" type="radio" checked="true"><span>Days</span>
+        <input name="scales" (click)="zoomTasks('days')" type="radio"><span>Days</span>
     </label>
     </div>
-    <div class="grid" #ganttGrid [ngStyle]="{ 'height': ganttActivityHeight + 'px', 'width': 300 + 'px'}">
+    <div class="grid" #ganttGrid [ngStyle]="{ 'height': ganttActivityHeight + 'px', 'width': ganttService.gridWidth + 'px'}">
     <div class="grid_scale" [ngStyle]="setGridScaleStyle()">
         <div class="grid_head_cell" *ngFor="let column of gridColumns" [style.width]="column.width">
-            <label style="padding-left:15px">{{column.name}}</label>
+            <label [ngStyle]="{ 'margin-left': column.left + 'px'}">{{column.name}}</label>            
         </div>
-
     </div>
     <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': project.tasks.length * ganttService.barTop + ganttService.rowHeight * 3 + 'px'}">
-        <div class="grid_row" [ngStyle]="setGridRowStyle()"
-            *ngFor="let data of project.tasks" [style.backgroundcolor]="rowHighlight(data)">
-            <div class="grid_cell" style="width: 300px">
-        <div class="gantt_tree_content">{{data.name}}</div>
-    </div>
-    </div>
+        <div class="grid_row" [ngStyle]="setGridRowStyle()" *ngFor="let data of project.tasks">
+            <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px' }">
+                <div class="gantt_tree_content">{{data.name}}</div>                
+            </div>
+            <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[1].width + 'px' }">
+                <div>{{data.percentComplete}}</div>
+            </div>
+        </div>
     </div>
     </div><div class="gantt_activity" (window:resize)="onResize($event)" [ngStyle]="{ 'height': ganttActivityHeight + 'px', 'width': ganttActivityWidth - 18 + 'px'}">
-        <time-scale [zoom]="zoom" [scale]="scale" [dimensions]="dimensions"></time-scale>
+        <time-scale [zoom]="zoom" [zoomLevel]="zoomLevel" [scale]="scale" [dimensions]="dimensions"></time-scale>
         <div class="gantt_activity_area" #ganttActivityArea [ngStyle]="{ 'height': project.tasks.length * ganttService.rowHeight + 'px', 'width': containerWidth + 'px'}">
-            <activity-background [zoom]="zoom" [scale]="scale" [grid]="grid" [dimensions]="dimensions" [project]="project"></activity-background>
-            <activity-bars [zoom]="zoom" [scale]="scale" [dimensions]="dimensions" [project]="project"></activity-bars>
+            <activity-background [zoom]="zoom" [zoomLevel]="zoomLevel" [grid]="grid" [project]="project"></activity-background>
+            <activity-bars [zoom]="zoom" [zoomLevel]="zoomLevel" [scale]="scale" [dimensions]="dimensions" [project]="project"></activity-bars>
         </div>
     </div>
     <div class="gantt_vertical_scroll" #verticalScroll (scroll)="onVerticalScroll(verticalScroll, ganttGrid, ganttActivityArea)">
@@ -101,7 +102,7 @@ import { GanttConfig } from '../shared/services/gantt-config.service';
                 top: 80px;
             }
 
-                .grid {
+        .grid {
             overflow-x: hidden;
             overflow-y: hidden;
             display: inline-block;
@@ -113,7 +114,7 @@ import { GanttConfig } from '../shared/services/gantt-config.service';
             color: #6b6b6b;
             font-size: 12px;
             border-bottom: 1px solid #cecece;
-            background-color: #fff;
+            background-color: #fafafa;
         }
 
         .grid_head_cell {
@@ -183,7 +184,7 @@ import { GanttConfig } from '../shared/services/gantt-config.service';
         }
     `]
 })
-export class GanttActivityComponent implements OnInit, AfterViewInit {
+export class GanttActivityComponent implements OnInit {
     @Input() project: any;
     @Input() options: any;
 
@@ -204,7 +205,7 @@ export class GanttActivityComponent implements OnInit, AfterViewInit {
     private activityContainerSizes: any;
     private ganttActivityHeight: any;
     private ganttActivityWidth: any;
-    private zoomLevel: string = 'days';
+    private zoomLevel: string = Zooming[Zooming.hours];
 
     private scale: any = {
         start: null,
@@ -232,13 +233,11 @@ export class GanttActivityComponent implements OnInit, AfterViewInit {
     constructor(
         public elem: ElementRef,
         private ganttService: GanttService) {
-
-        // set the zoom level to days
-        this.zoom.emit(this.zoomLevel);
+            
     }
 
-    // TODO(dale): this needs to be refactored as its very messy!
     ngOnInit() {
+        this.zoomLevel = this.options.zooming;
         this.start = this.options.scale.start;
         this.end = this.options.scale.end;
         this.dates = this.ganttService.calculateScale(this.start, this.end);
@@ -259,11 +258,6 @@ export class GanttActivityComponent implements OnInit, AfterViewInit {
         this.gridDataHeight = this.calculateGridDataHeight();
     }
 
-    ngAfterViewInit() {
-        //TODO(dale): determine the best way to set default zoom level based on options passed
-        //this.zoomTasks(this.options.zooming);
-    }
-
     onVerticalScroll(verticalScroll: any, ganttGrid: any, ganttActivityArea: any): void {
         this.ganttService.scrollTop(verticalScroll, ganttGrid, ganttActivityArea);
     }
@@ -272,11 +266,6 @@ export class GanttActivityComponent implements OnInit, AfterViewInit {
         let activityContainerSizes = this.ganttService.calculateActivityContainerDimensions();
         this.ganttActivityHeight = activityContainerSizes.height;
         this.ganttActivityWidth = activityContainerSizes.width;
-    }
-
-    rowHighlight(data: any) {
-        let backgroundColour = '';
-        return backgroundColour;
     }
 
     setScale() {
@@ -316,14 +305,14 @@ export class GanttActivityComponent implements OnInit, AfterViewInit {
     private setGridScaleStyle() {
         var height = this.ganttService.rowHeight;
 
-        if (this.zoomLevel === 'hours') {
+        if (this.zoomLevel === Zooming[Zooming.hours]) {
             height *= 2;
         }
 
         return {
             'height': height + 'px',
             'line-height': height + 'px',
-            'width': '300px'
+            'width': this.ganttService.gridWidth + 'px'
         };
     }
 
@@ -336,7 +325,7 @@ export class GanttActivityComponent implements OnInit, AfterViewInit {
     private calculateContainerWidth(): number {
         let containerWidth = 0;
 
-        if (this.zoomLevel === 'hours') {
+        if (this.zoomLevel === Zooming[Zooming.hours]) {
             containerWidth = this.cellsCount * this.ganttService.hourCellWidth * 24 + this.ganttService.hourCellWidth
         } else {
             containerWidth = this.cellsCount * this.ganttService.cellWidth + this.ganttService.cellWidth;
@@ -357,9 +346,10 @@ export class GanttActivityComponent implements OnInit, AfterViewInit {
         this.ganttActivityWidth = this.activityContainerSizes.width;
     }
 
-    private setGridColumns() {
+    private setGridColumns() {        
         return this.gridColumns = [
-            { name: 'Task', width: 346 }
+            { name: 'Task',  left: 20, width: 350 },
+            { name: '%', left: 315, width: 150 }
         ];
     }
 
