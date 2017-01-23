@@ -200,12 +200,19 @@ export class GanttService {
             if (task.end != null) {
                 let oneHour = 60 * 60 * 1000;
                 let diffHours = (Math.abs((task.start.getTime() - task.end.getTime()) / oneHour));
-                let hours = diffHours;
+                let duration = diffHours;
 
-                if (hours > 1) {
-                    return `${hours} hr(s)`;
+                if (duration > 24) {
+                    return `${Math.round(duration / 24)} day(s)`; // duration in days
+                } else if (duration > 1) {
+                    return `${Math.round(duration)} hr(s)`; // duration in hours
                 } else {
-                    return `${hours * 60} min(s)`
+                    let minutes = duration * 60;
+
+                    if (minutes < 1) {
+                        return `${Math.round(minutes * 60)} second(s)`; // duration in seconds
+                    }                    
+                    return `${Math.round(minutes)} min(s)` // duration in minutes
                 }                
             }
 

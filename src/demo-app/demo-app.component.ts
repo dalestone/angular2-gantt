@@ -81,6 +81,13 @@ export class DemoAppComponent {
                 'resource': 'res2',
                 'start': new Date('2017-01-24T00:00:00.0Z'),
                 'end': new Date('2017-01-24T00:34:00.0Z')
+            },
+            {
+                'id': '9',
+                'name': 'Lorem Ipsum',
+                'resource': 'res2',
+                'start': new Date('2017-01-24T00:00:00.0Z'),
+                'end': new Date('2017-01-24T00:00:36.0Z')
             }
         ]
     };
