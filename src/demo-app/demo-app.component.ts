@@ -80,7 +80,7 @@ export class DemoAppComponent {
                 'name': 'Donec ac augue est.',
                 'resource': 'res2',
                 'start': new Date('2017-01-24T00:00:00.0Z'),
-                'end': new Date('2017-01-26T00:00:00.0Z')
+                'end': new Date('2017-01-24T00:34:00.0Z')
             }
         ]
     };

@@ -9,9 +9,9 @@ import { Component, Input } from '@angular/core';
     `,
     styleUrls: [`
         .gantt-header {
-            background-color: #FAFAFA;
+            background-color: whitesmoke;
             height: 50px;
-            border-bottom: 1px solid #CECECE;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         .gantt-header-title {

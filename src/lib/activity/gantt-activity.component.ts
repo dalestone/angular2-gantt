@@ -18,8 +18,8 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
     </div>
     <div class="grid" #ganttGrid [ngStyle]="{ 'height': ganttActivityHeight + 'px', 'width': ganttService.gridWidth + 'px'}">
     <div class="grid_scale" [ngStyle]="setGridScaleStyle()">
-        <div class="grid_head_cell" *ngFor="let column of gridColumns" [style.width]="column.width">
-            <label [ngStyle]="{ 'margin-left': column.left + 'px'}">{{column.name}}</label>            
+        <div class="grid_head_cell" *ngFor="let column of gridColumns" [style.width]="column.width + 'px'" [style.left]="column.left + 'px'">
+            <label>{{column.name}}</label>            
         </div>
     </div>
     <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': project.tasks.length * ganttService.barTop + ganttService.rowHeight * 3 + 'px'}">
@@ -29,6 +29,9 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
             </div>
             <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[1].width + 'px' }">
                 <div>{{data.percentComplete}}</div>
+            </div>
+            <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[2].width + 'px'}">
+                <div> {{ ganttService.calculateDuration(data) }}</div>
             </div>
         </div>
     </div>
@@ -113,8 +116,8 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
         .grid_scale {
             color: #6b6b6b;
             font-size: 12px;
-            border-bottom: 1px solid #cecece;
-            background-color: #fafafa;
+            border-bottom: 1px solid #e0e0e0;
+            background-color: whitesmoke;
         }
 
         .grid_head_cell {
@@ -141,7 +144,7 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
 
         .grid_row {
             box-sizing: border-box;
-            border-bottom: 1px solid #ebebeb;
+            border-bottom: 1px solid #e0e0e0;
             background-color: #fff;
             position: relative;
             -webkit-user-select: none;
@@ -167,11 +170,11 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
 
         .actions_bar {
             /*border-top: 1px solid #cecece;*/
-            border-bottom: 1px solid #cecece;
+            border-bottom: 1px solid #e0e0e0;
             clear: both;
             /*margin-top: 90px;*/
             height: 28px;
-            background: #fafafa;
+            background: whitesmoke;
             color: #494949;
             font-family: Arial, sans-serif;
             font-size: 13px;
@@ -225,7 +228,11 @@ export class GanttActivityComponent implements OnInit {
     private data: any[] = [];
 
     private gridData: any[] = [];
-    private gridColumns: any[] = [];
+    public gridColumns: any[] = [
+        { name: 'Task',  left: 20, width: 350 },
+        { name: '%', left: 8, width: 40 },
+        { name: 'Duration', left: 14, width: 120 }
+    ];
     private gridDataHeight = 0;
 
     public gridScale: any;
@@ -254,7 +261,6 @@ export class GanttActivityComponent implements OnInit {
         this.setDimensions();
         this.setData();
         this.setSizes();
-        this.setGridColumns();
         this.gridDataHeight = this.calculateGridDataHeight();
     }
 
@@ -344,13 +350,6 @@ export class GanttActivityComponent implements OnInit {
     private setSizes(): void {
         this.ganttActivityHeight = this.activityContainerSizes.height;
         this.ganttActivityWidth = this.activityContainerSizes.width;
-    }
-
-    private setGridColumns() {        
-        return this.gridColumns = [
-            { name: 'Task',  left: 20, width: 350 },
-            { name: '%', left: 315, width: 150 }
-        ];
     }
 
     private calculateGridDataHeight(): number {

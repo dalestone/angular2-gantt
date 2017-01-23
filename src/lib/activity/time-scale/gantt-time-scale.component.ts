@@ -15,7 +15,7 @@ import { Zooming } from '../../shared/interfaces';
         </div>`,
     styleUrls: [`
         .weekend {
-            background-color:#FAFAFA;
+            background-color:whitesmoke;
         }
 
         .time_scale {

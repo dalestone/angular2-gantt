@@ -5,9 +5,9 @@ import { Component, Input } from '@angular/core';
     template: `<div class="gantt-footer"></div>`,
     styleUrls: [`
         .gantt-footer {
-            background-color: #FAFAFA;
+            background-color: whitesmoke;
             height: 36px;    
-            border-top: 1px solid #CECECE;
+            border-top: 1px solid #e0e0e0;
         }
 
         .gantt-footer-actions {

@@ -194,6 +194,27 @@ export class GanttService {
         }
     }
 
+    /** Calculates the difference in two dates and returns number of hours */
+    public calculateDuration(task: any): string {
+        try {
+            if (task.end != null) {
+                let oneHour = 60 * 60 * 1000;
+                let diffHours = (Math.abs((task.start.getTime() - task.end.getTime()) / oneHour));
+                let hours = diffHours;
+
+                if (hours > 1) {
+                    return `${hours} hr(s)`;
+                } else {
+                    return `${hours * 60} min(s)`
+                }                
+            }
+
+            return '';
+        } catch (err) {
+            return '';
+        }
+    }
+
     /** Calculate the gantt scale range given the start and end date of tasks*/
     public calculateScale(start: Date = new Date(), end: Date = this.addDays(start, 7)) {
         let scale: any[] = [];

@@ -29,7 +29,7 @@ import { Zooming } from '../../shared/interfaces';
         }
 
         .weekend {
-            background-color:#FAFAFA;
+            background-color:whitesmoke;
         }
     `]
 })
