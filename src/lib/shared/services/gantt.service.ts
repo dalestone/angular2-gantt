@@ -58,14 +58,16 @@ export class GanttService {
         var left: number = 0;
         var hoursInDay: number = 24;
 
-        for (var i = 0; i < scale.length; i++) {
-            if (start.getDate() === scale[i].getDate()) {
-                if (hours) {
-                    left = i * hoursInDay * this.hourCellWidth + hoursInDay * i + this.calculateBarLeftDelta(start, hours);
-                } else {
-                    left = i * this.cellWidth + i + this.calculateBarLeftDelta(start, hours);
+        if (start != null) {
+            for (var i = 0; i < scale.length; i++) {
+                if (start.getDate() === scale[i].getDate()) {
+                    if (hours) {
+                        left = i * hoursInDay * this.hourCellWidth + hoursInDay * i + this.calculateBarLeftDelta(start, hours);
+                    } else {
+                        left = i * this.cellWidth + i + this.calculateBarLeftDelta(start, hours);
+                    }
+                    break;
                 }
-                break;
             }
         }
         return left;
