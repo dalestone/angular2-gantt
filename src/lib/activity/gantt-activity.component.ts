@@ -16,7 +16,7 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
             <input name="scales" (click)="zoomTasks('days')" type="radio"><span>Days</span>
         </label>
         <div style="float:right">
-            <button (click)="expand()" style="background-color:whitesmoke; border:none; font-size:22px" [innerHTML]="activityActions.expandedIcon"></button>
+            <button (click)="expand()" style="background-color:whitesmoke; border:1px solid #e0e0e0; font-size:21px" [innerHTML]="activityActions.expandedIcon"></button>
         </div>
     </div>
     <div class="grid" #ganttGrid [ngStyle]="{ 'height': ganttActivityHeight, 'width': ganttService.gridWidth + 'px'}">
@@ -289,8 +289,7 @@ export class GanttActivityComponent implements OnInit {
     onResize(event: any): void {
         let activityContainerSizes = this.ganttService.calculateActivityContainerDimensions();
         if (this.activityActions.expanded) {
-            this.ganttActivityHeight = '100%';
-
+            this.ganttActivityHeight = this.project.tasks.length * this.ganttService.rowHeight + this.ganttService.rowHeight * 3 + 'px';
         } else {
             this.ganttActivityHeight = activityContainerSizes.height + 'px';;
         }
@@ -340,7 +339,7 @@ export class GanttActivityComponent implements OnInit {
         } else {
             this.activityActions.expanded = true;
             this.activityActions.expandedIcon = this.upTriangle;
-            this.ganttActivityHeight = '100%';
+            this.ganttActivityHeight = this.project.tasks.length * this.ganttService.rowHeight + this.ganttService.rowHeight * 3 + 'px';
         }
     }
 
