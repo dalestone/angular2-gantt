@@ -40,7 +40,7 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
     </div>
     </div><div class="gantt_activity" (window:resize)="onResize($event)" [ngStyle]="{ 'height': ganttActivityHeight, 'width': ganttActivityWidth - 18 + 'px'}">
         <time-scale [zoom]="zoom" [zoomLevel]="zoomLevel" [scale]="scale" [dimensions]="dimensions"></time-scale>
-        <div (wheel)="onWheel($event, ganttGrid, ganttActivityArea)" class="gantt_activity_area" #ganttActivityArea [ngStyle]="{ 'height': project.tasks.length * ganttService.rowHeight + 'px', 'width': containerWidth + 'px'}">
+        <div class="gantt_activity_area" #ganttActivityArea [ngStyle]="{ 'height': project.tasks.length * ganttService.rowHeight + 'px', 'width': containerWidth + 'px'}">
             <activity-background [zoom]="zoom" [zoomLevel]="zoomLevel" [grid]="grid" [project]="project"></activity-background>
             <activity-bars [zoom]="zoom" [zoomLevel]="zoomLevel" [scale]="scale" [dimensions]="dimensions" [project]="project"></activity-bars>
         </div>
