@@ -199,7 +199,7 @@ export class GanttService {
     /** Calculates the difference in two dates and returns number of hours */
     public calculateDuration(task: any): string {
         try {
-            if (task.end != null) {
+            if (task.start != null && task.end != null) {
                 let oneHour = 60 * 60 * 1000;
                 let diffHours = (Math.abs((task.start.getTime() - task.end.getTime()) / oneHour));
                 let duration = diffHours;
