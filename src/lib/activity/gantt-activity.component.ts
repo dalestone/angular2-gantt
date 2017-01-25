@@ -279,12 +279,12 @@ export class GanttActivityComponent implements OnInit {
         this.ganttService.scrollTop(verticalScroll, ganttGrid, ganttActivityArea);
     }
 
-    onWheel(e, ganttGrid: any, ganttActivityArea: any): void {
-        //var verticalScroll = document.querySelector('.gantt_vertical_scroll'); //TODO(dale): replace with @ViewChild('')
+    // onWheel(e, ganttGrid: any, ganttActivityArea: any): void {
+    //     //var verticalScroll = document.querySelector('.gantt_vertical_scroll'); //TODO(dale): replace with @ViewChild('')
 
-        //console.log("wheel event called", e);
-        //console.log("wheel event called",e, verticalScroll, ganttGrid, ganttActivityArea);
-    }
+    //     //console.log("wheel event called", e);
+    //     //console.log("wheel event called",e, verticalScroll, ganttGrid, ganttActivityArea);
+    // }
 
     onResize(event: any): void {
         let activityContainerSizes = this.ganttService.calculateActivityContainerDimensions();
