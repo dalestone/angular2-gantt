@@ -8,15 +8,18 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
     selector: 'gantt-activity',
     template: `
     <div class="actions_bar">
-    <strong> Zooming: &nbsp; </strong>
-    <label>
-        <input name="scales" (click)="zoomTasks('hours')" type="radio"><span>Hours</span>
-    </label>
-    <label>
-        <input name="scales" (click)="zoomTasks('days')" type="radio"><span>Days</span>
-    </label>
+        <strong> Zooming: </strong>
+        <label>
+            <input name="scales" (click)="zoomTasks('hours')" type="radio"><span>Hours</span>
+        </label>
+        <label>
+            <input name="scales" (click)="zoomTasks('days')" type="radio"><span>Days</span>
+        </label>
+        <div style="float:right">
+            <button (click)="expand()" style="background-color:whitesmoke; border:none; font-size:22px" [innerHTML]="activityActions.expandedIcon"></button>
+        </div>
     </div>
-    <div class="grid" #ganttGrid [ngStyle]="{ 'height': ganttActivityHeight + 'px', 'width': ganttService.gridWidth + 'px'}">
+    <div class="grid" #ganttGrid [ngStyle]="{ 'height': ganttActivityHeight, 'width': ganttService.gridWidth + 'px'}">
     <div class="grid_scale" [ngStyle]="setGridScaleStyle()">
         <div class="grid_head_cell" *ngFor="let column of gridColumns" [style.width]="column.width + 'px'" [style.left]="column.left + 'px'">
             <label>{{column.name}}</label>            
@@ -35,14 +38,14 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
             </div>
         </div>
     </div>
-    </div><div class="gantt_activity" (window:resize)="onResize($event)" [ngStyle]="{ 'height': ganttActivityHeight + 'px', 'width': ganttActivityWidth - 18 + 'px'}">
+    </div><div class="gantt_activity" (window:resize)="onResize($event)" [ngStyle]="{ 'height': ganttActivityHeight, 'width': ganttActivityWidth - 18 + 'px'}">
         <time-scale [zoom]="zoom" [zoomLevel]="zoomLevel" [scale]="scale" [dimensions]="dimensions"></time-scale>
-        <div class="gantt_activity_area" #ganttActivityArea [ngStyle]="{ 'height': project.tasks.length * ganttService.rowHeight + 'px', 'width': containerWidth + 'px'}">
+        <div (wheel)="onWheel($event, ganttGrid, ganttActivityArea)" class="gantt_activity_area" #ganttActivityArea [ngStyle]="{ 'height': project.tasks.length * ganttService.rowHeight + 'px', 'width': containerWidth + 'px'}">
             <activity-background [zoom]="zoom" [zoomLevel]="zoomLevel" [grid]="grid" [project]="project"></activity-background>
             <activity-bars [zoom]="zoom" [zoomLevel]="zoomLevel" [scale]="scale" [dimensions]="dimensions" [project]="project"></activity-bars>
         </div>
     </div>
-    <div class="gantt_vertical_scroll" #verticalScroll (scroll)="onVerticalScroll(verticalScroll, ganttGrid, ganttActivityArea)">
+    <div class="gantt_vertical_scroll" #verticalScroll (scroll)="onVerticalScroll(verticalScroll, ganttGrid, ganttActivityArea)" [ngStyle]="{'display': activityActions.expanded === true ? 'none' : 'block' }">
         <div [ngStyle]="{ 'height': project.tasks.length * ganttService.rowHeight + ganttService.rowHeight * 3 + 'px'}"></div>
     </div>
     `,
@@ -191,7 +194,15 @@ export class GanttActivityComponent implements OnInit {
     @Input() project: any;
     @Input() options: any;
 
+    private upTriangle: string = '&#x25b2;' // BLACK DOWN-POINTING TRIANGLE
+    private downTriangle: string = '&#x25bc;'; // BLACK UP-POINTING TRIANGLE
+
     private zoom: EventEmitter<string> = new EventEmitter<string>();
+
+    private activityActions = {
+        expanded: false,
+        expandedIcon: this.downTriangle
+    }
 
     private timeScale: any;
     private background: any;
@@ -229,7 +240,7 @@ export class GanttActivityComponent implements OnInit {
 
     private gridData: any[] = [];
     public gridColumns: any[] = [
-        { name: 'Task',  left: 20, width: 350 },
+        { name: 'Task', left: 20, width: 350 },
         { name: '%', left: 8, width: 40 },
         { name: 'Duration', left: 14, width: 120 }
     ];
@@ -240,7 +251,7 @@ export class GanttActivityComponent implements OnInit {
     constructor(
         public elem: ElementRef,
         private ganttService: GanttService) {
-            
+
     }
 
     ngOnInit() {
@@ -268,9 +279,22 @@ export class GanttActivityComponent implements OnInit {
         this.ganttService.scrollTop(verticalScroll, ganttGrid, ganttActivityArea);
     }
 
+    onWheel(e, ganttGrid: any, ganttActivityArea: any): void {
+        //var verticalScroll = document.querySelector('.gantt_vertical_scroll'); //TODO(dale): replace with @ViewChild('')
+
+        //console.log("wheel event called", e);
+        //console.log("wheel event called",e, verticalScroll, ganttGrid, ganttActivityArea);
+    }
+
     onResize(event: any): void {
         let activityContainerSizes = this.ganttService.calculateActivityContainerDimensions();
-        this.ganttActivityHeight = activityContainerSizes.height;
+        if (this.activityActions.expanded) {
+            this.ganttActivityHeight = '100%';
+
+        } else {
+            this.ganttActivityHeight = activityContainerSizes.height + 'px';;
+        }
+
         this.ganttActivityWidth = activityContainerSizes.width;
     }
 
@@ -305,7 +329,19 @@ export class GanttActivityComponent implements OnInit {
         this.zoom.emit(this.zoomLevel);
         this.containerWidth = this.calculateContainerWidth();
         this.setDimensions();
-        document.querySelector('.gantt_activity').scrollLeft = 0 // reset scroll left
+        document.querySelector('.gantt_activity').scrollLeft = 0 // reset scroll left, replace with @ViewChild?
+    }
+
+    expand() {
+        if (this.activityActions.expanded) {
+            this.activityActions.expanded = false;
+            this.activityActions.expandedIcon = this.downTriangle;
+            this.ganttActivityHeight = '300px';
+        } else {
+            this.activityActions.expanded = true;
+            this.activityActions.expandedIcon = this.upTriangle;
+            this.ganttActivityHeight = '100%';
+        }
     }
 
     private setGridScaleStyle() {
@@ -348,7 +384,7 @@ export class GanttActivityComponent implements OnInit {
     }
 
     private setSizes(): void {
-        this.ganttActivityHeight = this.activityContainerSizes.height;
+        this.ganttActivityHeight = this.activityContainerSizes.height + 'px';
         this.ganttActivityWidth = this.activityContainerSizes.width;
     }
 

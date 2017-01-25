@@ -35,7 +35,6 @@ export class GanttService {
     }
 
     private calculateBarWidth(start: Date, end: Date, hours?: boolean): number {
-
         if (typeof start === "string") {
             start = new Date(start);
         }
