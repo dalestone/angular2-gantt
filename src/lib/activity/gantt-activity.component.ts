@@ -337,6 +337,9 @@ export class GanttActivityComponent implements OnInit {
             this.activityActions.expandedIcon = this.downTriangle;
             this.ganttActivityHeight = '300px';
         } else {
+            var verticalScroll = document.querySelector('.gantt_vertical_scroll');
+            verticalScroll.scrollTop = 0;
+
             this.activityActions.expanded = true;
             this.activityActions.expandedIcon = this.upTriangle;
             this.ganttActivityHeight = this.project.tasks.length * this.ganttService.rowHeight + this.ganttService.rowHeight * 3 + 'px';
