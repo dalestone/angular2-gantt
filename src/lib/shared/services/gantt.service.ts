@@ -385,7 +385,7 @@ export class GanttService {
     /** Group data by id , only supports one level*/
     public groupData(tasks: any): any {
         var merged:any = [];
-        var groups = new GroupByPipe().transform(tasks, (task) => {
+        var groups:any = new GroupByPipe().transform(tasks, (task:any) => {
             return [task.treePath.split('/')[0]]
         });
         return merged.concat.apply([], groups);
