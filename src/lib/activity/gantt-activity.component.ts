@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, AfterViewInit, ViewChild, ChangeDetectionStrategy, OnChanges } from '@angular/core';
 
 import { GanttService } from '../shared/services/gantt.service';
 import { GanttConfig } from '../shared/services/gantt-config.service';
@@ -8,15 +8,14 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
     selector: 'gantt-activity',
     template: `
     <div class="actions_bar">
-        <strong> Zooming: </strong>
-        <label>
-            <input name="scales" (click)="zoomTasks('hours')" type="radio"><span>Hours</span>
-        </label>
-        <label>
-            <input name="scales" (click)="zoomTasks('days')" type="radio"><span>Days</span>
-        </label>
         <div style="float:right">
-            <button (click)="expand()" style="background-color:whitesmoke; border:1px solid #e0e0e0; font-size:21px" [innerHTML]="activityActions.expandedIcon"></button>
+            <label>
+                <button (click)="zoomTasks('hours')" style="background-color:whitesmoke; border:none; font-size:16px">Hour</button>
+            </label>
+            <label>
+                <button (click)="zoomTasks('days')" style="background-color:whitesmoke; border:none; font-size:16px">Day</button>
+            </label>
+            <button (click)="expand()" style="background-color:whitesmoke; border:none; font-size:21px; cursor:pointer" [innerHTML]="activityActions.expandedIcon"></button>
         </div>
     </div>
     <div class="grid" #ganttGrid [ngStyle]="{ 'height': ganttActivityHeight, 'width': ganttService.gridWidth + 'px'}">
@@ -24,17 +23,22 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
         <div class="grid_head_cell" *ngFor="let column of gridColumns" [style.width]="column.width + 'px'" [style.left]="column.left + 'px'">
             <label>{{column.name}}</label>            
         </div>
+        <div class="grid_head_cell">
+            <button (click)="toggleAllChildren()" style="background-color:whitesmoke; border:none; font-size:21px; cursor:pointer">&#x21D5;</button>
+        </div>
     </div>
     <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': project.tasks.length * ganttService.barTop + ganttService.rowHeight * 3 + 'px'}">
-        <div class="grid_row" [ngStyle]="setGridRowStyle()" *ngFor="let data of project.tasks">
-            <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px' }">
-                <div class="gantt_tree_content">{{data.name}}</div>                
-            </div>
-            <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[1].width + 'px' }">
-                <div>{{data.percentComplete}}</div>
-            </div>
-            <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[2].width + 'px'}">
-                <div> {{ ganttService.calculateDuration(data) }}</div>
+        <div *ngFor="let data of ganttService.groupData(project.tasks)">
+            <div #row (click)="toggleChildren(row)" class="grid_row" [ngStyle]="setGridRowStyle(ganttService.isParent(data.treePath))" [style.display]="ganttService.isParent(data.treePath) === true ? 'block': 'none'"  [attr.data-isParent]="ganttService.isParent(data.treePath)" [attr.data-parentid]="data.parentId">
+                <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px', 'padding-left': ganttService.isChild(data.treePath) }">
+                    <div class="gantt_tree_content">{{data.name}}</div>                
+                </div>
+                <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[1].width + 'px' }">
+                    <div>{{data.percentComplete}}</div>
+                </div>
+                <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[2].width + 'px'}">
+                    <div> {{ ganttService.calculateDuration(data) }}</div>
+                </div>
             </div>
         </div>
     </div>
@@ -194,6 +198,8 @@ export class GanttActivityComponent implements OnInit {
     @Input() project: any;
     @Input() options: any;
 
+    private showDetail: boolean = true;
+
     private upTriangle: string = '&#x25b2;' // BLACK DOWN-POINTING TRIANGLE
     private downTriangle: string = '&#x25bc;'; // BLACK UP-POINTING TRIANGLE
 
@@ -251,7 +257,6 @@ export class GanttActivityComponent implements OnInit {
     constructor(
         public elem: ElementRef,
         private ganttService: GanttService) {
-
     }
 
     ngOnInit() {
@@ -279,12 +284,45 @@ export class GanttActivityComponent implements OnInit {
         this.ganttService.scrollTop(verticalScroll, ganttGrid, ganttActivityArea);
     }
 
-    // onWheel(e, ganttGrid: any, ganttActivityArea: any): void {
-    //     //var verticalScroll = document.querySelector('.gantt_vertical_scroll'); //TODO(dale): replace with @ViewChild('')
+    //TODO(dale): this is surely possible with angular template syntax?
+    toggleChildren(rowElem: any) {
+        try {
+            var isParent: boolean = "true" === rowElem.getAttribute('data-isparent');
+            var children: any = document.querySelectorAll('[data-parentid=' + rowElem.getAttribute('data-parentid') + ']');
 
-    //     //console.log("wheel event called", e);
-    //     //console.log("wheel event called",e, verticalScroll, ganttGrid, ganttActivityArea);
-    // }
+            if (isParent) {
+                for (var i = 0; i < children.length; i++) {
+                    var child = children[i];
+                    if (child.getAttribute('data-isparent') === "false") {
+                        if (child.style.display === 'none') {
+                            child.style.display = 'block'
+                        } else {
+                            child.style.display = 'none';
+                        }
+                    }
+                }
+            }
+        } catch (err) {
+
+        }
+    }
+
+    toggleAllChildren() {
+        try {
+            var children: any = document.querySelectorAll('[data-isparent=false]');
+
+            for (var i = 0; i < children.length; i++) {
+                var child = children[i];
+                if (child.style.display === 'none') {
+                    child.style.display = 'block';
+                } else {
+                    child.style.display = 'none';
+                }
+            }
+        } catch (err) {
+
+        }
+    }
 
     onResize(event: any): void {
         let activityContainerSizes = this.ganttService.calculateActivityContainerDimensions();
@@ -316,7 +354,16 @@ export class GanttActivityComponent implements OnInit {
         this.data = this.gridData;
     }
 
-    setGridRowStyle() {
+    setGridRowStyle(isParent: boolean) {
+        if (isParent) {
+            return {
+                'height': this.ganttService.rowHeight + 'px',
+                'line-height': this.ganttService.rowHeight + 'px',
+                'font-weight': 'bold',
+                'cursor': 'pointer'
+            };
+        }
+
         return {
             'height': this.ganttService.rowHeight + 'px',
             'line-height': this.ganttService.rowHeight + 'px'
@@ -396,3 +443,164 @@ export class GanttActivityComponent implements OnInit {
 }
 
 
+//** <tree-builder [nodes]="ganttService.transformData(project.tasks)"></tree-builder> */
+@Component({
+    selector: 'tree-builder',
+    template: '<tree-parent-repeater *ngFor="let node of nodes" [node]="node"></tree-parent-repeater>'
+})
+export class TreeBuilder {
+    _nodes: any = [
+        {
+            name: "testing", children: [
+                { name: "testing2", children: [{ name: "testing4", children: [] }] }
+            ]
+        },
+        {
+            name: "testing3", children: []
+        }
+    ];
+
+    @Input() nodes: any;
+}
+
+@Component({
+    selector: 'tree-parent-repeater',
+    styleUrls: [`
+        .grid_row {
+            box-sizing: border-box;
+            border-bottom: 1px solid #e0e0e0;
+            background-color: #fff;
+            position: relative;
+            -webkit-user-select: none;
+            cursor:pointer;
+            height:25px;
+            line-height:25px;
+            font-size:16px;
+        }
+
+        .grid_row:hover {
+            background-color: whitesmoke;
+        }
+  `],
+    template: `
+    <div>
+        <div (click)="toggle()" class="grid_row">
+            <div style="display:inline-block; width:10px; padding-left:4px; font-size:14px">{{ expanded !== true ? '&#x25b6;' : '&#x25bc;' }}</div>
+            <div style="display:inline-block; width:350px">{{ node.name }}</div>
+            <div style="display:inline-block; width:40px">{{ node.percentComplete }}</div>
+            <div style="display:inline-block; width:40px">0</div>
+        </div>
+        <tree-children-repeater *ngIf="expanded" [root]="node"></tree-children-repeater>
+    </div>
+  `
+})
+export class TreeParentRepeater {
+    @Input() node: any;
+    expanded: boolean = true;
+
+    toggle = () => {
+        if (this.expanded) {
+            this.expanded = false;
+        } else {
+            this.expanded = true;
+        }
+    }
+}
+
+@Component({
+    selector: 'tree-children-repeater',
+    styleUrls: [`
+        .grid_row {
+            box-sizing: border-box;
+            border-bottom: 1px solid #e0e0e0;
+            background-color: #fff;
+            position: relative;
+            -webkit-user-select: none;
+            cursor:pointer;
+            height:25px;
+            line-height:25px;
+            font-size:16px;
+        }
+
+        .grid_row:hover {
+            background-color: whitesmoke;
+        }
+  `],
+    template: `
+    <div *ngIf="root.children.length > 0">
+      <div *ngFor="let child of root.children" style="padding-left:20px">
+          <div (click)="toggle()" class="grid_row">
+            <div style="display:inline-block; width:10px; padding-left:4px; font-size:14px">{{ expanded !== true ? '&#x25b6;' : '&#x25bc;' }}</div>
+            <div style="display:inline-block; width:330px">{{ child.name }}</div>
+            <div style="display:inline-block; width:40px">{{ child.percentComplete }}</div>
+            <div style="display:inline-block; width:40px">0</div>
+          </div>
+          <tree-children-repeater *ngIf="expanded" [root]="child"></tree-children-repeater>
+      </div>
+    </div>
+  `
+})
+export class TreeChildrenRepeater {
+    @Input() root: any;
+    expanded: boolean = true;
+
+    toggle = () => {
+        if (this.expanded) {
+            this.expanded = false;
+        } else {
+            this.expanded = true;
+        }
+    }
+}
+
+        // OLD WAY WITHOUT TREE
+        // <!--<div class="grid_row" [ngStyle]="setGridRowStyle()" *ngFor="let data of project.tasks">
+        //     <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px', 'padding-left': '20px' }">
+        //         <div class="gantt_tree_content">{{data.name}}</div>                
+        //     </div>
+        //     <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[1].width + 'px' }">
+        //         <div>{{data.percentComplete}}</div>
+        //     </div>
+        //     <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[2].width + 'px'}">
+        //         <div> {{ ganttService.calculateDuration(data) }}</div>
+        //     </div>
+        // </div>-->
+
+    // <!--<div class="grid_row" [ngStyle]="setGridRowStyle()">
+    //     <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px' }">
+    //         <div class="gantt_tree_content"><b>{{ group[0].id.split('/')[0] }}</b></div>                
+    //     </div>
+    //     <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[1].width + 'px' }">{{ ganttService.calculateTotalPercentage(group)}}</div>
+    //     <div class="grid_cell" [ngStyle]="{ 'width': '65px'}">{{ ganttService.calculateTotalDuration(group) }}</div>
+    //     <div class="grid_cell">
+    //     	<button (click)="toggle(groupContainer)" style="background-color:#fff; border:none">{{ true == true ? '&#x25bc;' : '&#x25b2;' }}</button>
+    //     </div>
+    // </div>
+    // <div [id]="group[0].id.split('/')[0] + '_container'" style="display:block;">
+    //     <div class="grid_row" [ngStyle]="setGridRowStyle()" *ngFor="let data of group">
+    //         <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px', 'padding-left': '20px' }">
+    //             <div class="gantt_tree_content">{{data.name}}</div>                
+    //         </div>
+    //         <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[1].width + 'px' }">
+    //             <div>{{data.percentComplete}}</div>
+    //         </div>
+    //         <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[2].width + 'px'}">
+    //             <div> {{ ganttService.calculateDuration(data) }}</div>
+    //         </div>
+    //     </div>
+    // </div>-->
+
+        //     <!--<div #groupContainer *ngFor="let node of ganttService.createTree(project.tasks)">
+        //     <div class="grid_row" [ngStyle]="setGridRowStyle()">
+        //         <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px' }">
+        //             <button style="background-color:#fff; border:none">&#x25bc;</button>
+        //             {{ node.name }}
+        //         </div>
+        //         <div class="grid_cell"  [ngStyle]="{ 'width': gridColumns[1].width + 'px' }">{{ ganttService.calculateTotalPercentage(node) }}</div>
+        //     </div>
+        //     <div class="grid_row" [ngStyle]="setGridRowStyle()" *ngFor="let child of node.children">
+        //         <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px', 'padding-left': '40px' }">{{ child.name }}</div>
+        //         <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[1].width + 'px' }">{{ child.percentComplete }}</div>
+        //         <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[2].width + 'px'}">{{ ganttService.calculateDuration(child) }}</div>
+        //     </div>
+        // </div>-->

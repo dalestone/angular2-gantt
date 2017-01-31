@@ -6,15 +6,18 @@ import { DemoAppComponent }   from './demo-app.component';
 //import { GanttModule  } from 'ng2-gantt';
 import { GanttModule } from '../lib'
 
+// import { TreeModule } from 'angular2-tree-component';
+
 @NgModule({
     imports: [
         BrowserModule,
         FormsModule,
-        GanttModule
+        GanttModule,
+        // TreeModule
     ],
     exports: [],
     declarations: [
-        DemoAppComponent
+        DemoAppComponent,
     ],
     providers: [],
     bootstrap: [DemoAppComponent]

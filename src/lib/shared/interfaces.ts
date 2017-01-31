@@ -6,6 +6,8 @@ export interface Project {
 
 export interface Task {
     id: string;
+    treePath: string;
+    parentId: string;
     name: string;
     resource?: string;
     start: Date;

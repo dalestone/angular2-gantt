@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GanttConfig } from './gantt-config.service';
 import { IBarStyle, Task, IScale, Zooming } from '../interfaces';
+import { GroupByPipe } from '../../shared/pipes/groupBy.pipe';
 
 @Injectable()
 export class GanttService {
@@ -14,7 +15,7 @@ export class GanttService {
     public barLineHeight: number = 0;
     public barTop: number = 0;
     public barMoveable: boolean = false;
-    public gridWidth: number = 500;
+    public gridWidth: number = 540;
     private barStyles: IBarStyle[] = [
         { status: "information", backgroundColor: "rgb(18,195, 244)", border: "1px solid #2196F3", progressBackgroundColor: "#2196F3" },
         { status: "warning", backgroundColor: "#FFA726", border: "1px solid #EF6C00", progressBackgroundColor: "#EF6C00" },
@@ -58,6 +59,10 @@ export class GanttService {
         var hoursInDay: number = 24;
 
         if (start != null) {
+            if (typeof start === "string") {
+                start = new Date();
+            }
+
             for (var i = 0; i < scale.length; i++) {
                 if (start.getDate() === scale[i].getDate()) {
                     if (hours) {
@@ -87,10 +92,32 @@ export class GanttService {
         return offset;
     }
 
+    public isParent(treePath: string): boolean {
+
+        try {
+            var depth = treePath.split('/').length;
+
+            if (depth === 1) {
+                return true;
+            }
+        }
+        catch (err) {
+            return false;
+        }
+        return false;
+    }
+
+    public isChild(treePath: string) {
+        if (this.isParent(treePath)) {
+            return '0px';
+        }
+        return '20px';
+    }
+
     /** Calculate the bar styles */
     public calculateBar(task: any, index: number, scale: any, hours?: boolean) {
         var barStyle = this.getBarStyle(task.status);
-
+        //console.log(this.barTop * index + 2)
         return {
             'top': this.barTop * index + 2 + 'px',
             'left': this.calculateBarLeft(task.start, scale, hours) + 'px',
@@ -212,14 +239,34 @@ export class GanttService {
 
                     if (minutes < 1) {
                         return `${Math.round(minutes * 60)} second(s)`; // duration in seconds
-                    }                    
+                    }
                     return `${Math.round(minutes)} min(s)` // duration in minutes
-                }                
+                }
             }
 
             return '';
         } catch (err) {
             return '';
+        }
+    }
+
+    calculateTotalDuration(tasks: any[]): string {
+        return '';
+    }
+
+    /** Calculate the total percentage of a group of tasks */
+    calculateTotalPercentage(node: any): number {
+        var totalPercent: number = 0;
+        var children = node.children;
+
+        if (children.length > 0) {
+            children.forEach((child: any) => {
+                totalPercent += isNaN(child.percentComplete) ? 0 : child.percentComplete;
+            });
+
+            return Math.ceil(totalPercent / children.length);
+        } else {
+            return isNaN(node.percentComplete) ? 0 : node.percentComplete;
         }
     }
 
@@ -274,11 +321,11 @@ export class GanttService {
             }
         });
 
-        start = new Date(Math.min.apply(null, dates.map(function(t) {
+        start = new Date(Math.min.apply(null, dates.map(function (t) {
             return t.start;
         })));
 
-        end = new Date(Math.max.apply(null, dates.map(function(t) {
+        end = new Date(Math.max.apply(null, dates.map(function (t) {
             return t.end;
         })));
 
@@ -309,6 +356,7 @@ export class GanttService {
         return parseInt(document.defaultView.getComputedStyle(element)[attribute], 10);
     }
 
+    //TODO(dale): determine whether this is needed
     public calculateContainerWidth(): number {
         this.windowInnerWidth = window.innerWidth;
         let containerWidth = (innerWidth - 18);
@@ -317,7 +365,7 @@ export class GanttService {
     }
 
     public calculateActivityContainerDimensions(): any {
-        var scrollWidth:number = 18;
+        var scrollWidth: number = 18;
         this.windowInnerWidth = window.innerWidth;
         let width = this.windowInnerWidth - this.gridWidth - scrollWidth;
 
@@ -332,6 +380,48 @@ export class GanttService {
             this.setScrollTop(verticalScrollTop, ganttGridElem);
             this.setScrollTop(verticalScrollTop, ganttActivityAreaElem);
         }
+    }
+
+    /** Group data by id , only supports one level*/
+    public groupData(tasks: any): any[] {
+        var merged = [];
+        var groups = new GroupByPipe().transform(tasks, (task) => {
+            return [task.treePath.split('/')[0]]
+        });
+        return merged.concat.apply([], groups);
+    }
+
+    /** Create tree of data */
+    public transformData(input: any): any[] {
+        var output = [];
+        for (var i = 0; i < input.length; i++) {
+            var chain = input[i].id.split('/');
+            var currentNode = output;
+            for (var j = 0; j < chain.length; j++) {
+                var wantedNode = chain[j];
+                var lastNode = currentNode;
+                for (var k = 0; k < currentNode.length; k++) {
+                    if (currentNode[k].name == wantedNode) {
+                        currentNode = currentNode[k].children;
+                        break;
+                    }
+                }
+                // If we couldn't find an item in this list of children
+                // that has the right name, create one:
+                if (lastNode == currentNode) {
+                    //TODO(dale): determine way to show percent complete on correct child  
+                    var newNode = currentNode[k] = {
+                        name: wantedNode,
+                        percentComplete: input[i].percentComplete,
+                        start: input[i].start,
+                        end: input[i].end,
+                        children: []
+                    };
+                    currentNode = newNode.children;
+                }
+            }
+        }
+        return output;
     }
 
     /** Set the scroll top property of a native DOM element */

@@ -9,7 +9,7 @@ import { IGanttOptions, Project } from './shared/interfaces';
         <div style="width: 100%">
             <div class="gantt_container" (window:resize)="onResize($event)">
                 <gantt-header [name]="_project.name"></gantt-header>
-                <gantt-activity [project]="_project" [options]="_options"></gantt-activity>
+                <gantt-activity [project]="_project" [options]="options"></gantt-activity>
                 <gantt-footer [project]="_project"></gantt-footer>
             </div>
         </div>
@@ -30,10 +30,12 @@ export class GanttComponent implements OnInit {
     private _project: Project;
     private _options: IGanttOptions;
 
+    //TODO(dale): this may be causing an issue in the tree builder?
     @Input()
     set project(project: any) {
         if (project) {
             this._project = project;
+
         } else {
             this.setDefaultProject();
         }

@@ -7,7 +7,9 @@
     <table>
         <thead>
             <tr>
+                <td>Id</td>
                 <td>Name</td>
+                <td>Tree Path</td>
                 <td>Percent Complete</td>
                 <td>Start Date</td>
                 <td>End Date</td>
@@ -16,7 +18,9 @@
         </thead>
         <tbody>
             <tr *ngFor="let task of project.tasks">
-                <td><input type="text" [(ngModel)]="task.name"/></td>
+                <td><input style="width:100%" type="text" [(ngModel)]="task.id"/></td>
+                <td><input style="width:100%" type="text" [(ngModel)]="task.name"/></td>
+                <td><input type="width:100%" type="text" [(ngModel)]="task.treePath"/></td>
                 <td><input type="number" [(ngModel)]="task.percentComplete" min="0" max="100"/>
                 <td><input type="text" [(ngModel)]="task.start"/></td>
                 <td><input type="text" [(ngModel)]="task.end"/></td>
@@ -34,6 +38,7 @@
     </select>
     <button (click)="createTask(taskStatus)">Create Task</button>
     <button (click)="updateTasks()">Update Tasks Percent Complete</button>
+    <button (click)="loadBigDataSet()">Load big dataset</button>
 
     <h1>Output</h1>
     <p>{{ project | json }}</p>

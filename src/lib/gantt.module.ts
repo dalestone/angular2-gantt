@@ -12,7 +12,7 @@ import { GanttActivityModule } from './activity/gantt-activity.module';
     imports: [
         CommonModule,
         FormsModule,
-        GanttActivityModule
+        GanttActivityModule,
     ],
     exports: [
         GanttComponent
@@ -20,7 +20,7 @@ import { GanttActivityModule } from './activity/gantt-activity.module';
     declarations: [
         GanttComponent,
         GanttHeaderComponent,
-        GanttFooterComponent
+        GanttFooterComponent,        
     ],
     providers: [GanttService],
 })

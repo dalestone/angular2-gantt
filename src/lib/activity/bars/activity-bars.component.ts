@@ -6,17 +6,17 @@ import { Zooming } from '../../shared/interfaces';
     selector: 'activity-bars',
     template: `
     <div class="gantt_activity_bars_area" [ngStyle]="{ 'height': containerHeight + 'px', 'width': containerWidth + 'px' }">
-    <div #bar class="gantt_activity_line" *ngFor="let task of project.tasks; let i = index" [ngStyle]="drawBar(task, i)">
-        <div class="gantt_activity_progress" [ngStyle]="drawProgress(task, bar)"></div>
-        <div class="gantt_activity_progress_drag" style="left: 518px"></div>
-        <div class="gantt_activity_content"><span *ngIf="task?.percentComplete">{{task.percentComplete}}%</span></div>
-        <div class="gantt_activity_link_control gantt_activity_right" style="height: 26px; line-height: 30px">
-        <div class="gantt_link_point"></div>
+        <div #bar class="gantt_activity_line" *ngFor="let task of ganttService.groupData(project.tasks); let i = index" [ngStyle]="drawBar(task, i)" [style.display]="ganttService.isParent(task.treePath) === true ? 'block': 'none'" [attr.data-isParent]="ganttService.isParent(task.treePath)" [attr.data-parentid]="task.parentId">
+            <div class="gantt_activity_progress" [ngStyle]="drawProgress(task, bar)"></div>
+            <div class="gantt_activity_progress_drag" style="left: 518px"></div>
+            <div class="gantt_activity_content"><span *ngIf="task?.percentComplete">{{task.percentComplete}}%</span></div>
+            <div class="gantt_activity_link_control gantt_activity_right" style="height: 26px; line-height: 30px">
+            <div class="gantt_link_point"></div>
         </div>
-        <div  class="gantt_activity_link_control gantt_activity_left" style="height: 26px; line-height: 30px">
-        <div class="gantt_link_point"></div>
+            <div  class="gantt_activity_link_control gantt_activity_left" style="height: 26px; line-height: 30px">
+                <div class="gantt_link_point"></div>
+            </div>
         </div>
-    </div>
     </div>
     `,
     styleUrls: [`
@@ -30,7 +30,7 @@ import { Zooming } from '../../shared/interfaces';
     }
 
     .gantt_activity_line:hover {
-        cursor: move;
+        /*cursor: move;*/
     }
 
     .gantt_activity_progress {
