@@ -383,8 +383,8 @@ export class GanttService {
     }
 
     /** Group data by id , only supports one level*/
-    public groupData(tasks: any): any[] {
-        var merged = [];
+    public groupData(tasks: any): any {
+        var merged:any = [];
         var groups = new GroupByPipe().transform(tasks, (task) => {
             return [task.treePath.split('/')[0]]
         });
@@ -392,14 +392,14 @@ export class GanttService {
     }
 
     /** Create tree of data */
-    public transformData(input: any): any[] {
-        var output = [];
+    public transformData(input: any): any {
+        var output:any = [];
         for (var i = 0; i < input.length; i++) {
-            var chain = input[i].id.split('/');
-            var currentNode = output;
+            var chain:any = input[i].id.split('/');
+            var currentNode:any = output;
             for (var j = 0; j < chain.length; j++) {
-                var wantedNode = chain[j];
-                var lastNode = currentNode;
+                var wantedNode:any = chain[j];
+                var lastNode:any = currentNode;
                 for (var k = 0; k < currentNode.length; k++) {
                     if (currentNode[k].name == wantedNode) {
                         currentNode = currentNode[k].children;
@@ -410,7 +410,7 @@ export class GanttService {
                 // that has the right name, create one:
                 if (lastNode == currentNode) {
                     //TODO(dale): determine way to show percent complete on correct child  
-                    var newNode = currentNode[k] = {
+                    var newNode:any = currentNode[k] = {
                         name: wantedNode,
                         percentComplete: input[i].percentComplete,
                         start: input[i].start,
