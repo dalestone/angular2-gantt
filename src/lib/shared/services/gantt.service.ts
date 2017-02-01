@@ -22,6 +22,7 @@ export class GanttService {
         { status: "error", backgroundColor: "#EF5350", border: "1px solid #C62828", progressBackgroundColor: "#C62828" },
         { status: "completed", backgroundColor: "#66BB6A", border: "1px solid #2E7D32", progressBackgroundColor: "#2E7D32" }
     ];
+    public TASK_CACHE: any[];
 
     constructor() {
         let _ganttConfig = new GanttConfig();
@@ -422,6 +423,32 @@ export class GanttService {
             }
         }
         return output;
+    }
+
+    /** Checks whether any new data needs to be added to task cache  */
+    public doTaskCheck(tasks: any[], treeExpanded: boolean) {
+        var cachedTaskIds = this.TASK_CACHE.map(task => { return task.id });
+        var itemsToCache: any[] = [];
+
+        if (treeExpanded) {
+            // push children and parent tasks that are not cached
+            tasks.filter(task => {
+                return cachedTaskIds.indexOf(task.id) === -1
+            }).forEach(task => {
+                itemsToCache.push(task);
+            })
+        } else {
+            // only look at tasks that are not cached
+            tasks.filter(task => { 
+                return cachedTaskIds.indexOf(task.id) === -1 && task.treePath.split('/').length === 1 
+            }).forEach(task => {
+                itemsToCache.push(task);
+            });
+        }
+
+        itemsToCache.forEach(item => {
+            this.TASK_CACHE.push(item);
+        });
     }
 
     /** Set the scroll top property of a native DOM element */

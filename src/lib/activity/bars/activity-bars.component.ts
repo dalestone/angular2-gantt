@@ -6,7 +6,7 @@ import { Zooming } from '../../shared/interfaces';
     selector: 'activity-bars',
     template: `
     <div class="gantt_activity_bars_area" [ngStyle]="{ 'height': containerHeight + 'px', 'width': containerWidth + 'px' }">
-        <div #bar class="gantt_activity_line" *ngFor="let task of ganttService.groupData(project.tasks); let i = index" [ngStyle]="drawBar(task, i)" [style.display]="ganttService.isParent(task.treePath) === true ? 'block': 'none'" [attr.data-isParent]="ganttService.isParent(task.treePath)" [attr.data-parentid]="task.parentId">
+        <div #bar class="gantt_activity_line" *ngFor="let task of ganttService.groupData(tasks); let i = index" [ngStyle]="drawBar(task, i)">
             <div class="gantt_activity_progress" [ngStyle]="drawProgress(task, bar)"></div>
             <div class="gantt_activity_progress_drag" style="left: 518px"></div>
             <div class="gantt_activity_content"><span *ngIf="task?.percentComplete">{{task.percentComplete}}%</span></div>
@@ -96,7 +96,7 @@ import { Zooming } from '../../shared/interfaces';
 export class GanttActivityBarsComponent implements OnInit {
     @Input() scale: any;
     @Input() dimensions: any;
-    @Input() project: any;
+    @Input() tasks: any;
     @Input() zoom: any;
     @Input() zoomLevel: any;
 

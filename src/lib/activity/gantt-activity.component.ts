@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, AfterViewInit, ViewChild, ChangeDetectionStrategy, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, AfterViewInit, ViewChild, ChangeDetectionStrategy, OnChanges, DoCheck } from '@angular/core';
 
 import { GanttService } from '../shared/services/gantt.service';
 import { GanttConfig } from '../shared/services/gantt-config.service';
@@ -27,30 +27,28 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
             <button (click)="toggleAllChildren()" style="background-color:whitesmoke; border:none; font-size:21px; cursor:pointer">&#x21D5;</button>
         </div>
     </div>
-    <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': project.tasks.length * ganttService.barTop + ganttService.rowHeight * 3 + 'px'}">
-        <div *ngFor="let data of ganttService.groupData(project.tasks)">
-            <div #row (click)="toggleChildren(row)" class="grid_row" [ngStyle]="setGridRowStyle(ganttService.isParent(data.treePath))" [style.display]="ganttService.isParent(data.treePath) === true ? 'block': 'none'"  [attr.data-isParent]="ganttService.isParent(data.treePath)" [attr.data-parentid]="data.parentId">
-                <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px', 'padding-left': ganttService.isChild(data.treePath) }">
-                    <div class="gantt_tree_content">{{data.name}}</div>                
-                </div>
-                <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[1].width + 'px' }">
-                    <div>{{data.percentComplete}}</div>
-                </div>
-                <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[2].width + 'px'}">
-                    <div> {{ ganttService.calculateDuration(data) }}</div>
-                </div>
+    <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': ganttService.TASK_CACHE.length * ganttService.barTop + ganttService.rowHeight * 3 + 'px'}">
+    <div #row *ngFor="let data of ganttService.groupData(ganttService.TASK_CACHE)" (click)="toggleChildren(row)" class="grid_row" [ngStyle]="setGridRowStyle(ganttService.isParent(data.treePath))" [attr.data-id]="data.id"  [attr.data-isParent]="ganttService.isParent(data.treePath)" [attr.data-parentid]="data.parentId">
+            <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px', 'padding-left': ganttService.isChild(data.treePath) }">
+                <div class="gantt_tree_content">{{data.name}}</div>                
+            </div>
+            <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[1].width + 'px' }">
+                <div>{{data.percentComplete}}</div>
+            </div>
+            <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[2].width + 'px'}">
+                <div> {{ ganttService.calculateDuration(data) }}</div>
             </div>
         </div>
     </div>
     </div><div class="gantt_activity" (window:resize)="onResize($event)" [ngStyle]="{ 'height': ganttActivityHeight, 'width': ganttActivityWidth - 18 + 'px'}">
         <time-scale [zoom]="zoom" [zoomLevel]="zoomLevel" [scale]="scale" [dimensions]="dimensions"></time-scale>
-        <div class="gantt_activity_area" #ganttActivityArea [ngStyle]="{ 'height': project.tasks.length * ganttService.rowHeight + 'px', 'width': containerWidth + 'px'}">
-            <activity-background [zoom]="zoom" [zoomLevel]="zoomLevel" [grid]="grid" [project]="project"></activity-background>
-            <activity-bars [zoom]="zoom" [zoomLevel]="zoomLevel" [scale]="scale" [dimensions]="dimensions" [project]="project"></activity-bars>
+        <div class="gantt_activity_area" #ganttActivityArea [ngStyle]="{ 'height': ganttService.TASK_CACHE.length * ganttService.rowHeight + 'px', 'width': containerWidth + 'px'}">
+            <activity-background [zoom]="zoom" [zoomLevel]="zoomLevel" [grid]="grid" [tasks]="ganttService.TASK_CACHE"></activity-background>
+            <activity-bars [zoom]="zoom" [zoomLevel]="zoomLevel" [scale]="scale" [dimensions]="dimensions" [tasks]="ganttService.TASK_CACHE"></activity-bars>
         </div>
     </div>
     <div class="gantt_vertical_scroll" #verticalScroll (scroll)="onVerticalScroll(verticalScroll, ganttGrid, ganttActivityArea)" [ngStyle]="{'display': activityActions.expanded === true ? 'none' : 'block' }">
-        <div [ngStyle]="{ 'height': project.tasks.length * ganttService.rowHeight + ganttService.rowHeight * 3 + 'px'}"></div>
+        <div [ngStyle]="{ 'height': ganttService.TASK_CACHE.length * ganttService.rowHeight + ganttService.rowHeight * 3 + 'px'}"></div>
     </div>
     `,
     styleUrls: [`
@@ -192,19 +190,16 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
         .gantt_tree_content {
             padding-left:15px;
         }
-    `]
+    `],
+    changeDetection: ChangeDetectionStrategy.Default
 })
-export class GanttActivityComponent implements OnInit {
+export class GanttActivityComponent implements OnInit, DoCheck {
     @Input() project: any;
     @Input() options: any;
 
-    private showDetail: boolean = true;
-
     private upTriangle: string = '&#x25b2;' // BLACK DOWN-POINTING TRIANGLE
     private downTriangle: string = '&#x25bc;'; // BLACK UP-POINTING TRIANGLE
-
     private zoom: EventEmitter<string> = new EventEmitter<string>();
-
     private activityActions = {
         expanded: false,
         expandedIcon: this.downTriangle
@@ -226,6 +221,8 @@ export class GanttActivityComponent implements OnInit {
     private ganttActivityHeight: any;
     private ganttActivityWidth: any;
     private zoomLevel: string = Zooming[Zooming.hours];
+
+    private treeExpanded = false;
 
     private scale: any = {
         start: null,
@@ -260,11 +257,15 @@ export class GanttActivityComponent implements OnInit {
     }
 
     ngOnInit() {
+        // Cache the project data and only work with that. Only show parent tasks
+        this.ganttService.TASK_CACHE = this.project.tasks.slice(0).filter(item => {
+            return item.treePath.split('/').length === 1;
+        });
         this.zoomLevel = this.options.zooming;
         this.start = this.options.scale.start;
         this.end = this.options.scale.end;
         this.dates = this.ganttService.calculateScale(this.start, this.end);
-        this.gridData = this.project.tasks;
+        this.gridData = this.ganttService.TASK_CACHE;
         this.calculateRowsLength();
         this.calculateCellsLength();
         this.containerWidth = this.calculateContainerWidth();
@@ -280,44 +281,95 @@ export class GanttActivityComponent implements OnInit {
         this.gridDataHeight = this.calculateGridDataHeight();
     }
 
+    ngDoCheck() {
+        // do a check to see whether any new tasks have been added. If the task is a child then push into array if tree expanded?
+        this.ganttService.doTaskCheck(this.project.tasks, this.treeExpanded);
+    }
+
     onVerticalScroll(verticalScroll: any, ganttGrid: any, ganttActivityArea: any): void {
         this.ganttService.scrollTop(verticalScroll, ganttGrid, ganttActivityArea);
     }
 
-    //TODO(dale): this is surely possible with angular template syntax?
+    /** Removes or adds children for given parent tasks back into DOM by updating TASK_CACHE */
     toggleChildren(rowElem: any) {
-        try {
-            var isParent: boolean = "true" === rowElem.getAttribute('data-isparent');
-            var children: any = document.querySelectorAll('[data-parentid=' + rowElem.getAttribute('data-parentid') + ']');
+        // this.treeExpanded = false; // reset back so toggle all works correctly
 
+        try {
+            let isParent: boolean = "true" === rowElem.getAttribute('data-isparent');
+            let parentId: string = rowElem.getAttribute('data-parentid');
+            let children: any = document.querySelectorAll('[data-parentid=' + rowElem.getAttribute('data-parentid') + '][data-isparent=false]');
+
+            // use the task cache to allow deleting of items without polluting the project.tasks array
             if (isParent) {
-                for (var i = 0; i < children.length; i++) {
-                    var child = children[i];
-                    if (child.getAttribute('data-isparent') === "false") {
-                        if (child.style.display === 'none') {
-                            child.style.display = 'block'
-                        } else {
-                            child.style.display = 'none';
-                        }
-                    }
+                // remove children from the DOM as we don't want them if we are collapsing the parent
+                if (children.length > 0) {
+                    let childrenIds: any[] = this.ganttService.TASK_CACHE.filter(task => {
+                        return task.parentId == parentId && task.treePath.split('/').length > 1;
+                    }).map(item => { return item.id });
+
+                    childrenIds.forEach(item => {
+                        var removedIndex = this.ganttService.TASK_CACHE.map(item => { return item.id }).indexOf(item);
+
+                        this.ganttService.TASK_CACHE.splice(removedIndex, 1);
+                    });
+                } else {
+                    // CHECK the project cache to see if this parent id has any children
+                    // and if so push them back into array so DOM is updated
+                    let childrenTasks: any[] = this.project.tasks.filter(task => {
+                        return task.parentId == parentId && task.treePath.split('/').length > 1;
+                    });
+
+                    childrenTasks.forEach(task => {
+                        this.ganttService.TASK_CACHE.push(task);
+                    });
                 }
             }
+
         } catch (err) {
 
         }
     }
 
+    /** Removes or adds children tasks back into DOM by updating TASK_CACHE */
     toggleAllChildren() {
         try {
             var children: any = document.querySelectorAll('[data-isparent=false]');
+            var childrenIds: string[] = Array.prototype.slice.call(children).map(item => {
+                return item.getAttribute('data-id');
+            });
+            
+            // push all the children array items into cache
+            if (this.treeExpanded) {
+                if (children.length > 0) {
+                    let childrenIds: string[] = this.ganttService.TASK_CACHE.filter(task => {
+                        return task.treePath.split('/').length > 1;
+                    }).map(item => { return item.id });
 
-            for (var i = 0; i < children.length; i++) {
-                var child = children[i];
-                if (child.style.display === 'none') {
-                    child.style.display = 'block';
-                } else {
-                    child.style.display = 'none';
+                    childrenIds.forEach(item => {
+                        var removedIndex = this.ganttService.TASK_CACHE.map(item => { return item.id }).indexOf(item);
+                        this.ganttService.TASK_CACHE.splice(removedIndex, 1);
+                    });
                 }
+
+                this.treeExpanded = false;
+            } else {
+                // get all children tasks in project input
+                let childrenTasks: any[] = this.project.tasks.filter(task => {
+                    return task.treePath.split('/').length > 1;
+                });
+
+                if (children.length > 0) {
+                    // filter out these children as they already exist in task cache
+                    childrenTasks = childrenTasks.filter(task => {
+                        return childrenIds.indexOf(task.id) === -1;
+                    });
+                }
+
+                childrenTasks.forEach(task => {
+                    this.ganttService.TASK_CACHE.push(task);
+                });
+
+                this.treeExpanded = true;
             }
         } catch (err) {
 
@@ -354,7 +406,7 @@ export class GanttActivityComponent implements OnInit {
         this.data = this.gridData;
     }
 
-    setGridRowStyle(isParent: boolean) {
+    setGridRowStyle(isParent: boolean): any {
         if (isParent) {
             return {
                 'height': this.ganttService.rowHeight + 'px',

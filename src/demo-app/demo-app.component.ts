@@ -21,24 +21,14 @@ export class DemoAppComponent {
         'name': 'Angular2 Gantt',
         'tasks': [
             {
-                'id': 'ea2a8d86-1d4b-4807-844d-d5417fcf618d', 
-                'treePath': 'parent1',               
+                'id': 'ea2a8d86-1d4b-4807-844d-d5417fcf618d',
+                'treePath': 'parent 1',
                 'parentId': 'ea2a8d86-1d4b-4807-844d-d5417fcf618d',
-                'name': 'parent1',
+                'name': 'parent 1',
                 'resource': 'res1',
                 'start': new Date('2017-01-01T00:00:00.0Z'),
                 'end': new Date('2017-01-03T00:00:00.0Z'),
                 'percentComplete': 0,
-            },
-            {
-                'id': 'ea2a8d86-1d4b-4807-844d-d5417fcf618d',
-                'treePath': 'parent1/Praesent molestie lobortis mi non tempor',
-                'parentId': 'ea2a8d86-1d4b-4807-844d-d5417fcf618d',
-                'name': 'Praesent molestie lobortis mi non tempor',
-                'resource': 'res1',
-                'start': new Date('2017-01-03T00:00:00.0Z'),
-                'end': new Date('2017-01-05T00:00:00.0Z'),
-                'percentComplete': 0
             },
             {
                 'id': 'dd755f20-360a-451f-b200-b83b89a35ad1',
@@ -141,7 +131,7 @@ export class DemoAppComponent {
 
 
     constructor() {
-
+    
     }
 
     groupData(array: any[], f: any): any[] {
@@ -160,16 +150,30 @@ export class DemoAppComponent {
     createTask(element: any) {
         var selectedStatus = element.options[element.selectedIndex].value;
 
-        var task = {
-            'id': 'y7d94e61-b2ca-46c6-8809-cfc2aa133811',
+        var parentTask = {
+            'id': 'parent_task_' + Math.random(),
+            'parentId': 'parent_task',
+            'treePath': 'parent_task',
+            'name': 'parent_task',
+            'percentComplete': 0,
+            'start': new Date('2017-01-01T03:30:00.0Z'),
+            'end': new Date('2017-01-01T12:45:00.0Z'),
+            'status': selectedStatus
+        }
+        this.project.tasks.push(parentTask);
+
+        var childTask = {
+            'id': 'child_task_' + Math.random(),
+            'parentId': 'ea2a8d86-1d4b-4807-844d-d5417fcf618d',
+            'treePath': 'parent 1/child3',
             'name': 'child3',
             'percentComplete': 0,
             'start': new Date('2017-01-01T03:30:00.0Z'),
             'end': new Date('2017-01-01T12:45:00.0Z'),
             'status': selectedStatus
         }
+        this.project.tasks.push(childTask);
 
-        this.project.tasks.push(task);
     }
 
     updateTasks() {

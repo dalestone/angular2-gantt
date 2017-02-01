@@ -6,7 +6,7 @@ import { Zooming } from '../../shared/interfaces';
     selector: 'activity-background',
     template: `
     <div #bg class="gantt_activity_bg">
-        <div class="gantt_activity_row" [ngStyle]="setRowStyle()" *ngFor="let row of ganttService.groupData(project.tasks)" [style.display]="ganttService.isParent(row.treePath) === true ? 'block': 'none'" [attr.data-isParent]="ganttService.isParent(row.treePath)" [attr.data-parentid]="row.parentId">
+        <div class="gantt_activity_row" [ngStyle]="setRowStyle()" *ngFor="let row of ganttService.groupData(tasks)">
             <div class="gantt_activity_cell" [ngStyle]="setCellStyle()" *ngFor="let cell of cells; let l = last" [ngClass]="[(isDayWeekend(cell)) ? 'weekend' : '', l ? 'last_column_cell' : '']"></div>
         </div>
     </div>
@@ -34,7 +34,7 @@ import { Zooming } from '../../shared/interfaces';
     `]
 })
 export class GanttActivityBackgroundComponent implements OnInit {
-    @Input() project: any;
+    @Input() tasks: any;
     @Input() grid: any;
     @Input() zoom: any;
     @Input() zoomLevel: string;

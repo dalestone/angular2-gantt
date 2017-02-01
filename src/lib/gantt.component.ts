@@ -9,7 +9,7 @@ import { IGanttOptions, Project } from './shared/interfaces';
         <div style="width: 100%">
             <div class="gantt_container" (window:resize)="onResize($event)">
                 <gantt-header [name]="_project.name"></gantt-header>
-                <gantt-activity [project]="_project" [options]="options"></gantt-activity>
+                <gantt-activity [project]="_project" [options]="_options"></gantt-activity>
                 <gantt-footer [project]="_project"></gantt-footer>
             </div>
         </div>
@@ -35,14 +35,13 @@ export class GanttComponent implements OnInit {
     set project(project: any) {
         if (project) {
             this._project = project;
-
         } else {
             this.setDefaultProject();
         }
     }
     get project() { return this._project };
 
-    @Input()
+    @Input() 
     set options(options: any) {
         if (options.scale) {
             this._options = options;
@@ -51,12 +50,14 @@ export class GanttComponent implements OnInit {
         }
     }
     get options() { return this._options };
-
+    
     private ganttContainerWidth: number;
 
     constructor(private ganttService: GanttService) { }
 
-    ngOnInit() { }
+    ngOnInit() {
+
+     }
 
     setSizes(): void {
         this.ganttContainerWidth = this.ganttService.calculateContainerWidth();
