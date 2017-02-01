@@ -24,11 +24,12 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
             <label>{{column.name}}</label>            
         </div>
         <div class="grid_head_cell">
-            <button (click)="toggleAllChildren()" style="background-color:whitesmoke; border:none; font-size:21px; cursor:pointer">&#x21D5;</button>
+            <button (click)="toggleAllChildren()" style="background-color:whitesmoke; border:none; font-size:21px; cursor:pointer">{{ treeExpanded ? '&#x25b2;' : '&#x25bc;' }}</button>
         </div>
     </div>
     <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': ganttService.TASK_CACHE.length * ganttService.barTop + ganttService.rowHeight * 3 + 'px'}">
     <div #row *ngFor="let data of ganttService.groupData(ganttService.TASK_CACHE)" (click)="toggleChildren(row)" class="grid_row" [ngStyle]="setGridRowStyle(ganttService.isParent(data.treePath))" [attr.data-id]="data.id"  [attr.data-isParent]="ganttService.isParent(data.treePath)" [attr.data-parentid]="data.parentId">
+            <!-- TODO: add indication that this parent has children -->
             <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px', 'padding-left': ganttService.isChild(data.treePath) }">
                 <div class="gantt_tree_content">{{data.name}}</div>                
             </div>
@@ -197,8 +198,8 @@ export class GanttActivityComponent implements OnInit, DoCheck {
     @Input() project: any;
     @Input() options: any;
 
-    private upTriangle: string = '&#x25b2;' // BLACK DOWN-POINTING TRIANGLE
-    private downTriangle: string = '&#x25bc;'; // BLACK UP-POINTING TRIANGLE
+    private upTriangle: string = '&#x25b2;' // BLACK UP-POINTING TRIANGLE
+    private downTriangle: string = '&#x25bc;'; // BLACK DOWN-POINTING TRIANGLE
     private zoom: EventEmitter<string> = new EventEmitter<string>();
     private activityActions = {
         expanded: false,
