@@ -315,7 +315,7 @@ export class GanttService {
     public calculateGridScale(tasks: Task[]): IScale {
         var start: Date;
         var end: Date;
-        var dates = tasks.map((task) => {
+        var dates = tasks.map((task:any) => {
             return {
                 start: new Date(task.start),
                 end: new Date(task.end)
@@ -427,26 +427,26 @@ export class GanttService {
 
     /** Checks whether any new data needs to be added to task cache  */
     public doTaskCheck(tasks: any[], treeExpanded: boolean) {
-        var cachedTaskIds = this.TASK_CACHE.map(task => { return task.id });
+        var cachedTaskIds = this.TASK_CACHE.map((task:any) => { return task.id });
         var itemsToCache: any[] = [];
 
         if (treeExpanded) {
             // push children and parent tasks that are not cached
-            tasks.filter(task => {
+            tasks.filter((task:any) => {
                 return cachedTaskIds.indexOf(task.id) === -1
-            }).forEach(task => {
+            }).forEach((task:any) => {
                 itemsToCache.push(task);
             })
         } else {
             // only look at tasks that are not cached
-            tasks.filter(task => { 
+            tasks.filter((task:any) => { 
                 return cachedTaskIds.indexOf(task.id) === -1 && task.treePath.split('/').length === 1 
-            }).forEach(task => {
+            }).forEach((task:any) => {
                 itemsToCache.push(task);
             });
         }
 
-        itemsToCache.forEach(item => {
+        itemsToCache.forEach((item:any) => {
             this.TASK_CACHE.push(item);
         });
     }
