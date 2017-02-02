@@ -259,7 +259,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
 
     ngOnInit() {
         // Cache the project data and only work with that. Only show parent tasks
-        this.ganttService.TASK_CACHE = this.project.tasks.slice(0).filter(item => {
+        this.ganttService.TASK_CACHE = this.project.tasks.slice(0).filter((item:any) => {
             return item.treePath.split('/').length === 1;
         });
         this.zoomLevel = this.options.zooming;
@@ -304,23 +304,23 @@ export class GanttActivityComponent implements OnInit, DoCheck {
             if (isParent) {
                 // remove children from the DOM as we don't want them if we are collapsing the parent
                 if (children.length > 0) {
-                    let childrenIds: any[] = this.ganttService.TASK_CACHE.filter(task => {
+                    let childrenIds: any[] = this.ganttService.TASK_CACHE.filter((task:any) => {
                         return task.parentId == parentId && task.treePath.split('/').length > 1;
-                    }).map(item => { return item.id });
+                    }).map((item:any) => { return item.id });
 
-                    childrenIds.forEach(item => {
-                        var removedIndex = this.ganttService.TASK_CACHE.map(item => { return item.id }).indexOf(item);
+                    childrenIds.forEach((item:any) => {
+                        var removedIndex = this.ganttService.TASK_CACHE.map((item:any) => { return item.id }).indexOf(item);
 
                         this.ganttService.TASK_CACHE.splice(removedIndex, 1);
                     });
                 } else {
                     // CHECK the project cache to see if this parent id has any children
                     // and if so push them back into array so DOM is updated
-                    let childrenTasks: any[] = this.project.tasks.filter(task => {
+                    let childrenTasks: any[] = this.project.tasks.filter((task:any) => {
                         return task.parentId == parentId && task.treePath.split('/').length > 1;
                     });
 
-                    childrenTasks.forEach(task => {
+                    childrenTasks.forEach((task:any) => {
                         this.ganttService.TASK_CACHE.push(task);
                     });
                 }
@@ -335,19 +335,19 @@ export class GanttActivityComponent implements OnInit, DoCheck {
     toggleAllChildren() {
         try {
             var children: any = document.querySelectorAll('[data-isparent=false]');
-            var childrenIds: string[] = Array.prototype.slice.call(children).map(item => {
+            var childrenIds: string[] = Array.prototype.slice.call(children).map((item:any) => {
                 return item.getAttribute('data-id');
             });
             
             // push all the children array items into cache
             if (this.treeExpanded) {
                 if (children.length > 0) {
-                    let childrenIds: string[] = this.ganttService.TASK_CACHE.filter(task => {
+                    let childrenIds: string[] = this.ganttService.TASK_CACHE.filter((task:any) => {
                         return task.treePath.split('/').length > 1;
-                    }).map(item => { return item.id });
+                    }).map((item:any) => { return item.id });
 
-                    childrenIds.forEach(item => {
-                        var removedIndex = this.ganttService.TASK_CACHE.map(item => { return item.id }).indexOf(item);
+                    childrenIds.forEach((item:any) => {
+                        var removedIndex = this.ganttService.TASK_CACHE.map((item:any) => { return item.id }).indexOf(item);
                         this.ganttService.TASK_CACHE.splice(removedIndex, 1);
                     });
                 }
@@ -355,18 +355,18 @@ export class GanttActivityComponent implements OnInit, DoCheck {
                 this.treeExpanded = false;
             } else {
                 // get all children tasks in project input
-                let childrenTasks: any[] = this.project.tasks.filter(task => {
+                let childrenTasks: any[] = this.project.tasks.filter((task:any) => {
                     return task.treePath.split('/').length > 1;
                 });
 
                 if (children.length > 0) {
                     // filter out these children as they already exist in task cache
-                    childrenTasks = childrenTasks.filter(task => {
+                    childrenTasks = childrenTasks.filter((task:any) => {
                         return childrenIds.indexOf(task.id) === -1;
                     });
                 }
 
-                childrenTasks.forEach(task => {
+                childrenTasks.forEach((task:any) => {
                     this.ganttService.TASK_CACHE.push(task);
                 });
 
