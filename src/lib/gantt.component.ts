@@ -81,7 +81,7 @@ export class GanttComponent implements OnInit {
         }
     }
 
-    gridRowClicked(task) {
+    gridRowClicked(task:any) {
         this.onGridRowClick.emit(task);
     }
 

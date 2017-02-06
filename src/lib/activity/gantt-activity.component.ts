@@ -326,9 +326,8 @@ export class GanttActivityComponent implements OnInit, DoCheck {
                 }
             }
 
+            this.ganttActivityHeight = this.ganttService.TASK_CACHE.length * this.ganttService.rowHeight + 'px';
             this.onGridRowClick.emit(task);
-            this.ganttActivityHeight = this.ganttService.TASK_CACHE.length * this.ganttService.rowHeight + this.ganttService.rowHeight * 3 + 'px';
-
         } catch (err) {
 
         }
@@ -375,8 +374,6 @@ export class GanttActivityComponent implements OnInit, DoCheck {
 
                 this.treeExpanded = true;
             }
-
-            this.ganttActivityHeight = this.ganttService.TASK_CACHE.length * this.ganttService.rowHeight + this.ganttService.rowHeight * 3 + 'px';
         } catch (err) {
 
         }
@@ -447,7 +444,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
 
             this.activityActions.expanded = true;
             this.activityActions.expandedIcon = this.upTriangle;
-            this.ganttActivityHeight = this.project.tasks.length * this.ganttService.rowHeight + this.ganttService.rowHeight * 3 + 'px';
+            this.ganttActivityHeight = this.ganttService.TASK_CACHE.length * this.ganttService.rowHeight + this.ganttService.rowHeight * 3 + 'px';
         }
     }
 
