@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { NgStyle } from '@angular/common';
 import { GanttService } from './shared/services/gantt.service';
 import { IGanttOptions, Project } from './shared/interfaces';
@@ -9,7 +9,7 @@ import { IGanttOptions, Project } from './shared/interfaces';
         <div style="width: 100%">
             <div class="gantt_container" (window:resize)="onResize($event)">
                 <gantt-header [name]="_project.name"></gantt-header>
-                <gantt-activity [project]="_project" [options]="_options"></gantt-activity>
+                <gantt-activity [project]="_project" [options]="_options" (onGridRowClick)="gridRowClicked($event)"></gantt-activity>
                 <gantt-footer [project]="_project"></gantt-footer>
             </div>
         </div>
@@ -50,6 +50,8 @@ export class GanttComponent implements OnInit {
         }
     }
     get options() { return this._options };
+
+    @Output() onGridRowClick: EventEmitter<any> = new EventEmitter<any>();
     
     private ganttContainerWidth: number;
 
@@ -77,6 +79,10 @@ export class GanttComponent implements OnInit {
             name: '',
             tasks: []
         }
+    }
+
+    gridRowClicked(task) {
+        this.onGridRowClick.emit(task);
     }
 
     onResize($event: any): void {

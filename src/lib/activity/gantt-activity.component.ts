@@ -28,8 +28,7 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
         </div>
     </div>
     <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': ganttService.TASK_CACHE.length * ganttService.barTop + ganttService.rowHeight * 3 + 'px'}">
-    <div #row *ngFor="let data of ganttService.groupData(ganttService.TASK_CACHE)" (click)="toggleChildren(row)" class="grid_row" [ngStyle]="setGridRowStyle(ganttService.isParent(data.treePath))" [attr.data-id]="data.id"  [attr.data-isParent]="ganttService.isParent(data.treePath)" [attr.data-parentid]="data.parentId">
-            <!-- TODO: add indication that this parent has children -->
+    <div #row *ngFor="let data of ganttService.groupData(ganttService.TASK_CACHE)" (click)="toggleChildren(row, data)" class="grid_row" [ngStyle]="setGridRowStyle(ganttService.isParent(data.treePath))" [attr.data-id]="data.id"  [attr.data-isParent]="ganttService.isParent(data.treePath)" [attr.data-parentid]="data.parentId">
             <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px', 'padding-left': ganttService.isChild(data.treePath) }">
                 <div class="gantt_tree_content">{{data.name}}</div>                
             </div>
@@ -197,6 +196,7 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
 export class GanttActivityComponent implements OnInit, DoCheck {
     @Input() project: any;
     @Input() options: any;
+    @Output() onGridRowClick: EventEmitter<any> = new EventEmitter<any>();
 
     private upTriangle: string = '&#x25b2;' // BLACK UP-POINTING TRIANGLE
     private downTriangle: string = '&#x25bc;'; // BLACK DOWN-POINTING TRIANGLE
@@ -292,7 +292,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
     }
 
     /** Removes or adds children for given parent tasks back into DOM by updating TASK_CACHE */
-    toggleChildren(rowElem: any) {
+    toggleChildren(rowElem: any, task:any) {
         // this.treeExpanded = false; // reset back so toggle all works correctly
 
         try {
@@ -325,6 +325,8 @@ export class GanttActivityComponent implements OnInit, DoCheck {
                     });
                 }
             }
+
+            this.onGridRowClick.emit(task);
 
         } catch (err) {
 

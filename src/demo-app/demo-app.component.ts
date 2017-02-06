@@ -217,4 +217,8 @@ export class DemoAppComponent {
 
         this.project.tasks.push(...tasks);
     }
+
+    gridRowClicked(event) {
+        console.log(event);
+    }
 }
