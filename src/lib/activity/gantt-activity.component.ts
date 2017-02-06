@@ -10,10 +10,10 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
     <div class="actions_bar">
         <div style="float:right">
             <label>
-                <button (click)="zoomTasks('hours')" style="background-color:whitesmoke; border:none; font-size:16px">Hour</button>
+                <button (click)="zoomTasks('hours')" style="background-color:whitesmoke; border:none; font-size:16px; cursor:pointer">Hour</button>
             </label>
             <label>
-                <button (click)="zoomTasks('days')" style="background-color:whitesmoke; border:none; font-size:16px">Day</button>
+                <button (click)="zoomTasks('days')" style="background-color:whitesmoke; border:none; font-size:16px; cursor:pointer">Day</button>
             </label>
             <button (click)="expand()" style="background-color:whitesmoke; border:none; font-size:21px; cursor:pointer" [innerHTML]="activityActions.expandedIcon"></button>
         </div>
@@ -327,6 +327,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
             }
 
             this.onGridRowClick.emit(task);
+            this.ganttActivityHeight = this.ganttService.TASK_CACHE.length * this.ganttService.rowHeight + this.ganttService.rowHeight * 3 + 'px';
 
         } catch (err) {
 
@@ -374,6 +375,8 @@ export class GanttActivityComponent implements OnInit, DoCheck {
 
                 this.treeExpanded = true;
             }
+
+            this.ganttActivityHeight = this.ganttService.TASK_CACHE.length * this.ganttService.rowHeight + this.ganttService.rowHeight * 3 + 'px';
         } catch (err) {
 
         }
@@ -382,7 +385,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
     onResize(event: any): void {
         let activityContainerSizes = this.ganttService.calculateActivityContainerDimensions();
         if (this.activityActions.expanded) {
-            this.ganttActivityHeight = this.project.tasks.length * this.ganttService.rowHeight + this.ganttService.rowHeight * 3 + 'px';
+            this.ganttActivityHeight = this.ganttService.TASK_CACHE.length * this.ganttService.rowHeight + this.ganttService.rowHeight * 3 + 'px';
         } else {
             this.ganttActivityHeight = activityContainerSizes.height + 'px';;
         }
