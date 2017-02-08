@@ -29,13 +29,16 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
     </div>
     <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': ganttService.TASK_CACHE.length * ganttService.barTop + ganttService.rowHeight * 3 + 'px'}">
     <div #row *ngFor="let data of ganttService.groupData(ganttService.TASK_CACHE)" (click)="toggleChildren(row, data)" class="grid_row" [ngStyle]="setGridRowStyle(ganttService.isParent(data.treePath))" [attr.data-id]="data.id"  [attr.data-isParent]="ganttService.isParent(data.treePath)" [attr.data-parentid]="data.parentId">
-            <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px', 'padding-left': ganttService.isChild(data.treePath) }">
+            <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[0].width + 'px' }">
+                <div [innerHTML]="getStatusIcon(data.status)" [style.color]="getStatusIconColor(data.status)"></div>
+            </div>
+            <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[1].width + 'px', 'padding-left': ganttService.isChild(data.treePath) }">
                 <div class="gantt_tree_content">{{data.name}}</div>                
             </div>
-            <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[1].width + 'px' }">
+            <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[2].width + 'px' }">
                 <div>{{data.percentComplete}}</div>
             </div>
-            <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[2].width + 'px'}">
+            <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[3].width + 'px'}">
                 <div> {{ ganttService.calculateDuration(data) }}</div>
             </div>
         </div>
@@ -244,6 +247,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
 
     private gridData: any[] = [];
     public gridColumns: any[] = [
+        { name: '', left: 0, width: 16 },
         { name: 'Task', left: 20, width: 350 },
         { name: '%', left: 8, width: 40 },
         { name: 'Duration', left: 14, width: 120 }
@@ -326,8 +330,8 @@ export class GanttActivityComponent implements OnInit, DoCheck {
                 }
             }
 
-            this.ganttActivityHeight = this.ganttService.TASK_CACHE.length * this.ganttService.rowHeight + 'px';
             this.onGridRowClick.emit(task);
+            
         } catch (err) {
 
         }
@@ -446,6 +450,32 @@ export class GanttActivityComponent implements OnInit, DoCheck {
             this.activityActions.expandedIcon = this.upTriangle;
             this.ganttActivityHeight = this.ganttService.TASK_CACHE.length * this.ganttService.rowHeight + this.ganttService.rowHeight * 3 + 'px';
         }
+    }
+
+    getStatusIcon(status: string): string {
+        var checkMarkIcon: string = '&#x2714;';
+        var upBlackPointer: string = '&#x25b2;';
+        var crossMarkIcon: string = '&#x2718;';
+
+        if (status === "Completed") {            
+            return checkMarkIcon;
+        } else if (status === "Warning") {
+            return upBlackPointer;
+        } else if (status === "Error") {
+            return crossMarkIcon;
+        }
+        return '';
+    }
+
+    getStatusIconColor(status: string): string {
+        if (status === "Completed") {
+            return 'green';
+        } else if (status === "Warning") {
+            return 'orange';  
+        } else if (status === "Error") {
+            return 'red';
+        }
+        return '';
     }
 
     private setGridScaleStyle() {

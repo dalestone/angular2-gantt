@@ -28,7 +28,8 @@ export class DemoAppComponent {
                 'resource': 'res1',
                 'start': new Date('2017-01-01T00:00:00.0Z'),
                 'end': new Date('2017-01-03T00:00:00.0Z'),
-                'percentComplete': 0,
+                'percentComplete': 100,
+                'status': 'Completed'
             },
             {
                 'id': 'dd755f20-360a-451f-b200-b83b89a35ad1',
@@ -58,7 +59,8 @@ export class DemoAppComponent {
                 'resource': 'res1',
                 'start': new Date('2017-01-07T00:00:00.0Z'),
                 'end': new Date('2017-01-22T00:00:00.0Z'),
-                'percentComplete': 0
+                'percentComplete': 0,
+                'status': 'Error'
             },
             {
                 'id': 'xafa430b-d4da-4d7d-90ed-69056a042d7a',
