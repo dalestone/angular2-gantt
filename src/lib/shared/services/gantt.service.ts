@@ -78,6 +78,11 @@ export class GanttService {
         return left;
     }
 
+    /** Calculates the height of the gantt grid, activity and vertical scroll */
+    public calculateGanttHeight(): string {        
+        return `${this.TASK_CACHE.length * this.rowHeight}px`;
+    }
+
     private calculateBarLeftDelta(start: Date, hours?: boolean): number {
         var offset: number = 0;
         var hoursInDay: number = 24;

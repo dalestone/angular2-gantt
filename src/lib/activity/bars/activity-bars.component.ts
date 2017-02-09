@@ -9,7 +9,7 @@ import { Zooming } from '../../shared/interfaces';
         <div #bar class="gantt_activity_line" *ngFor="let task of ganttService.groupData(tasks); let i = index" [ngStyle]="drawBar(task, i)">
             <div class="gantt_activity_progress" [ngStyle]="drawProgress(task, bar)"></div>
             <div class="gantt_activity_progress_drag" style="left: 518px"></div>
-            <div class="gantt_activity_content"><span *ngIf="task?.percentComplete">{{task.percentComplete}}%</span></div>
+            <div class="gantt_activity_content"></div>
             <div class="gantt_activity_link_control gantt_activity_right" style="height: 26px; line-height: 30px">
             <div class="gantt_link_point"></div>
         </div>

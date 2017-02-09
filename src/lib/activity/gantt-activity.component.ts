@@ -27,7 +27,7 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
             <button (click)="toggleAllChildren()" style="background-color:whitesmoke; border:none; font-size:21px; cursor:pointer">{{ treeExpanded ? '&#x25b2;' : '&#x25bc;' }}</button>
         </div>
     </div>
-    <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': ganttService.TASK_CACHE.length * ganttService.barTop + ganttService.rowHeight * 3 + 'px'}">
+    <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': ganttService.calculateGanttHeight() }">
     <div #row *ngFor="let data of ganttService.groupData(ganttService.TASK_CACHE)" (click)="toggleChildren(row, data)" class="grid_row" [ngStyle]="setGridRowStyle(ganttService.isParent(data.treePath))" [attr.data-id]="data.id"  [attr.data-isParent]="ganttService.isParent(data.treePath)" [attr.data-parentid]="data.parentId">
             <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[0].width + 'px' }">
                 <div [innerHTML]="getStatusIcon(data.status)" [style.color]="getStatusIconColor(data.status)"></div>
@@ -45,13 +45,13 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
     </div>
     </div><div class="gantt_activity" (window:resize)="onResize($event)" [ngStyle]="{ 'height': ganttActivityHeight, 'width': ganttActivityWidth - 18 + 'px'}">
         <time-scale [zoom]="zoom" [zoomLevel]="zoomLevel" [scale]="scale" [dimensions]="dimensions"></time-scale>
-        <div class="gantt_activity_area" #ganttActivityArea [ngStyle]="{ 'height': ganttService.TASK_CACHE.length * ganttService.rowHeight + 'px', 'width': containerWidth + 'px'}">
+        <div class="gantt_activity_area" #ganttActivityArea [ngStyle]="{ 'height': ganttService.calculateGanttHeight(), 'width': containerWidth + 'px'}">
             <activity-background [zoom]="zoom" [zoomLevel]="zoomLevel" [grid]="grid" [tasks]="ganttService.TASK_CACHE"></activity-background>
             <activity-bars [zoom]="zoom" [zoomLevel]="zoomLevel" [scale]="scale" [dimensions]="dimensions" [tasks]="ganttService.TASK_CACHE"></activity-bars>
         </div>
     </div>
     <div class="gantt_vertical_scroll" #verticalScroll (scroll)="onVerticalScroll(verticalScroll, ganttGrid, ganttActivityArea)" [ngStyle]="{'display': activityActions.expanded === true ? 'none' : 'block' }">
-        <div [ngStyle]="{ 'height': ganttService.TASK_CACHE.length * ganttService.rowHeight + ganttService.rowHeight * 3 + 'px'}"></div>
+        <div [ngStyle]="{ 'height': ganttService.calculateGanttHeight() }"></div>
     </div>
     `,
     styleUrls: [`
