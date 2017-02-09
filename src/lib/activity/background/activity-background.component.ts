@@ -35,7 +35,7 @@ import { Zooming } from '../../shared/interfaces';
 })
 export class GanttActivityBackgroundComponent implements OnInit {
     @Input() tasks: any;
-    @Input() grid: any;
+    @Input() timeScale:any;
     @Input() zoom: any;
     @Input() zoomLevel: string;
 
@@ -81,61 +81,60 @@ export class GanttActivityBackgroundComponent implements OnInit {
         if (this.zoomLevel === Zooming[Zooming.hours]) {
             this.cells = [];
 
-            this.grid.cells.dates.forEach((date: any) => {
+            this.timeScale.forEach((date: any) => {
                 for (var i = 0; i <= 23; i++) {
                     this.cells.push(date);
                 }
             });
         } else {
-            this.cells = this.grid.cells.dates;
+            this.cells = this.timeScale;
         }
-    }
-
-    //TODO(dale): replace with either svg or canvas
-    // exceeding the maximum length/width/area on most browsers renders the canvas
-    // unusable (it will ignore any draw commands, even in the usable area)
-    private drawGrid2(): void {
-        this.bg.nativeElement.innerHTML = '';
-        //grid width and height
-        var bw = 1384; // maximum width 16384 CHROME
-        var bh = 300; //this.project.tasks.length * this.ganttService.rowHeight;
-        var rowHeight = this.ganttService.rowHeight;
-        var cellWidth = 0;
-
-        if (this.zoomLevel === Zooming[Zooming.hours]) {
-            cellWidth = this.ganttService.hourCellWidth;
-        } else {
-            cellWidth = this.ganttService.cellWidth;
-        }
-
-        var canvas = document.createElement('canvas');
-        canvas.setAttribute("width", bw.toString());
-        canvas.setAttribute("height", bh.toString());
-        var context = canvas.getContext("2d");
-
-        var lineSpacer = 0;
-        // vertical lines
-        for (var x = 0; x <= bw; x += cellWidth) {
-            lineSpacer += cellWidth / cellWidth;
-
-            context.moveTo(x + lineSpacer - 1.5, 0);
-            context.lineTo(x + lineSpacer - 1.5, bh);
-        }
-
-        // horizontal lines
-        for (var x = 0; x <= bh; x += rowHeight) {
-            context.moveTo(0, x);
-            context.lineTo(bw , x);
-        }
-
-        context.strokeStyle = "#e0e0e0";
-        context.stroke();
-
-        this.bg.nativeElement.append(canvas);
     }
 }
 
 
+    //TODO(dale): replace with either svg or canvas
+    // exceeding the maximum length/width/area on most browsers renders the canvas
+    // unusable (it will ignore any draw commands, even in the usable area)
+    // private drawGrid2(): void {
+    //     this.bg.nativeElement.innerHTML = '';
+    //     //grid width and height
+    //     var bw = 1384; // maximum width 16384 CHROME
+    //     var bh = 300; //this.project.tasks.length * this.ganttService.rowHeight;
+    //     var rowHeight = this.ganttService.rowHeight;
+    //     var cellWidth = 0;
+
+    //     if (this.zoomLevel === Zooming[Zooming.hours]) {
+    //         cellWidth = this.ganttService.hourCellWidth;
+    //     } else {
+    //         cellWidth = this.ganttService.cellWidth;
+    //     }
+
+    //     var canvas = document.createElement('canvas');
+    //     canvas.setAttribute("width", bw.toString());
+    //     canvas.setAttribute("height", bh.toString());
+    //     var context = canvas.getContext("2d");
+
+    //     var lineSpacer = 0;
+    //     // vertical lines
+    //     for (var x = 0; x <= bw; x += cellWidth) {
+    //         lineSpacer += cellWidth / cellWidth;
+
+    //         context.moveTo(x + lineSpacer - 1.5, 0);
+    //         context.lineTo(x + lineSpacer - 1.5, bh);
+    //     }
+
+    //     // horizontal lines
+    //     for (var x = 0; x <= bh; x += rowHeight) {
+    //         context.moveTo(0, x);
+    //         context.lineTo(bw , x);
+    //     }
+
+    //     context.strokeStyle = "#e0e0e0";
+    //     context.stroke();
+
+    //     this.bg.nativeElement.append(canvas);
+    // }
 
 
 // var canvas = $('<canvas/>').attr({width: cw, height: ch}).appendTo('body');

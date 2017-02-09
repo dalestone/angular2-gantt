@@ -11,9 +11,9 @@ import { Zooming } from '../../shared/interfaces';
             <div class="gantt_activity_progress_drag" style="left: 518px"></div>
             <div class="gantt_activity_content"></div>
             <div class="gantt_activity_link_control gantt_activity_right" style="height: 26px; line-height: 30px">
-            <div class="gantt_link_point"></div>
-        </div>
-            <div  class="gantt_activity_link_control gantt_activity_left" style="height: 26px; line-height: 30px">
+                <div class="gantt_link_point"></div>
+            </div>
+            <div class="gantt_activity_link_control gantt_activity_left" style="height: 26px; line-height: 30px">
                 <div class="gantt_link_point"></div>
             </div>
         </div>
@@ -94,7 +94,7 @@ import { Zooming } from '../../shared/interfaces';
     ]
 })
 export class GanttActivityBarsComponent implements OnInit {
-    @Input() scale: any;
+    @Input() timeScale: any;
     @Input() dimensions: any;
     @Input() tasks: any;
     @Input() zoom: any;
@@ -102,14 +102,10 @@ export class GanttActivityBarsComponent implements OnInit {
 
     private containerHeight: number = 0;
     private containerWidth: number = 0;
-    private timescale: any;
 
-    constructor(private ganttService: GanttService) { 
-
-    }
+    constructor(private ganttService: GanttService) { }
 
     ngOnInit() {
-        this.timescale = this.ganttService.calculateScale(this.scale.start, this.scale.end);
         this.containerHeight = this.dimensions.height;
         this.containerWidth = this.dimensions.width;
 
@@ -202,9 +198,9 @@ export class GanttActivityBarsComponent implements OnInit {
         let style = {};
 
         if (this.zoomLevel === Zooming[Zooming.hours]) {
-            style = this.ganttService.calculateBar(task, index, this.timescale, true);
+            style = this.ganttService.calculateBar(task, index, this.timeScale, true);
         } else {
-            style = this.ganttService.calculateBar(task, index, this.timescale);
+            style = this.ganttService.calculateBar(task, index, this.timeScale);
         }
         return style;
     }

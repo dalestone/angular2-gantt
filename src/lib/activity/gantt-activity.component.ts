@@ -44,10 +44,10 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
         </div>
     </div>
     </div><div class="gantt_activity" (window:resize)="onResize($event)" [ngStyle]="{ 'height': ganttActivityHeight, 'width': ganttActivityWidth - 18 + 'px'}">
-        <time-scale [zoom]="zoom" [zoomLevel]="zoomLevel" [scale]="scale" [dimensions]="dimensions"></time-scale>
+        <time-scale [zoom]="zoom" [zoomLevel]="zoomLevel" [timeScale]="ganttService.TIME_SCALE" [dimensions]="dimensions"></time-scale>
         <div class="gantt_activity_area" #ganttActivityArea [ngStyle]="{ 'height': ganttService.calculateGanttHeight(), 'width': containerWidth + 'px'}">
-            <activity-background [zoom]="zoom" [zoomLevel]="zoomLevel" [grid]="grid" [tasks]="ganttService.TASK_CACHE"></activity-background>
-            <activity-bars [zoom]="zoom" [zoomLevel]="zoomLevel" [scale]="scale" [dimensions]="dimensions" [tasks]="ganttService.TASK_CACHE"></activity-bars>
+            <activity-background [zoom]="zoom" [zoomLevel]="zoomLevel" [timeScale]="ganttService.TIME_SCALE" [tasks]="ganttService.TASK_CACHE"></activity-background>
+            <activity-bars [zoom]="zoom" [zoomLevel]="zoomLevel" [timeScale]="ganttService.TIME_SCALE" [dimensions]="dimensions" [tasks]="ganttService.TASK_CACHE"></activity-bars>
         </div>
     </div>
     <div class="gantt_vertical_scroll" #verticalScroll (scroll)="onVerticalScroll(verticalScroll, ganttGrid, ganttActivityArea)" [ngStyle]="{'display': activityActions.expanded === true ? 'none' : 'block' }">
@@ -210,12 +210,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
     }
 
     private timeScale: any;
-    private background: any;
-    private bars: any;
-    private left = 0;
-    private rowsCount: number = 0;
-    private cellsCount: number = 0;
-    private dates: any[] = [];
+
     private start: Date;
     private end: Date;
     private containerHeight: any;
@@ -232,12 +227,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         start: null,
         end: null
     };
-
-    private grid: any = {
-        rows: 0,
-        cells: { dates: [] }
-    };
-
+    
     private dimensions = {
         height: 0,
         width: 0
@@ -245,16 +235,12 @@ export class GanttActivityComponent implements OnInit, DoCheck {
 
     private data: any[] = [];
 
-    private gridData: any[] = [];
     public gridColumns: any[] = [
         { name: '', left: 0, width: 16 },
         { name: 'Task', left: 20, width: 330 },
         { name: '%', left: 8, width: 40 },
         { name: 'Duration', left: 14, width: 120 }
     ];
-    private gridDataHeight = 0;
-
-    public gridScale: any;
 
     constructor(
         public elem: ElementRef,
@@ -266,24 +252,18 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         this.ganttService.TASK_CACHE = this.project.tasks.slice(0).filter((item:any) => {
             return item.treePath.split('/').length === 1;
         });
+        this.ganttService.TIME_SCALE = this.ganttService.calculateScale(this.options.scale.start, this.options.scale.end);
         this.zoomLevel = this.options.zooming;
         this.start = this.options.scale.start;
         this.end = this.options.scale.end;
-        this.dates = this.ganttService.calculateScale(this.start, this.end);
-        this.gridData = this.ganttService.TASK_CACHE;
-        this.calculateRowsLength();
-        this.calculateCellsLength();
         this.containerWidth = this.calculateContainerWidth();
         this.containerHeight = this.calculateContainerHeight();
         this.activityContainerSizes = this.ganttService.calculateActivityContainerDimensions();
 
         // important that these are called last as it relies on values calculated above.
         this.setScale();
-        this.setGrid();
         this.setDimensions();
-        this.setData();
         this.setSizes();
-        this.gridDataHeight = this.calculateGridDataHeight();
     }
 
     ngDoCheck() {
@@ -297,8 +277,6 @@ export class GanttActivityComponent implements OnInit, DoCheck {
 
     /** Removes or adds children for given parent tasks back into DOM by updating TASK_CACHE */
     toggleChildren(rowElem: any, task:any) {
-        // this.treeExpanded = false; // reset back so toggle all works correctly
-
         try {
             let isParent: boolean = "true" === rowElem.getAttribute('data-isparent');
             let parentId: string = rowElem.getAttribute('data-parentid');
@@ -399,18 +377,9 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         this.scale.end = this.end;
     }
 
-    setGrid() {
-        this.grid.rows = this.rowsCount;
-        this.grid.cells.dates = this.dates;
-    }
-
     setDimensions() {
         this.dimensions.height = this.containerHeight;
         this.dimensions.width = this.containerWidth;
-    }
-
-    setData() {
-        this.data = this.gridData;
     }
 
     setGridRowStyle(isParent: boolean): any {
@@ -493,28 +462,15 @@ export class GanttActivityComponent implements OnInit, DoCheck {
     }
 
     private calculateContainerHeight(): number {
-        let containerHeight = this.rowsCount * this.ganttService.rowHeight;
-
-        return containerHeight;
+        return this.ganttService.TASK_CACHE.length * this.ganttService.rowHeight;
     }
 
     private calculateContainerWidth(): number {
-        let containerWidth = 0;
-
         if (this.zoomLevel === Zooming[Zooming.hours]) {
-            containerWidth = this.cellsCount * this.ganttService.hourCellWidth * 24 + this.ganttService.hourCellWidth
+            return this.ganttService.TIME_SCALE.length * this.ganttService.hourCellWidth * 24 + this.ganttService.hourCellWidth
         } else {
-            containerWidth = this.cellsCount * this.ganttService.cellWidth + this.ganttService.cellWidth;
+            return this.ganttService.TIME_SCALE.length * this.ganttService.cellWidth + this.ganttService.cellWidth;
         }
-        return containerWidth;
-    }
-
-    private calculateRowsLength(): void {
-        this.rowsCount = this.gridData.length;
-    }
-
-    private calculateCellsLength(): void {
-        this.cellsCount = this.dates.length;
     }
 
     private setSizes(): void {
@@ -522,9 +478,6 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         this.ganttActivityWidth = this.activityContainerSizes.width;
     }
 
-    private calculateGridDataHeight(): number {
-        return this.gridData.length * this.ganttService.barTop;
-    }
 }
 
 
@@ -637,55 +590,3 @@ export class TreeChildrenRepeater {
         }
     }
 }
-
-        // OLD WAY WITHOUT TREE
-        // <!--<div class="grid_row" [ngStyle]="setGridRowStyle()" *ngFor="let data of project.tasks">
-        //     <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px', 'padding-left': '20px' }">
-        //         <div class="gantt_tree_content">{{data.name}}</div>                
-        //     </div>
-        //     <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[1].width + 'px' }">
-        //         <div>{{data.percentComplete}}</div>
-        //     </div>
-        //     <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[2].width + 'px'}">
-        //         <div> {{ ganttService.calculateDuration(data) }}</div>
-        //     </div>
-        // </div>-->
-
-    // <!--<div class="grid_row" [ngStyle]="setGridRowStyle()">
-    //     <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px' }">
-    //         <div class="gantt_tree_content"><b>{{ group[0].id.split('/')[0] }}</b></div>                
-    //     </div>
-    //     <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[1].width + 'px' }">{{ ganttService.calculateTotalPercentage(group)}}</div>
-    //     <div class="grid_cell" [ngStyle]="{ 'width': '65px'}">{{ ganttService.calculateTotalDuration(group) }}</div>
-    //     <div class="grid_cell">
-    //     	<button (click)="toggle(groupContainer)" style="background-color:#fff; border:none">{{ true == true ? '&#x25bc;' : '&#x25b2;' }}</button>
-    //     </div>
-    // </div>
-    // <div [id]="group[0].id.split('/')[0] + '_container'" style="display:block;">
-    //     <div class="grid_row" [ngStyle]="setGridRowStyle()" *ngFor="let data of group">
-    //         <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px', 'padding-left': '20px' }">
-    //             <div class="gantt_tree_content">{{data.name}}</div>                
-    //         </div>
-    //         <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[1].width + 'px' }">
-    //             <div>{{data.percentComplete}}</div>
-    //         </div>
-    //         <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[2].width + 'px'}">
-    //             <div> {{ ganttService.calculateDuration(data) }}</div>
-    //         </div>
-    //     </div>
-    // </div>-->
-
-        //     <!--<div #groupContainer *ngFor="let node of ganttService.createTree(project.tasks)">
-        //     <div class="grid_row" [ngStyle]="setGridRowStyle()">
-        //         <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px' }">
-        //             <button style="background-color:#fff; border:none">&#x25bc;</button>
-        //             {{ node.name }}
-        //         </div>
-        //         <div class="grid_cell"  [ngStyle]="{ 'width': gridColumns[1].width + 'px' }">{{ ganttService.calculateTotalPercentage(node) }}</div>
-        //     </div>
-        //     <div class="grid_row" [ngStyle]="setGridRowStyle()" *ngFor="let child of node.children">
-        //         <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[0].width + 'px', 'padding-left': '40px' }">{{ child.name }}</div>
-        //         <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[1].width + 'px' }">{{ child.percentComplete }}</div>
-        //         <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[2].width + 'px'}">{{ ganttService.calculateDuration(child) }}</div>
-        //     </div>
-        // </div>-->

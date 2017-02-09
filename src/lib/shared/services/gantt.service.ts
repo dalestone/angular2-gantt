@@ -23,6 +23,7 @@ export class GanttService {
         { status: "completed", backgroundColor: "#66BB6A", border: "1px solid #2E7D32", progressBackgroundColor: "#2E7D32" }
     ];
     public TASK_CACHE: any[];
+    public TIME_SCALE: any[];
 
     constructor() {
         let _ganttConfig = new GanttConfig();
@@ -80,7 +81,7 @@ export class GanttService {
 
     /** Calculates the height of the gantt grid, activity and vertical scroll */
     public calculateGanttHeight(): string {        
-        return `${this.TASK_CACHE.length * this.rowHeight}px`;
+        return `${this.TASK_CACHE.length * this.rowHeight + this.rowHeight * 3}px`;
     }
 
     private calculateBarLeftDelta(start: Date, hours?: boolean): number {
