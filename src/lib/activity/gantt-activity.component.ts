@@ -56,62 +56,50 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
     `,
     styleUrls: [`
         .gantt_activity {
-                /*overflow-x: hidden;*/
-                overflow-x: auto;
-                height: 250px;
-                overflow-y: hidden;
-                display: inline-block;
-                vertical-align: top;
-                position:relative;
-            }
+            /*overflow-x: hidden;*/
+            overflow-x: auto;
+            height: 250px;
+            overflow-y: hidden;
+            display: inline-block;
+            vertical-align: top;
+            position:relative;
+        }
 
-            .gantt_activity_area {
-                position: relative;
-                overflow-x: hidden;
-                overflow-y: hidden;
-                -webkit-user-select: none;
-            }
+        .gantt_activity_area {
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            -webkit-user-select: none;
+        }
 
-            .gantt_vertical_scroll {
-                background-color: transparent;
-                overflow-x: hidden;
-                overflow-y: scroll;
-                position: absolute;
-                right: 0;
-                display: block;
-                height: 247px;
-                width: 18px;
-                top: 87px;
-            }
+        .gantt_vertical_scroll {
+            background-color: transparent;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            position: absolute;
+            right: 0;
+            display: block;
+            height: 283px;
+            width: 18px;
+            top: 70px;
+        }
 
-            .gantt_activity {
-                /*overflow-x: hidden;*/
-                overflow-x: auto;
-                height: 250px;
-                overflow-y: hidden;
-                display: inline-block;
-                vertical-align: top;
-                position:relative;
-            }
+        .gantt_activity {
+            /*overflow-x: hidden;*/
+            overflow-x: auto;
+            height: 250px;
+            overflow-y: hidden;
+            display: inline-block;
+            vertical-align: top;
+            position:relative;
+        }
 
-            .gantt_activity_area {
-                position: relative;
-                overflow-x: hidden;
-                overflow-y: hidden;
-                -webkit-user-select: none;
-            }
-
-            .gantt_vertical_scroll {
-                background-color: transparent;
-                overflow-x: hidden;
-                overflow-y: scroll;
-                position: absolute;
-                right: 0;
-                display: block;
-                height: 283px;
-                width: 18px;
-                top: 80px;
-            }
+        .gantt_activity_area {
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            -webkit-user-select: none;
+        }
 
         .grid {
             overflow-x: hidden;
@@ -274,6 +262,13 @@ export class GanttActivityComponent implements OnInit, DoCheck {
     onVerticalScroll(verticalScroll: any, ganttGrid: any, ganttActivityArea: any): void {
         this.ganttService.scrollTop(verticalScroll, ganttGrid, ganttActivityArea);
     }
+
+    // onWheel(ganttGrid: any, ganttActivityArea: any) {
+    //     //var verticalScroll = document.querySelector('.gantt_vertical_scroll');
+    //     //this.ganttService.scrollTop(verticalScroll, ganttGrid, ganttActivityArea);
+
+    //     console.log("wheel event fired");
+    // }
 
     /** Removes or adds children for given parent tasks back into DOM by updating TASK_CACHE */
     toggleChildren(rowElem: any, task:any) {

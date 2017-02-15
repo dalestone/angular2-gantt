@@ -10,15 +10,15 @@ import { Component, Input } from '@angular/core';
     styleUrls: [`
         .gantt-header {
             background-color: whitesmoke;
-            height: 50px;
+            height: 40px;
             border-bottom: 1px solid #e0e0e0;
         }
 
         .gantt-header-title {
-            padding: 15px;   
+            padding: 12px;   
             display: inline-block;
             font-family: Arial, Helvetica, sans-serif;
-            font-size: 20px;
+            font-size: 16px;
         }
 
         .gantt-header-actions {

@@ -382,10 +382,14 @@ export class GanttService {
     /** Set the vertical scroll top positions for gantt */
     public scrollTop(verticalScrollElem: any, ganttGridElem: any, ganttActivityAreaElem: any) {
         let verticalScrollTop = verticalScrollElem.scrollTop;
+        let scroll = this.setScrollTop;
 
+        // debounce
         if (verticalScrollTop !== null && verticalScrollTop !== undefined) {
-            this.setScrollTop(verticalScrollTop, ganttGridElem);
-            this.setScrollTop(verticalScrollTop, ganttActivityAreaElem);
+            setTimeout(function() {
+                scroll(verticalScrollTop, ganttGridElem);
+                scroll(verticalScrollTop, ganttActivityAreaElem);
+            }, 50);
         }
     }
 
