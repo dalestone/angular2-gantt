@@ -36,7 +36,8 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
                 <div class="gantt_tree_content">{{data.name}}</div>                
             </div>
             <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[2].width + 'px' }">
-                <div>{{data.percentComplete}}</div>
+                <!--<div>{{ ganttService.isParent(data.treePath) === true ? ganttService.calculateParentTotalPercentage(data, project.tasks) : data.percentComplete }}</div>-->
+                <div>{{ data.percentComplete }}</div>
             </div>
             <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[3].width + 'px'}">
                 <div> {{ ganttService.calculateDuration(data) }}</div>
@@ -60,6 +61,7 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
             overflow-x: auto;
             height: 250px;
             overflow-y: hidden;
+            overflow-x: scroll;
             display: inline-block;
             vertical-align: top;
             position:relative;
@@ -82,23 +84,6 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
             height: 283px;
             width: 18px;
             top: 70px;
-        }
-
-        .gantt_activity {
-            /*overflow-x: hidden;*/
-            overflow-x: auto;
-            height: 250px;
-            overflow-y: hidden;
-            display: inline-block;
-            vertical-align: top;
-            position:relative;
-        }
-
-        .gantt_activity_area {
-            position: relative;
-            overflow-x: hidden;
-            overflow-y: hidden;
-            -webkit-user-select: none;
         }
 
         .grid {
@@ -215,7 +200,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         start: null,
         end: null
     };
-    
+
     private dimensions = {
         height: 0,
         width: 0
@@ -236,11 +221,12 @@ export class GanttActivityComponent implements OnInit, DoCheck {
     }
 
     ngOnInit() {
-        // Cache the project data and only work with that. Only show parent tasks
-        this.ganttService.TASK_CACHE = this.project.tasks.slice(0).filter((item:any) => {
+        // Cache the project data and only work with that. Only show parent tasks by default
+        this.ganttService.TASK_CACHE = this.project.tasks.slice(0).filter((item: any) => {
             return item.treePath.split('/').length === 1;
         });
         this.ganttService.TIME_SCALE = this.ganttService.calculateScale(this.options.scale.start, this.options.scale.end);
+
         this.zoomLevel = this.options.zooming;
         this.start = this.options.scale.start;
         this.end = this.options.scale.end;
@@ -254,24 +240,24 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         this.setSizes();
     }
 
+    /** Custom model check */
     ngDoCheck() {
         // do a check to see whether any new tasks have been added. If the task is a child then push into array if tree expanded?
-        this.ganttService.doTaskCheck(this.project.tasks, this.treeExpanded);
+        var tasksAdded = this.ganttService.doTaskCheck(this.project.tasks, this.treeExpanded);
+
+        // only force expand if tasks are added and tree is already expanded
+        if (tasksAdded && this.activityActions.expanded) {
+            this.expand(true);
+        }
     }
 
+    /** On vertical scroll set the scroll top of grid and activity  */
     onVerticalScroll(verticalScroll: any, ganttGrid: any, ganttActivityArea: any): void {
         this.ganttService.scrollTop(verticalScroll, ganttGrid, ganttActivityArea);
     }
 
-    // onWheel(ganttGrid: any, ganttActivityArea: any) {
-    //     //var verticalScroll = document.querySelector('.gantt_vertical_scroll');
-    //     //this.ganttService.scrollTop(verticalScroll, ganttGrid, ganttActivityArea);
-
-    //     console.log("wheel event fired");
-    // }
-
     /** Removes or adds children for given parent tasks back into DOM by updating TASK_CACHE */
-    toggleChildren(rowElem: any, task:any) {
+    toggleChildren(rowElem: any, task: any) {
         try {
             let isParent: boolean = "true" === rowElem.getAttribute('data-isparent');
             let parentId: string = rowElem.getAttribute('data-parentid');
@@ -281,81 +267,95 @@ export class GanttActivityComponent implements OnInit, DoCheck {
             if (isParent) {
                 // remove children from the DOM as we don't want them if we are collapsing the parent
                 if (children.length > 0) {
-                    let childrenIds: any[] = this.ganttService.TASK_CACHE.filter((task:any) => {
+                    let childrenIds: any[] = this.ganttService.TASK_CACHE.filter((task: any) => {
                         return task.parentId == parentId && task.treePath.split('/').length > 1;
-                    }).map((item:any) => { return item.id });
+                    }).map((item: any) => { return item.id });
 
-                    childrenIds.forEach((item:any) => {
-                        var removedIndex = this.ganttService.TASK_CACHE.map((item:any) => { return item.id }).indexOf(item);
+                    childrenIds.forEach((item: any) => {
+                        var removedIndex = this.ganttService.TASK_CACHE.map((item: any) => { return item.id }).indexOf(item);
 
                         this.ganttService.TASK_CACHE.splice(removedIndex, 1);
                     });
+
+                    if (this.activityActions.expanded) {
+                        this.expand(true);
+                    }
+
                 } else {
                     // CHECK the project cache to see if this parent id has any children
                     // and if so push them back into array so DOM is updated
-                    let childrenTasks: any[] = this.project.tasks.filter((task:any) => {
+                    let childrenTasks: any[] = this.project.tasks.filter((task: any) => {
                         return task.parentId == parentId && task.treePath.split('/').length > 1;
                     });
 
-                    childrenTasks.forEach((task:any) => {
+                    childrenTasks.forEach((task: any) => {
                         this.ganttService.TASK_CACHE.push(task);
                     });
+
+                    if (this.activityActions.expanded) {
+                        this.expand(true);
+                    }
                 }
             }
 
             this.onGridRowClick.emit(task);
-            
-        } catch (err) {
 
-        }
+        } catch (err) { }
     }
 
     /** Removes or adds children tasks back into DOM by updating TASK_CACHE */
     toggleAllChildren() {
         try {
             var children: any = document.querySelectorAll('[data-isparent=false]');
-            var childrenIds: string[] = Array.prototype.slice.call(children).map((item:any) => {
+            var childrenIds: string[] = Array.prototype.slice.call(children).map((item: any) => {
                 return item.getAttribute('data-id');
             });
-            
+
             // push all the children array items into cache
             if (this.treeExpanded) {
                 if (children.length > 0) {
-                    let childrenIds: string[] = this.ganttService.TASK_CACHE.filter((task:any) => {
+                    let childrenIds: string[] = this.ganttService.TASK_CACHE.filter((task: any) => {
                         return task.treePath.split('/').length > 1;
-                    }).map((item:any) => { return item.id });
+                    }).map((item: any) => { return item.id });
 
-                    childrenIds.forEach((item:any) => {
-                        var removedIndex = this.ganttService.TASK_CACHE.map((item:any) => { return item.id }).indexOf(item);
+                    childrenIds.forEach((item: any) => {
+                        var removedIndex = this.ganttService.TASK_CACHE.map((item: any) => { return item.id }).indexOf(item);
                         this.ganttService.TASK_CACHE.splice(removedIndex, 1);
                     });
                 }
 
                 this.treeExpanded = false;
+
+                if (this.activityActions.expanded) {
+                    this.expand(true);
+                }
             } else {
                 // get all children tasks in project input
-                let childrenTasks: any[] = this.project.tasks.filter((task:any) => {
+                let childrenTasks: any[] = this.project.tasks.filter((task: any) => {
                     return task.treePath.split('/').length > 1;
                 });
 
                 if (children.length > 0) {
                     // filter out these children as they already exist in task cache
-                    childrenTasks = childrenTasks.filter((task:any) => {
+                    childrenTasks = childrenTasks.filter((task: any) => {
                         return childrenIds.indexOf(task.id) === -1;
                     });
                 }
 
-                childrenTasks.forEach((task:any) => {
+                childrenTasks.forEach((task: any) => {
                     this.ganttService.TASK_CACHE.push(task);
                 });
 
                 this.treeExpanded = true;
-            }
-        } catch (err) {
 
-        }
+                if (this.activityActions.expanded) {
+                    this.expand(true);
+                }
+            }
+        } catch (err) { }
     }
 
+    /** On resize of browser window dynamically adjust gantt activity height and width */
     onResize(event: any): void {
         let activityContainerSizes = this.ganttService.calculateActivityContainerDimensions();
         if (this.activityActions.expanded) {
@@ -393,6 +393,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         };
     }
 
+    /** Set the zoom level e.g hours, days */
     zoomTasks(level: string) {
         this.zoomLevel = level;
         this.zoom.emit(this.zoomLevel);
@@ -401,27 +402,33 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         document.querySelector('.gantt_activity').scrollLeft = 0 // reset scroll left, replace with @ViewChild?
     }
 
-    expand() {
-        if (this.activityActions.expanded) {
+    /** Expand the gantt grid and activity area height */
+    expand(force: boolean): void {
+        var verticalScroll = document.querySelector('.gantt_vertical_scroll');
+        var ganttActivityHeight: string = `${this.ganttService.TASK_CACHE.length * this.ganttService.rowHeight + this.ganttService.rowHeight * 3}px`;
+
+        if (force && this.activityActions.expanded) {
+            this.ganttActivityHeight = ganttActivityHeight;
+        } else if (this.activityActions.expanded) {
             this.activityActions.expanded = false;
             this.activityActions.expandedIcon = this.downTriangle;
             this.ganttActivityHeight = '300px';
         } else {
-            var verticalScroll = document.querySelector('.gantt_vertical_scroll');
             verticalScroll.scrollTop = 0;
 
             this.activityActions.expanded = true;
             this.activityActions.expandedIcon = this.upTriangle;
-            this.ganttActivityHeight = this.ganttService.TASK_CACHE.length * this.ganttService.rowHeight + this.ganttService.rowHeight * 3 + 'px';
+            this.ganttActivityHeight = ganttActivityHeight;
         }
     }
 
+    /** Get the status icon unicode string */
     getStatusIcon(status: string): string {
         var checkMarkIcon: string = '&#x2714;';
         var upBlackPointer: string = '&#x25b2;';
         var crossMarkIcon: string = '&#x2718;';
 
-        if (status === "Completed") {            
+        if (status === "Completed") {
             return checkMarkIcon;
         } else if (status === "Warning") {
             return upBlackPointer;
@@ -431,11 +438,12 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         return '';
     }
 
+    /** Get the status icon color */
     getStatusIconColor(status: string): string {
         if (status === "Completed") {
             return 'green';
         } else if (status === "Warning") {
-            return 'orange';  
+            return 'orange';
         } else if (status === "Error") {
             return 'red';
         }

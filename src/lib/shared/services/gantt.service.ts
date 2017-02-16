@@ -277,6 +277,25 @@ export class GanttService {
         }
     }
 
+    /** Calculate the total percent of the parent task */
+    calculateParentTotalPercentage(parent: any, tasks: any[]) {
+        var children = tasks.filter((task:any) => {
+            return task.parentId === parent.id && task.id != parent.id
+        }); // get only children tasks ignoring parent.
+
+        var totalPercent: number = 0;
+        
+        if (children.length > 0) {
+            children.forEach((child:any) => {
+                totalPercent += isNaN(child.percentComplete) ? 0 : child.percentComplete;
+            });
+
+            return Math.ceil(totalPercent / children.length);
+        } else {
+            return isNaN(parent.percentComplete) ? 0 : parent.percentComplete;
+        }
+    }
+
     /** Calculate the gantt scale range given the start and end date of tasks*/
     public calculateScale(start: Date = new Date(), end: Date = this.addDays(start, 7)) {
         let scale: any[] = [];
@@ -387,8 +406,9 @@ export class GanttService {
         // debounce
         if (verticalScrollTop !== null && verticalScrollTop !== undefined) {
             setTimeout(function() {
-                scroll(verticalScrollTop, ganttGridElem);
                 scroll(verticalScrollTop, ganttActivityAreaElem);
+                scroll(ganttActivityAreaElem.scrollTop, ganttGridElem);
+
             }, 50);
         }
     }
@@ -436,7 +456,7 @@ export class GanttService {
     }
 
     /** Checks whether any new data needs to be added to task cache  */
-    public doTaskCheck(tasks: any[], treeExpanded: boolean) {
+    public doTaskCheck(tasks: any[], treeExpanded: boolean): boolean {
         var cachedTaskIds = this.TASK_CACHE.map((task:any) => { return task.id });
         var itemsToCache: any[] = [];
 
@@ -459,6 +479,12 @@ export class GanttService {
         itemsToCache.forEach((item:any) => {
             this.TASK_CACHE.push(item);
         });
+
+        if (itemsToCache.length > 0) {
+            return true;
+        }
+
+        return false;
     }
 
     /** Set the scroll top property of a native DOM element */
