@@ -238,6 +238,8 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         this.setScale();
         this.setDimensions();
         this.setSizes();
+
+        this.expand(); // default to expanded
     }
 
     /** Custom model check */
@@ -403,7 +405,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
     }
 
     /** Expand the gantt grid and activity area height */
-    expand(force: boolean): void {
+    expand(force?: boolean): void {
         var verticalScroll = document.querySelector('.gantt_vertical_scroll');
         var ganttActivityHeight: string = `${this.ganttService.TASK_CACHE.length * this.ganttService.rowHeight + this.ganttService.rowHeight * 3}px`;
 
@@ -428,7 +430,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         var upBlackPointer: string = '&#x25b2;';
         var crossMarkIcon: string = '&#x2718;';
 
-        if (status === "Completed" || percentComplete === 100 && status !== "Warning" && status !== "Error") {
+        if (status === "Completed" || percentComplete === 100 && status !== "Error") {
             return checkMarkIcon;
         } else if (status === "Warning") {
             return upBlackPointer;
@@ -440,7 +442,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
 
     /** Get the status icon color */
     getStatusIconColor(status: string, percentComplete: number): string {
-        if (status === "Completed" || percentComplete === 100 && status !== "Warning" && status !== "Error") {
+        if (status === "Completed" || percentComplete === 100 && status !== "Error") {
             return 'green';
         } else if (status === "Warning") {
             return 'orange';
