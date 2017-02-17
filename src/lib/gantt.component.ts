@@ -14,16 +14,7 @@ import { IGanttOptions, Project } from './shared/interfaces';
             </div>
         </div>
     `,
-    styleUrls: [`
-        .gantt_container {
-            font-family: Arial;
-            font-size: 13px;
-            border: 1px solid #cecece;
-            position: relative;
-            white-space: nowrap;   
-            margin-top: 0px;
-        }
-    `],
+    styleUrls: ['gantt.component.scss'],
     providers: []
 })
 export class GanttComponent implements OnInit {
@@ -41,7 +32,7 @@ export class GanttComponent implements OnInit {
     }
     get project() { return this._project };
 
-    @Input() 
+    @Input()
     set options(options: any) {
         if (options.scale) {
             this._options = options;
@@ -52,7 +43,7 @@ export class GanttComponent implements OnInit {
     get options() { return this._options };
 
     @Output() onGridRowClick: EventEmitter<any> = new EventEmitter<any>();
-    
+
     private ganttContainerWidth: number;
 
     constructor(private ganttService: GanttService) { }

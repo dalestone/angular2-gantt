@@ -1,0 +1,25 @@
+@import '../../../lib/shared/sass/_variables';
+
+.gantt {
+  &_activity {
+    &_bg {
+      overflow: hidden;
+    }
+
+    &_row {
+      border-bottom: 1px solid $color-grey;
+      background-color: $color-white;
+      box-sizing: border-box;
+    }
+
+    &_cell {
+      display: inline-block;
+      height: 100%;
+      border-right: 1px solid $color-grey;
+    }
+  }
+}
+
+.weekend {
+  background-color:$color-light-grey;
+}

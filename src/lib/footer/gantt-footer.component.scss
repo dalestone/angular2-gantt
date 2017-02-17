@@ -1,0 +1,16 @@
+@import '../../lib/shared/sass/_variables';
+
+.gantt {
+
+  &-footer {
+    background-color: $color-light-grey;
+    height: 36px;
+    border-top: 1px solid $color-grey;
+
+    &-actions {
+      float: right;
+    }
+
+  }
+
+}

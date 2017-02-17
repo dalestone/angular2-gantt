@@ -1,0 +1,29 @@
+@import '../../../lib/shared/sass/_variables';
+
+.time {
+  &_scale {
+    font-size: $font-size - 4px;
+    border-bottom: 1px solid $color-grey;
+    background-color: $color-white;
+
+    &_line {
+      box-sizing: border-box;
+      &:first-child {
+        border-top: none;
+      }
+    }
+
+    &_cell {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 1px solid $color-grey;
+      text-align: center;
+      height: 100%;
+    }
+  }
+}
+
+.weekend {
+  background-color: $color-light-grey;
+}

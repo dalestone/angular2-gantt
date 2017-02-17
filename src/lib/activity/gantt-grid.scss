@@ -1,0 +1,67 @@
+@import '../../lib/shared/sass/_variables';
+
+.grid {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  display: inline-block;
+  vertical-align: top;
+  border-right: 1px solid $color-grey;
+
+  &_scale {
+    color: $color-dark-grey;
+    font-size: $font-size - 4px;
+    border-bottom: 1px solid $color-grey;
+    background-color: $color-light-grey;
+  }
+
+  &_head_cell {
+    /*color: #a6a6a6;*/
+    border-top: none !important;
+    border-right: none !important;
+    line-height: inherit;
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: top;
+    border-right: 1px solid $color-grey;
+    /*text-align: center;*/
+    position: relative;
+    cursor: default;
+    height: 100%;
+    user-select: none;
+    overflow: hidden;
+  }
+
+  &_data {
+    overflow:hidden;
+  }
+
+  &_row {
+    box-sizing: border-box;
+    border-bottom: 1px solid $color-grey;
+    background-color: $color-white;
+    position: relative;
+    user-select: none;
+    cursor:pointer;
+    height:25px;
+    line-height:25px;
+    font-size: $font-size;
+    &:hover {
+      background-color: $color-light-grey;
+    }
+  }
+
+  &_cell {
+    border-right: none;
+    color: $color-dark-grey;
+    display: inline-block;
+    vertical-align: top;
+    padding-left: 6px;
+    padding-right: 6px;
+    height: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: $font-size - 3px;
+    box-sizing: border-box;
+  }
+
+}

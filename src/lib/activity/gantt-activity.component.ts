@@ -21,7 +21,7 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
     <div class="grid" #ganttGrid [ngStyle]="{ 'height': ganttActivityHeight, 'width': ganttService.gridWidth + 'px'}">
     <div class="grid_scale" [ngStyle]="setGridScaleStyle()">
         <div class="grid_head_cell" *ngFor="let column of gridColumns" [style.width]="column.width + 'px'" [style.left]="column.left + 'px'">
-            <label>{{column.name}}</label>            
+            <label>{{column.name}}</label>
         </div>
         <div class="grid_head_cell">
             <button (click)="toggleAllChildren()" style="background-color:whitesmoke; border:none; font-size:21px; cursor:pointer">{{ treeExpanded ? '&#x25b2;' : '&#x25bc;' }}</button>
@@ -33,7 +33,7 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
                 <div [innerHTML]="getStatusIcon(data.status, data.percentComplete)" [style.color]="getStatusIconColor(data.status, data.percentComplete)"></div>
             </div>
             <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[1].width + 'px', 'padding-left': ganttService.isChild(data.treePath) }">
-                <div class="gantt_tree_content">{{data.name}}</div>                
+                <div class="gantt_tree_content">{{data.name}}</div>
             </div>
             <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[2].width + 'px' }">
                 <!--<div>{{ ganttService.isParent(data.treePath) === true ? ganttService.calculateParentTotalPercentage(data, project.tasks) : data.percentComplete }}</div>-->
@@ -55,118 +55,7 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
         <div [ngStyle]="{ 'height': ganttService.calculateGanttHeight() }"></div>
     </div>
     `,
-    styleUrls: [`
-        .gantt_activity {
-            /*overflow-x: hidden;*/
-            overflow-x: auto;
-            height: 250px;
-            overflow-y: hidden;
-            overflow-x: scroll;
-            display: inline-block;
-            vertical-align: top;
-            position:relative;
-        }
-
-        .gantt_activity_area {
-            position: relative;
-            overflow-x: hidden;
-            overflow-y: hidden;
-            -webkit-user-select: none;
-        }
-
-        .gantt_vertical_scroll {
-            background-color: transparent;
-            overflow-x: hidden;
-            overflow-y: scroll;
-            position: absolute;
-            right: 0;
-            display: block;
-            height: 283px;
-            width: 18px;
-            top: 70px;
-        }
-
-        .grid {
-            overflow-x: hidden;
-            overflow-y: hidden;
-            display: inline-block;
-            vertical-align: top;
-            border-right: 1px solid #cecece;
-        }
-
-        .grid_scale {
-            color: #6b6b6b;
-            font-size: 12px;
-            border-bottom: 1px solid #e0e0e0;
-            background-color: whitesmoke;
-        }
-
-        .grid_head_cell {
-            /*color: #a6a6a6;*/
-            border-top: none !important;
-            border-right: none !important;
-            line-height: inherit;
-            box-sizing: border-box;
-            display: inline-block;
-            vertical-align: top;
-            border-right: 1px solid #cecece;
-            /*text-align: center;*/
-            position: relative;
-            cursor: default;
-            height: 100%;
-            -moz-user-select: -moz-none;
-            -webkit-user-select: none;
-            overflow: hidden;
-        }
-
-        .grid_data {
-            overflow:hidden;   
-        }
-
-        .grid_row {
-            box-sizing: border-box;
-            border-bottom: 1px solid #e0e0e0;
-            background-color: #fff;
-            position: relative;
-            -webkit-user-select: none;
-        }
-
-        .grid_row:hover {
-            background-color: #eeeeee;
-        }
-
-        .grid_cell {
-            border-right: none;
-            color: #454545;
-            display: inline-block;
-            vertical-align: top;
-            padding-left: 6px;
-            padding-right: 6px;
-            height: 100%;
-            overflow: hidden;
-            white-space: nowrap;
-            font-size: 13px;
-            box-sizing: border-box;
-        }
-
-        .actions_bar {
-            /*border-top: 1px solid #cecece;*/
-            border-bottom: 1px solid #e0e0e0;
-            clear: both;
-            /*margin-top: 90px;*/
-            height: 28px;
-            background: whitesmoke;
-            color: #494949;
-            font-family: Arial, sans-serif;
-            font-size: 13px;
-            padding-left: 15px;
-            line-height: 25px;
-        }
-
-        .gantt_tree_content {
-            padding-left:15px;
-        }
-    `],
+    styleUrls: ['gantt-activity.component.scss', 'gantt-grid.scss'],
     changeDetection: ChangeDetectionStrategy.Default
 })
 export class GanttActivityComponent implements OnInit, DoCheck {
@@ -506,23 +395,7 @@ export class TreeBuilder {
 
 @Component({
     selector: 'tree-parent-repeater',
-    styleUrls: [`
-        .grid_row {
-            box-sizing: border-box;
-            border-bottom: 1px solid #e0e0e0;
-            background-color: #fff;
-            position: relative;
-            -webkit-user-select: none;
-            cursor:pointer;
-            height:25px;
-            line-height:25px;
-            font-size:16px;
-        }
-
-        .grid_row:hover {
-            background-color: whitesmoke;
-        }
-  `],
+    styleUrls: ['gantt-grid.scss'],
     template: `
     <div>
         <div (click)="toggle()" class="grid_row">
@@ -550,23 +423,7 @@ export class TreeParentRepeater {
 
 @Component({
     selector: 'tree-children-repeater',
-    styleUrls: [`
-        .grid_row {
-            box-sizing: border-box;
-            border-bottom: 1px solid #e0e0e0;
-            background-color: #fff;
-            position: relative;
-            -webkit-user-select: none;
-            cursor:pointer;
-            height:25px;
-            line-height:25px;
-            font-size:16px;
-        }
-
-        .grid_row:hover {
-            background-color: whitesmoke;
-        }
-  `],
+    styleUrls: ['gantt-grid.scss'],
     template: `
     <div *ngIf="root.children.length > 0">
       <div *ngFor="let child of root.children" style="padding-left:20px">

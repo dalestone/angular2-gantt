@@ -19,76 +19,7 @@ import { Zooming } from '../../shared/interfaces';
         </div>
     </div>
     `,
-    styleUrls: [`
-    .gantt_activity_line {
-        /*border-radius: 2px;*/
-        position: absolute;
-        box-sizing: border-box;
-        background-color: rgb(18,195,244);
-        border: 1px solid #2196F3;
-        -webkit-user-select: none;
-    }
-
-    .gantt_activity_line:hover {
-        /*cursor: move;*/
-    }
-
-    .gantt_activity_progress {
-        text-align: center;
-        z-index: 0;
-        background: #2196F3;
-        position: absolute;
-        min-height: 18px;
-        display: block;
-        height: 18px;
-    }
-
-    .gantt_activity_progress_drag {
-        height: 8px;
-        width: 8px;
-        bottom: -4px;
-        margin-left: 4px;
-        background-position: bottom;
-        background-image: "";
-        background-repeat: no-repeat;
-        z-index: 2;
-    }
-
-    .gantt_activity_content {
-        font-size: 12px;
-        color: #fff;
-        width: 100%;
-        top: 0;
-        position: absolute;
-        white-space: nowrap;
-        text-align: center;
-        line-height: inherit;
-        overflow: hidden;
-        height: 100%;
-    }
-
-    .gantt_activity_link_control {
-        position: absolute;
-        width: 13px;
-        top: 0;   
-    }
-
-    .gantt_activity_right {
-        right: 0;
-    }
-
-    .gantt_activity_left {
-        left: 0;
-    }
-
-    .gantt_activity_right:hover {
-        cursor:w-resize;
-    }
-
-    .gantt_activity_left:hover {
-        cursor:w-resize;
-    }
-    `],
+    styleUrls: ['activity-bars.component.scss'],
     providers: [
         GanttService
     ]
@@ -155,7 +86,7 @@ export class GanttActivityBarsComponent implements OnInit {
                 barWidth = cellWidth;
                 days = Math.round(barWidth / cellWidth);
             }
-            bar.style.width = ((days * cellWidth) + days); // rounds to the nearest cell            
+            bar.style.width = ((days * cellWidth) + days); // rounds to the nearest cell
         }
 
         this.addMouseEventListeners(doDrag);
