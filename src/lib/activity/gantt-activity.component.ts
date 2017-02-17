@@ -28,7 +28,7 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
         </div>
     </div>
     <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': ganttService.calculateGanttHeight() }">
-    <div #row *ngFor="let data of ganttService.groupData(ganttService.TASK_CACHE)" (click)="toggleChildren(row, data)" class="grid_row" [ngStyle]="setGridRowStyle(ganttService.isParent(data.treePath))" [attr.data-id]="data.id"  [attr.data-isParent]="ganttService.isParent(data.treePath)" [attr.data-parentid]="data.parentId">
+    <div #row *ngFor="let data of ganttService.groupData(ganttService.TASK_CACHE)" (click)="toggleChildren(row, data)" class="grid_row" [ngStyle]="setGridRowStyle(ganttService.isParent(data.treePath))" [attr.data-id]="ganttService.setIdPrefix(data.id)"  [attr.data-isParent]="ganttService.isParent(data.treePath)" [attr.data-parentid]="ganttService.setIdPrefix(data.parentId)">
             <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[0].width + 'px' }">
                 <div [innerHTML]="getStatusIcon(data.status)" [style.color]="getStatusIconColor(data.status)"></div>
             </div>
@@ -260,7 +260,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
     toggleChildren(rowElem: any, task: any) {
         try {
             let isParent: boolean = "true" === rowElem.getAttribute('data-isparent');
-            let parentId: string = rowElem.getAttribute('data-parentid');
+            let parentId: string = rowElem.getAttribute('data-parentid').replace("_", ""); // remove id prefix
             let children: any = document.querySelectorAll('[data-parentid=' + rowElem.getAttribute('data-parentid') + '][data-isparent=false]');
 
             // use the task cache to allow deleting of items without polluting the project.tasks array
@@ -285,7 +285,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
                     // CHECK the project cache to see if this parent id has any children
                     // and if so push them back into array so DOM is updated
                     let childrenTasks: any[] = this.project.tasks.filter((task: any) => {
-                        return task.parentId == parentId && task.treePath.split('/').length > 1;
+                        return task.parentId === parentId && task.treePath.split('/').length > 1;
                     });
 
                     childrenTasks.forEach((task: any) => {
@@ -308,7 +308,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         try {
             var children: any = document.querySelectorAll('[data-isparent=false]');
             var childrenIds: string[] = Array.prototype.slice.call(children).map((item: any) => {
-                return item.getAttribute('data-id');
+                return item.getAttribute('data-id').replace("_", ""); // remove id prefix
             });
 
             // push all the children array items into cache

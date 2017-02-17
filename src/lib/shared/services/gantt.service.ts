@@ -487,6 +487,16 @@ export class GanttService {
         return false;
     }
 
+    /** Set a id prefix so CSS3 query selector can work with ids that contain numbers */
+    public setIdPrefix(id: string): string {        
+        return `_${id}`;
+    }
+
+    // /** Remove the id prefix to allow querying of data */
+    // public removeIdPrefix(id: string): string {
+    //     return id.substring(1, id.length - 1);
+    // }
+
     /** Set the scroll top property of a native DOM element */
     private setScrollTop(scrollTop: number, element: any): void {
         if (element !== null && element !== undefined) {
