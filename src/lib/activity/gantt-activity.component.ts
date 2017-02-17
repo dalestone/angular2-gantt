@@ -30,7 +30,7 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
     <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': ganttService.calculateGanttHeight() }">
     <div #row *ngFor="let data of ganttService.groupData(ganttService.TASK_CACHE)" (click)="toggleChildren(row, data)" class="grid_row" [ngStyle]="setGridRowStyle(ganttService.isParent(data.treePath))" [attr.data-id]="ganttService.setIdPrefix(data.id)"  [attr.data-isParent]="ganttService.isParent(data.treePath)" [attr.data-parentid]="ganttService.setIdPrefix(data.parentId)">
             <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[0].width + 'px' }">
-                <div [innerHTML]="getStatusIcon(data.status)" [style.color]="getStatusIconColor(data.status)"></div>
+                <div [innerHTML]="getStatusIcon(data.status, data.percentComplete)" [style.color]="getStatusIconColor(data.status, data.percentComplete)"></div>
             </div>
             <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[1].width + 'px', 'padding-left': ganttService.isChild(data.treePath) }">
                 <div class="gantt_tree_content">{{data.name}}</div>                
@@ -423,12 +423,12 @@ export class GanttActivityComponent implements OnInit, DoCheck {
     }
 
     /** Get the status icon unicode string */
-    getStatusIcon(status: string): string {
+    getStatusIcon(status: string, percentComplete: number): string {
         var checkMarkIcon: string = '&#x2714;';
         var upBlackPointer: string = '&#x25b2;';
         var crossMarkIcon: string = '&#x2718;';
 
-        if (status === "Completed") {
+        if (status === "Completed" || percentComplete === 100 && status !== "Warning" && status !== "Error") {
             return checkMarkIcon;
         } else if (status === "Warning") {
             return upBlackPointer;
@@ -439,8 +439,8 @@ export class GanttActivityComponent implements OnInit, DoCheck {
     }
 
     /** Get the status icon color */
-    getStatusIconColor(status: string): string {
-        if (status === "Completed") {
+    getStatusIconColor(status: string, percentComplete: number): string {
+        if (status === "Completed" || percentComplete === 100 && status !== "Warning" && status !== "Error") {
             return 'green';
         } else if (status === "Warning") {
             return 'orange';
