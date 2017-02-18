@@ -1,0 +1,23 @@
+@import '../../lib/shared/sass/_variables';
+
+.gantt {
+  &-header {
+    background-color: $color-light-grey;
+    height: 40px;
+    border-bottom: 1px solid $color-grey;
+
+    &-title {
+      padding: 12px;
+      display: inline-block;
+      font-family: $font-family;
+      font-size: $font-size;
+    }
+
+    &-actions {
+      display: inline;
+      float: right;
+      padding: 6px;
+    }
+
+  }
+}

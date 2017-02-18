@@ -3,17 +3,7 @@ import { Component, Input } from '@angular/core';
 @Component({
     selector: 'gantt-footer',
     template: `<div class="gantt-footer"></div>`,
-    styleUrls: [`
-        .gantt-footer {
-            background-color: whitesmoke;
-            height: 36px;    
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .gantt-footer-actions {
-            float:right;
-        }
-    `]
+    styleUrls: ['gantt-footer.component.scss']
 })
 export class GanttFooterComponent {
     @Input() project: any;

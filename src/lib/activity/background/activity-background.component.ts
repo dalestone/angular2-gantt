@@ -11,27 +11,7 @@ import { Zooming } from '../../shared/interfaces';
         </div>
     </div>
     `,
-    styleUrls: [`
-        .gantt_activity_bg {
-            overflow: hidden;    
-        }
-
-        .gantt_activity_row {
-            border-bottom: 1px solid #ebebeb;
-            background-color: #fff;
-            box-sizing: border-box;
-        }
-
-        .gantt_activity_cell {
-            display: inline-block;
-            height: 100%;
-            border-right: 1px solid #ebebeb;
-        }
-
-        .weekend {
-            background-color:whitesmoke;
-        }
-    `]
+    styleUrls: ['activity-background.component.scss']
 })
 export class GanttActivityBackgroundComponent implements OnInit {
     @Input() tasks: any;

@@ -1,0 +1,55 @@
+@import '../../lib/shared/sass/_variables';
+
+.gantt {
+
+  &_activity {
+    overflow-x: auto;
+    height: 250px;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    display: inline-block;
+    vertical-align: top;
+    position:relative;
+
+    &_area {
+      position: relative;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      user-select: none;
+    }
+
+  }
+
+  &_vertical_scroll {
+    background-color: transparent;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    position: absolute;
+    right: 0;
+    display: block;
+    height: 283px;
+    width: 18px;
+    top: 70px;
+  }
+
+  &_tree {
+    &_content {
+      padding-left:15px;
+    }
+  }
+
+}
+
+.actions_bar {
+  /*border-top: 1px solid #cecece;*/
+  border-bottom: 1px solid $color-grey;
+  clear: both;
+  /*margin-top: 90px;*/
+  height: 28px;
+  background: $color-light-grey;
+  color: $color-dark-grey;
+  font-family: $font-family;
+  font-size: $font-size - 3px;
+  padding-left: 15px;
+  line-height: 25px;
+}

@@ -13,34 +13,7 @@ import { Zooming } from '../../shared/interfaces';
                 <div class="time_scale_cell" *ngFor="let hour of getHours()" [ngStyle]="{ 'width': ganttService.hourCellWidth + 'px' }">{{hour}}</div>
             </div>
         </div>`,
-    styleUrls: [`
-        .weekend {
-            background-color:whitesmoke;
-        }
-
-        .time_scale {
-            font-size: 12px;
-            border-bottom: 1px solid #cecece;
-            background-color: #fff;
-        }
-
-        .time_scale_line {
-            box-sizing: border-box;
-        }
-
-        .time_scale_line:first-child {
-            border-top: none;
-        }
-
-        .time_scale_cell {
-            display: inline-block;
-            white-space: nowrap;
-            overflow: hidden;
-            border-right: 1px solid #cecece;
-            text-align: center;
-            height: 100%;
-            }`
-    ],
+    styleUrls: ['gantt-time-scale.component.scss'],
     providers: [
         GanttService
     ]
@@ -55,7 +28,7 @@ export class GanttTimeScaleComponent implements OnInit {
 
     ngOnInit() {
         this.zoom.subscribe((zoomLevel: string) => {
-            this.zoomLevel = zoomLevel;                        
+            this.zoomLevel = zoomLevel;
         });;
     }
 
@@ -77,13 +50,13 @@ export class GanttTimeScaleComponent implements OnInit {
     private setTimescaleCellStyle() {
         var width = this.ganttService.cellWidth;
         var hoursInDay = 24;
-        var hourSeperatorPixels = 23; // we don't include the first 
+        var hourSeperatorPixels = 23; // we don't include the first
 
         if(this.zoomLevel ===  Zooming[Zooming.hours]) {
-            width = this.ganttService.hourCellWidth * hoursInDay + hourSeperatorPixels; 
+            width = this.ganttService.hourCellWidth * hoursInDay + hourSeperatorPixels;
         }
 
-        return {            
+        return {
             'width': width + 'px'
         };
     }
