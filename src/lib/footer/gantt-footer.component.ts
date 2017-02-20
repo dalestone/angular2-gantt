@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 @Component({
     selector: 'gantt-footer',
     template: `<div class="gantt-footer"></div>`,
-    styleUrls: [`
+    styles: [`
         .gantt-footer {
             background-color: whitesmoke;
             height: 36px;    

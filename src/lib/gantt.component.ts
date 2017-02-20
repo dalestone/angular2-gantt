@@ -14,7 +14,7 @@ import { IGanttOptions, Project } from './shared/interfaces';
             </div>
         </div>
     `,
-    styleUrls: [`
+    styles: [`
         .gantt_container {
             font-family: Arial;
             font-size: 13px;

@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
             <div class="gantt-header-title">{{ name }}</div>
         </div>
     `,
-    styleUrls: [`
+    styles: [`
         .gantt-header {
             background-color: whitesmoke;
             height: 40px;

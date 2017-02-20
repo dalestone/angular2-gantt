@@ -55,7 +55,7 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
         <div [ngStyle]="{ 'height': ganttService.calculateGanttHeight() }"></div>
     </div>
     `,
-    styleUrls: [`
+    styles: [`
         .gantt_activity {
             /*overflow-x: hidden;*/
             overflow-x: auto;
@@ -487,111 +487,111 @@ export class GanttActivityComponent implements OnInit, DoCheck {
 
 
 //** <tree-builder [nodes]="ganttService.transformData(project.tasks)"></tree-builder> */
-@Component({
-    selector: 'tree-builder',
-    template: '<tree-parent-repeater *ngFor="let node of nodes" [node]="node"></tree-parent-repeater>'
-})
-export class TreeBuilder {
-    _nodes: any = [
-        {
-            name: "testing", children: [
-                { name: "testing2", children: [{ name: "testing4", children: [] }] }
-            ]
-        },
-        {
-            name: "testing3", children: []
-        }
-    ];
+// @Component({
+//     selector: 'tree-builder',
+//     template: '<tree-parent-repeater *ngFor="let node of nodes" [node]="node"></tree-parent-repeater>'
+// })
+// export class TreeBuilder {
+//     _nodes: any = [
+//         {
+//             name: "testing", children: [
+//                 { name: "testing2", children: [{ name: "testing4", children: [] }] }
+//             ]
+//         },
+//         {
+//             name: "testing3", children: []
+//         }
+//     ];
 
-    @Input() nodes: any;
-}
+//     @Input() nodes: any;
+// }
 
-@Component({
-    selector: 'tree-parent-repeater',
-    styleUrls: [`
-        .grid_row {
-            box-sizing: border-box;
-            border-bottom: 1px solid #e0e0e0;
-            background-color: #fff;
-            position: relative;
-            -webkit-user-select: none;
-            cursor:pointer;
-            height:25px;
-            line-height:25px;
-            font-size:16px;
-        }
+// @Component({
+//     selector: 'tree-parent-repeater',
+//     styles: [`
+//         .grid_row {
+//             box-sizing: border-box;
+//             border-bottom: 1px solid #e0e0e0;
+//             background-color: #fff;
+//             position: relative;
+//             -webkit-user-select: none;
+//             cursor:pointer;
+//             height:25px;
+//             line-height:25px;
+//             font-size:16px;
+//         }
 
-        .grid_row:hover {
-            background-color: whitesmoke;
-        }
-  `],
-    template: `
-    <div>
-        <div (click)="toggle()" class="grid_row">
-            <div style="display:inline-block; width:10px; padding-left:4px; font-size:14px">{{ expanded !== true ? '&#x25b6;' : '&#x25bc;' }}</div>
-            <div style="display:inline-block; width:350px">{{ node.name }}</div>
-            <div style="display:inline-block; width:40px">{{ node.percentComplete }}</div>
-            <div style="display:inline-block; width:40px">0</div>
-        </div>
-        <tree-children-repeater *ngIf="expanded" [root]="node"></tree-children-repeater>
-    </div>
-  `
-})
-export class TreeParentRepeater {
-    @Input() node: any;
-    expanded: boolean = true;
+//         .grid_row:hover {
+//             background-color: whitesmoke;
+//         }
+//   `],
+//     template: `
+//     <div>
+//         <div (click)="toggle()" class="grid_row">
+//             <div style="display:inline-block; width:10px; padding-left:4px; font-size:14px">{{ expanded !== true ? '&#x25b6;' : '&#x25bc;' }}</div>
+//             <div style="display:inline-block; width:350px">{{ node.name }}</div>
+//             <div style="display:inline-block; width:40px">{{ node.percentComplete }}</div>
+//             <div style="display:inline-block; width:40px">0</div>
+//         </div>
+//         <tree-children-repeater *ngIf="expanded" [root]="node"></tree-children-repeater>
+//     </div>
+//   `
+// })
+// export class TreeParentRepeater {
+//     @Input() node: any;
+//     expanded: boolean = true;
 
-    toggle = () => {
-        if (this.expanded) {
-            this.expanded = false;
-        } else {
-            this.expanded = true;
-        }
-    }
-}
+//     toggle = () => {
+//         if (this.expanded) {
+//             this.expanded = false;
+//         } else {
+//             this.expanded = true;
+//         }
+//     }
+// }
 
-@Component({
-    selector: 'tree-children-repeater',
-    styleUrls: [`
-        .grid_row {
-            box-sizing: border-box;
-            border-bottom: 1px solid #e0e0e0;
-            background-color: #fff;
-            position: relative;
-            -webkit-user-select: none;
-            cursor:pointer;
-            height:25px;
-            line-height:25px;
-            font-size:16px;
-        }
+// @Component({
+//     selector: 'tree-children-repeater',
+//     styles: [`
+//         .grid_row {
+//             box-sizing: border-box;
+//             border-bottom: 1px solid #e0e0e0;
+//             background-color: #fff;
+//             position: relative;
+//             -webkit-user-select: none;
+//             cursor:pointer;
+//             height:25px;
+//             line-height:25px;
+//             font-size:16px;
+//         }
 
-        .grid_row:hover {
-            background-color: whitesmoke;
-        }
-  `],
-    template: `
-    <div *ngIf="root.children.length > 0">
-      <div *ngFor="let child of root.children" style="padding-left:20px">
-          <div (click)="toggle()" class="grid_row">
-            <div style="display:inline-block; width:10px; padding-left:4px; font-size:14px">{{ expanded !== true ? '&#x25b6;' : '&#x25bc;' }}</div>
-            <div style="display:inline-block; width:330px">{{ child.name }}</div>
-            <div style="display:inline-block; width:40px">{{ child.percentComplete }}</div>
-            <div style="display:inline-block; width:40px">0</div>
-          </div>
-          <tree-children-repeater *ngIf="expanded" [root]="child"></tree-children-repeater>
-      </div>
-    </div>
-  `
-})
-export class TreeChildrenRepeater {
-    @Input() root: any;
-    expanded: boolean = true;
+//         .grid_row:hover {
+//             background-color: whitesmoke;
+//         }
+//   `],
+//     template: `
+//     <div *ngIf="root.children.length > 0">
+//       <div *ngFor="let child of root.children" style="padding-left:20px">
+//           <div (click)="toggle()" class="grid_row">
+//             <div style="display:inline-block; width:10px; padding-left:4px; font-size:14px">{{ expanded !== true ? '&#x25b6;' : '&#x25bc;' }}</div>
+//             <div style="display:inline-block; width:330px">{{ child.name }}</div>
+//             <div style="display:inline-block; width:40px">{{ child.percentComplete }}</div>
+//             <div style="display:inline-block; width:40px">0</div>
+//           </div>
+//           <tree-children-repeater *ngIf="expanded" [root]="child"></tree-children-repeater>
+//       </div>
+//     </div>
+//   `
+// })
+// export class TreeChildrenRepeater {
+//     @Input() root: any;
+//     expanded: boolean = true;
 
-    toggle = () => {
-        if (this.expanded) {
-            this.expanded = false;
-        } else {
-            this.expanded = true;
-        }
-    }
-}
+//     toggle = () => {
+//         if (this.expanded) {
+//             this.expanded = false;
+//         } else {
+//             this.expanded = true;
+//         }
+//     }
+// }

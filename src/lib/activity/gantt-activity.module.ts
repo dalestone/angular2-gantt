@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { GanttActivityComponent, TreeBuilder, TreeParentRepeater, TreeChildrenRepeater } from './gantt-activity.component';
+import { GanttActivityComponent } from './gantt-activity.component';
 import { GanttTimeScaleComponent } from './time-scale/gantt-time-scale.component';
 import { GanttActivityBackgroundComponent } from './background/activity-background.component';
 import { GanttActivityBarsComponent } from './bars/activity-bars.component';
@@ -21,7 +21,7 @@ import { GanttActivityBarsComponent } from './bars/activity-bars.component';
         GanttTimeScaleComponent,
         GanttActivityBackgroundComponent,
         GanttActivityBarsComponent,
-        TreeBuilder, TreeParentRepeater, TreeChildrenRepeater,
+        ///TreeBuilder, TreeParentRepeater, TreeChildrenRepeater,
     ],
     providers: [],
 })

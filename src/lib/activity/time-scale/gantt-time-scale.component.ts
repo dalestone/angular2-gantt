@@ -13,7 +13,7 @@ import { Zooming } from '../../shared/interfaces';
                 <div class="time_scale_cell" *ngFor="let hour of getHours()" [ngStyle]="{ 'width': ganttService.hourCellWidth + 'px' }">{{hour}}</div>
             </div>
         </div>`,
-    styleUrls: [`
+    styles: [`
         .weekend {
             background-color:whitesmoke;
         }

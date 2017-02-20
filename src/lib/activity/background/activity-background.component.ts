@@ -11,7 +11,7 @@ import { Zooming } from '../../shared/interfaces';
         </div>
     </div>
     `,
-    styleUrls: [`
+    styles: [`
         .gantt_activity_bg {
             overflow: hidden;    
         }
