@@ -15,7 +15,7 @@ export class GanttService {
     public barLineHeight: number = 0;
     public barTop: number = 0;
     public barMoveable: boolean = false;
-    public gridWidth: number = 540;
+    public gridWidth: number = 560;
     private barStyles: IBarStyle[] = [
         { status: "information", backgroundColor: "rgb(18,195, 244)", border: "1px solid #2196F3", progressBackgroundColor: "#2196F3" },
         { status: "warning", backgroundColor: "#FFA726", border: "1px solid #EF6C00", progressBackgroundColor: "#EF6C00" },
@@ -258,7 +258,38 @@ export class GanttService {
     }
 
     calculateTotalDuration(tasks: any[]): string {
-        return '';
+        try {
+            let totalHours = 0;
+            let oneHour = 60 * 60 * 1000;
+            for (let i = 0; i < tasks.length; i++) {
+                let start = tasks[i].start;
+                let end = tasks[i].end;
+
+                if (start != null && end != null) {
+                    let duration = Math.abs(tasks[i].end.getTime() - tasks[i].start.getTime()) / oneHour; // duration in hours
+                    totalHours += duration;
+                }
+            }
+
+            if (totalHours === 0) {
+                return '';
+            }
+
+            if (totalHours > 24) {
+                return `${Math.round(totalHours / 24)} day(s)`; // duration in days
+            } else if (totalHours > 1) {
+                return `${Math.round(totalHours)} hr(s)`; // duration in hours
+            } else {
+                let minutes = totalHours * 60;
+
+                if (minutes < 1) {
+                    return `${Math.round(minutes * 60)} second(s)`; // duration in seconds
+                }
+                return `${Math.round(minutes)} min(s)` // duration in minutes
+            }
+        } catch (err) {
+            return '';
+        }
     }
 
     /** Calculate the total percentage of a group of tasks */

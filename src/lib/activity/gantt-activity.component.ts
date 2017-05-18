@@ -21,7 +21,7 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
     <div class="grid" #ganttGrid [ngStyle]="{ 'height': ganttActivityHeight, 'width': ganttService.gridWidth + 'px'}">
     <div class="grid_scale" [ngStyle]="setGridScaleStyle()">
         <div class="grid_head_cell" *ngFor="let column of gridColumns" [style.width]="column.width + 'px'" [style.left]="column.left + 'px'">
-            <label>{{column.name}}</label>            
+            <label>{{column.name}} <span *ngIf="column.name === 'Duration'" style="font-weight:bold">{{ ganttService.calculateTotalDuration(ganttService.TASK_CACHE) }}</span></label>            
         </div>
         <div class="grid_head_cell">
             <button (click)="toggleAllChildren()" style="background-color:whitesmoke; border:none; font-size:21px; cursor:pointer">{{ treeExpanded ? '&#x25b2;' : '&#x25bc;' }}</button>
@@ -212,7 +212,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         { name: '', left: 0, width: 16 },
         { name: 'Task', left: 20, width: 330 },
         { name: '%', left: 8, width: 40 },
-        { name: 'Duration', left: 14, width: 120 }
+        { name: 'Duration', left: 14, width: 140 }
     ];
 
     constructor(

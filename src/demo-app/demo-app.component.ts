@@ -19,6 +19,7 @@ export class DemoAppComponent {
     project: Project = {
         'id': 'dd10f0b6-b8a4-4b2d-a7df-b2c3d63b4a01',
         'name': 'Angular2 Gantt',
+        'startDate': new Date("2017-02-27T08:32:09.6972999Z"),
         'tasks': [
             {
                 'id': 'ea2a8d86-1d4b-4807-844d-d5417fcf618d',

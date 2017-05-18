@@ -8,7 +8,7 @@ import { IGanttOptions, Project } from './shared/interfaces';
     template: `
         <div style="width: 100%">
             <div class="gantt_container" (window:resize)="onResize($event)">
-                <gantt-header [name]="_project.name"></gantt-header>
+                <gantt-header [name]="_project.name" [startDate]="_project.startDate"></gantt-header>
                 <gantt-activity [project]="_project" [options]="_options" (onGridRowClick)="gridRowClicked($event)"></gantt-activity>
                 <gantt-footer [project]="_project"></gantt-footer>
             </div>
@@ -77,6 +77,7 @@ export class GanttComponent implements OnInit {
         this._project = {
             id: '',
             name: '',
+            startDate: null,
             tasks: []
         }
     }

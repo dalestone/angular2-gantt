@@ -4,7 +4,10 @@ import { Component, Input } from '@angular/core';
     selector: 'gantt-header',
     template: `
         <div class="gantt-header">
-            <div class="gantt-header-title">{{ name }}</div>
+            <div class="gantt-header-title">
+                <div style="flex:1">{{ name }}</div>
+                <div>Started: {{ startDate | date: 'medium'}}</div>
+            </div>
         </div>
     `,
     styles: [`
@@ -16,7 +19,8 @@ import { Component, Input } from '@angular/core';
 
         .gantt-header-title {
             padding: 12px;   
-            display: inline-block;
+            display: flex;
+            flex-wrap:wrap;
             font-family: Arial, Helvetica, sans-serif;
             font-size: 16px;
         }
@@ -30,4 +34,5 @@ import { Component, Input } from '@angular/core';
 })
 export class GanttHeaderComponent {
     @Input() name:any;
+    @Input() startDate: Date;
 }
