@@ -98,35 +98,6 @@ export class DemoAppComponent {
                 'resource': 'res2',
                 'start': new Date('2017-01-24T00:00:00.0Z'),
                 'end': new Date('2017-01-24T00:00:36.0Z')
-            },
-            {
-                'id': 'ecd2aa93-27e3-4ab4-aa92-cba8eb6df505',
-                'treePath': 'Lorem Ipsum Ipsum',
-                'parentId': 'ecd2aa93-27e3-4ab4-aa92-cba8eb6df505',
-                'name': 'Lorem Ipsum Ipsum',
-                'resource': 'res2',
-                'start': new Date('2017-01-24T00:00:00.0Z'),
-                'end': new Date(null)
-            },
-            {
-                'id': 'e6ec0ddb-ecf6-4d6c-9606-ced38266b7de',
-                'treePath': 'Null dates',
-                'parentId': 'e6ec0ddb-ecf6-4d6c-9606-ced38266b7de',
-                'name': 'Null dates',
-                'resource': 'res3',
-                'percentComplete': 0,
-                'start': null,
-                'end': null
-            },
-            {
-                'id': 'c20d820c-2544-4252-8ff0-3848ae52b018',
-                'treePath': 'parent11',
-                'parentId': 'c20d820c-2544-4252-8ff0-3848ae52b018',
-                'name': 'child1',
-                'resource': 'res3',
-                'percentComplete': 0,
-                'start': null,
-                'end': null
             }
         ]
     };

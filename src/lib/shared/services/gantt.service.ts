@@ -259,6 +259,8 @@ export class GanttService {
 
     calculateTotalDuration(tasks: any[]): string {
         try {
+            tasks = tasks.filter(t => t.parentId === t.id); // only calculate total duration with parent tasks
+            
             let totalHours = 0;
             let oneHour = 60 * 60 * 1000;
             for (let i = 0; i < tasks.length; i++) {
