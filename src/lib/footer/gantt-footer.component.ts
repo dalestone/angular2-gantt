@@ -2,12 +2,24 @@ import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'gantt-footer',
-    template: `<div class="gantt-footer"></div>`,
+    template: `
+        <div class="gantt-footer">
+            <span>{{ project?.tasks?.length || 0 }} tasks</span>
+        </div>
+    `,
     styles: [`
         .gantt-footer {
-            background-color: whitesmoke;
-            height: 36px;    
-            border-top: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            min-height: 36px;
+            padding: 0 16px;
+            box-sizing: border-box;
+            background: var(--gantt-surface-muted);
+            border-top: 1px solid var(--gantt-border-soft);
+            color: var(--gantt-text-muted);
+            font-size: 12px;
+            font-weight: 600;
         }
 
         .gantt-footer-actions {

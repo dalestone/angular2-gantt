@@ -14,13 +14,34 @@ import { IGanttOptions, Project } from './shared/interfaces';
         </div>
     `,
     styles: [`
+        :host {
+            display: block;
+            width: 100%;
+        }
+
         .gantt_container {
-            font-family: Arial;
+            --gantt-surface: #ffffff;
+            --gantt-surface-muted: #f8fafc;
+            --gantt-surface-subtle: #f1f5f9;
+            --gantt-border: #d8dee8;
+            --gantt-border-soft: #e8edf3;
+            --gantt-text: #111827;
+            --gantt-text-muted: #667085;
+            --gantt-accent: #0e7490;
+            --gantt-accent-soft: #e6f7fb;
+            --gantt-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             font-size: 13px;
-            border: 1px solid #cecece;
+            color: var(--gantt-text);
+            background: var(--gantt-surface);
+            border: 1px solid var(--gantt-border);
+            border-radius: 8px;
+            box-shadow: var(--gantt-shadow);
+            overflow: hidden;
             position: relative;
             white-space: nowrap;   
-            margin-top: 0px;
+            margin-top: 0;
         }
     `],
     standalone: false,

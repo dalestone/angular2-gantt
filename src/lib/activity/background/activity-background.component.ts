@@ -17,23 +17,25 @@ import { Zooming } from '../../shared/interfaces';
     `,
     styles: [`
         .gantt_activity_bg {
-            overflow: hidden;    
+            overflow: hidden;
+            background: var(--gantt-surface);
         }
 
         .gantt_activity_row {
-            border-bottom: 1px solid #ebebeb;
-            background-color: #fff;
+            border-bottom: 1px solid var(--gantt-border-soft);
+            background-color: var(--gantt-surface);
             box-sizing: border-box;
         }
 
         .gantt_activity_cell {
             display: inline-block;
             height: 100%;
-            border-right: 1px solid #ebebeb;
+            border-right: 1px solid #eef2f7;
+            box-sizing: border-box;
         }
 
         .weekend {
-            background-color:whitesmoke;
+            background-color: #f8fafc;
         }
     `],
     standalone: false

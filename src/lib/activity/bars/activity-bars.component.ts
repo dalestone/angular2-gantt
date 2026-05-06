@@ -23,26 +23,47 @@ import { Zooming } from '../../shared/interfaces';
     `,
     styles: [`
     .gantt_activity_line {
-        /*border-radius: 2px;*/
         position: absolute;
         box-sizing: border-box;
-        background-color: rgb(18,195,244);
-        border: 1px solid #2196F3;
+        overflow: hidden;
+        border-radius: 999px;
+        background-color: #22d3ee;
+        border: 1px solid rgba(14, 116, 144, 0.5);
+        box-shadow: 0 6px 14px rgba(14, 116, 144, 0.16);
         -webkit-user-select: none;
+        user-select: none;
+        transition: filter 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+    }
+
+    .gantt_activity_line::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0) 50%, rgba(15, 23, 42, 0.08));
+        pointer-events: none;
+        z-index: 2;
     }
 
     .gantt_activity_line:hover {
-        /*cursor: move;*/
+        cursor: default;
+        filter: saturate(1.08);
+        box-shadow: 0 8px 18px rgba(14, 116, 144, 0.22);
+        transform: translateY(-1px);
     }
 
     .gantt_activity_progress {
         text-align: center;
-        z-index: 0;
-        background: #2196F3;
+        z-index: 1;
+        background: #0891b2;
         position: absolute;
         min-height: 18px;
         display: block;
         height: 18px;
+        border-radius: 999px 0 0 999px;
+        opacity: 1;
+        box-shadow: inset -2px 0 0 rgba(255, 255, 255, 0.8), 2px 0 7px rgba(15, 23, 42, 0.18);
+        transition: width 180ms linear;
     }
 
     .gantt_activity_progress_drag {
@@ -72,7 +93,13 @@ import { Zooming } from '../../shared/interfaces';
     .gantt_activity_link_control {
         position: absolute;
         width: 13px;
-        top: 0;   
+        top: 0;
+        opacity: 0;
+        transition: opacity 120ms ease;
+    }
+
+    .gantt_activity_line:hover .gantt_activity_link_control {
+        opacity: 1;
     }
 
     .gantt_activity_right {
@@ -84,11 +111,11 @@ import { Zooming } from '../../shared/interfaces';
     }
 
     .gantt_activity_right:hover {
-        cursor:w-resize;
+        cursor: w-resize;
     }
 
     .gantt_activity_left:hover {
-        cursor:w-resize;
+        cursor: w-resize;
     }
     `],
     providers: [

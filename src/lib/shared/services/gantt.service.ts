@@ -17,10 +17,10 @@ export class GanttService {
     public barMoveable: boolean = false;
     public gridWidth: number = 560;
     private barStyles: IBarStyle[] = [
-        { status: "information", backgroundColor: "rgb(18,195, 244)", border: "1px solid #2196F3", progressBackgroundColor: "#2196F3" },
-        { status: "warning", backgroundColor: "#FFA726", border: "1px solid #EF6C00", progressBackgroundColor: "#EF6C00" },
-        { status: "error", backgroundColor: "#EF5350", border: "1px solid #C62828", progressBackgroundColor: "#C62828" },
-        { status: "completed", backgroundColor: "#66BB6A", border: "1px solid #2E7D32", progressBackgroundColor: "#2E7D32" }
+        { status: "information", backgroundColor: "#cffafe", border: "1px solid rgba(14, 116, 144, 0.45)", progressBackgroundColor: "#0891b2" },
+        { status: "warning", backgroundColor: "#fef3c7", border: "1px solid rgba(180, 83, 9, 0.45)", progressBackgroundColor: "#d97706" },
+        { status: "error", backgroundColor: "#ffe4e6", border: "1px solid rgba(190, 18, 60, 0.45)", progressBackgroundColor: "#e11d48" },
+        { status: "completed", backgroundColor: "#d1fae5", border: "1px solid rgba(4, 120, 87, 0.45)", progressBackgroundColor: "#059669" }
     ];
     public TASK_CACHE: any[];
     public TIME_SCALE: any[];
@@ -164,8 +164,8 @@ export class GanttService {
                 style["border"] = this.barStyles[3].border;
                 break;
             default:
-                style["background-color"] = "rgb(18,195, 244)";
-                style["border"] = "1px solid #2196F3";
+                style["background-color"] = "#cffafe";
+                style["border"] = "1px solid rgba(14, 116, 144, 0.45)";
                 break;
         }
 

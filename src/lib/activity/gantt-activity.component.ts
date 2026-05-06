@@ -8,32 +8,29 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
     selector: 'gantt-activity',
     template: `
     <div class="actions_bar">
-        <div style="float:right">
-            <label>
-                <button (click)="zoomTasks('hours')" style="background-color:whitesmoke; border:none; font-size:16px; cursor:pointer">Hour</button>
-            </label>
-            <label>
-                <button (click)="zoomTasks('days')" style="background-color:whitesmoke; border:none; font-size:16px; cursor:pointer">Day</button>
-            </label>
-            <button (click)="expand()" style="background-color:whitesmoke; border:none; font-size:21px; cursor:pointer" [innerHTML]="activityActions.expandedIcon"></button>
+        <div class="actions_spacer"></div>
+        <div class="toolbar" aria-label="Gantt controls">
+            <button class="toolbar_button" [class.active]="zoomLevel === 'hours'" (click)="zoomTasks('hours')" type="button">Hour</button>
+            <button class="toolbar_button" [class.active]="zoomLevel === 'days'" (click)="zoomTasks('days')" type="button">Day</button>
+            <button class="toolbar_button icon_button" (click)="expand()" type="button" [innerHTML]="activityActions.expandedIcon" aria-label="Toggle expanded view"></button>
         </div>
     </div>
     <div class="grid" #ganttGrid [ngStyle]="{ 'height': ganttActivityHeight, 'width': ganttService.gridWidth + 'px'}">
     <div class="grid_scale" [ngStyle]="setGridScaleStyle()">
         @for (column of gridColumns; track column.name) {
         <div class="grid_head_cell" [style.width]="column.width + 'px'" [style.left]="column.left + 'px'">
-            <label>{{column.name}} @if (column.name === 'Duration') { <span style="font-weight:bold">{{ ganttService.calculateTotalDuration(ganttService.TASK_CACHE) }}</span> }</label>            
+            <label>{{column.name}} @if (column.name === 'Duration') { <span>{{ ganttService.calculateTotalDuration(ganttService.TASK_CACHE) }}</span> }</label>            
         </div>
         }
         <div class="grid_head_cell">
-            <button (click)="toggleAllChildren()" style="background-color:whitesmoke; border:none; font-size:21px; cursor:pointer">{{ treeExpanded ? '&#x25b2;' : '&#x25bc;' }}</button>
+            <button class="tree_toggle" (click)="toggleAllChildren()" type="button">{{ treeExpanded ? '&#x25b2;' : '&#x25bc;' }}</button>
         </div>
     </div>
     <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': ganttService.calculateGanttHeight() }">
     @for (data of ganttService.groupData(ganttService.TASK_CACHE); track data.id) {
     <div #row (click)="toggleChildren(row, data)" class="grid_row" [ngStyle]="setGridRowStyle(ganttService.isParent(data.treePath))" [attr.data-id]="ganttService.setIdPrefix(data.id)"  [attr.data-isParent]="ganttService.isParent(data.treePath)" [attr.data-parentid]="ganttService.setIdPrefix(data.parentId)">
             <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[0].width + 'px' }">
-                <div [innerHTML]="getStatusIcon(data.status, data.percentComplete)" [style.color]="getStatusIconColor(data.status, data.percentComplete)"></div>
+                <div class="status_icon" [innerHTML]="getStatusIcon(data.status, data.percentComplete)" [style.color]="getStatusIconColor(data.status, data.percentComplete)"></div>
             </div>
             <div class="grid_cell" [ngStyle]=" { 'width': gridColumns[1].width + 'px', 'padding-left': ganttService.isChild(data.treePath) }">
                 <div class="gantt_tree_content">{{data.name}}</div>                
@@ -61,14 +58,15 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
     `,
     styles: [`
         .gantt_activity {
-            /*overflow-x: hidden;*/
-            overflow-x: auto;
             height: 250px;
             overflow-y: hidden;
             overflow-x: scroll;
             display: inline-block;
             vertical-align: top;
-            position:relative;
+            position: relative;
+            background: var(--gantt-surface);
+            scrollbar-color: #b6c3d1 transparent;
+            scrollbar-width: thin;
         }
 
         .gantt_activity_area {
@@ -87,7 +85,9 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
             display: block;
             height: 283px;
             width: 18px;
-            top: 70px;
+            top: 92px;
+            scrollbar-color: #b6c3d1 transparent;
+            scrollbar-width: thin;
         }
 
         .grid {
@@ -95,32 +95,44 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
             overflow-y: hidden;
             display: inline-block;
             vertical-align: top;
-            border-right: 1px solid #cecece;
+            border-right: 1px solid var(--gantt-border);
+            background: var(--gantt-surface);
         }
 
         .grid_scale {
-            color: #6b6b6b;
-            font-size: 12px;
-            border-bottom: 1px solid #e0e0e0;
-            background-color: whitesmoke;
+            color: var(--gantt-text-muted);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--gantt-border-soft);
+            background-color: var(--gantt-surface-subtle);
         }
 
         .grid_head_cell {
-            /*color: #a6a6a6;*/
-            border-top: none !important;
-            border-right: none !important;
             line-height: inherit;
             box-sizing: border-box;
             display: inline-block;
             vertical-align: top;
-            border-right: 1px solid #cecece;
-            /*text-align: center;*/
+            border-right: 1px solid var(--gantt-border-soft);
             position: relative;
             cursor: default;
             height: 100%;
-            -moz-user-select: -moz-none;
             -webkit-user-select: none;
+            user-select: none;
             overflow: hidden;
+            padding: 0 10px;
+        }
+
+        .grid_head_cell label {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            height: 100%;
+        }
+
+        .grid_head_cell span {
+            color: var(--gantt-text);
+            font-weight: 800;
         }
 
         .grid_data {
@@ -129,23 +141,30 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
 
         .grid_row {
             box-sizing: border-box;
-            border-bottom: 1px solid #e0e0e0;
-            background-color: #fff;
+            border-bottom: 1px solid var(--gantt-border-soft);
+            background-color: var(--gantt-surface);
             position: relative;
             -webkit-user-select: none;
+            user-select: none;
+            transition: background-color 120ms ease, box-shadow 120ms ease;
+        }
+
+        .grid_row[data-isparent="true"] {
+            background: #fbfcfe;
         }
 
         .grid_row:hover {
-            background-color: #eeeeee;
+            background-color: var(--gantt-accent-soft);
+            box-shadow: inset 3px 0 0 var(--gantt-accent);
         }
 
         .grid_cell {
             border-right: none;
-            color: #454545;
+            color: var(--gantt-text);
             display: inline-block;
             vertical-align: top;
-            padding-left: 6px;
-            padding-right: 6px;
+            padding-left: 10px;
+            padding-right: 10px;
             height: 100%;
             overflow: hidden;
             white-space: nowrap;
@@ -154,21 +173,76 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
         }
 
         .actions_bar {
-            /*border-top: 1px solid #cecece;*/
-            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--gantt-border-soft);
             clear: both;
-            /*margin-top: 90px;*/
-            height: 28px;
-            background: whitesmoke;
-            color: #494949;
-            font-family: Arial, sans-serif;
+            height: 36px;
+            background: var(--gantt-surface-muted);
+            color: var(--gantt-text);
             font-size: 13px;
-            padding-left: 15px;
-            line-height: 25px;
+            padding: 0 10px 0 14px;
+            line-height: 1;
+        }
+
+        .toolbar {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid var(--gantt-border-soft);
+            border-radius: 7px;
+            background: var(--gantt-surface);
+            padding: 3px;
+        }
+
+        .toolbar_button,
+        .tree_toggle {
+            border: 0;
+            border-radius: 5px;
+            background: transparent;
+            color: var(--gantt-text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            height: 26px;
+            min-width: 42px;
+            padding: 0 9px;
+            transition: background-color 120ms ease, color 120ms ease;
+        }
+
+        .toolbar_button:hover,
+        .tree_toggle:hover {
+            background: var(--gantt-surface-subtle);
+            color: var(--gantt-text);
+        }
+
+        .toolbar_button.active {
+            background: var(--gantt-accent);
+            color: #fff;
+        }
+
+        .icon_button,
+        .tree_toggle {
+            min-width: 28px;
+            width: 28px;
+            padding: 0;
+            font-size: 14px;
         }
 
         .gantt_tree_content {
-            padding-left:15px;
+            overflow: hidden;
+            padding-left: 10px;
+            text-overflow: ellipsis;
+        }
+
+        .status_icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            font-size: 13px;
+            font-weight: 800;
         }
     `],
     standalone: false,

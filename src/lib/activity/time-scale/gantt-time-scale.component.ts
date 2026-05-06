@@ -21,13 +21,15 @@ import { Zooming } from '../../shared/interfaces';
         </div>`,
     styles: [`
         .weekend {
-            background-color:whitesmoke;
+            background-color: #f8fafc;
         }
 
         .time_scale {
             font-size: 12px;
-            border-bottom: 1px solid #cecece;
-            background-color: #fff;
+            border-bottom: 1px solid var(--gantt-border-soft);
+            background-color: var(--gantt-surface);
+            color: var(--gantt-text-muted);
+            font-weight: 600;
         }
 
         .time_scale_line {
@@ -42,10 +44,11 @@ import { Zooming } from '../../shared/interfaces';
             display: inline-block;
             white-space: nowrap;
             overflow: hidden;
-            border-right: 1px solid #cecece;
+            border-right: 1px solid var(--gantt-border-soft);
             text-align: center;
             height: 100%;
-            }`
+            box-sizing: border-box;
+        }`
     ],
     providers: [
         GanttService
