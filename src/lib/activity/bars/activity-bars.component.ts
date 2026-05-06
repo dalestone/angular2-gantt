@@ -5,7 +5,7 @@ import { Zooming } from '../../shared/interfaces';
 @Component({
     selector: 'activity-bars',
     template: `
-    <div class="gantt_activity_bars_area" [ngStyle]="{ 'height': containerHeight + 'px', 'width': containerWidth + 'px' }">
+    <div class="gantt_activity_bars_area" [ngStyle]="setContainerStyle()">
         @for (task of ganttService.groupData(tasks); track task.id; let i = $index) {
         <div #bar class="gantt_activity_line" [ngStyle]="drawBar(task, i)">
             <div class="gantt_activity_progress" [ngStyle]="drawProgress(task, bar)"></div>
@@ -129,6 +129,7 @@ export class GanttActivityBarsComponent implements OnInit {
     @Input() tasks: any;
     @Input() zoom: any;
     @Input() zoomLevel: any;
+    @Input() timelineZoom: number = 1;
 
     public containerHeight: number = 0;
     public containerWidth: number = 0;
@@ -225,24 +226,40 @@ export class GanttActivityBarsComponent implements OnInit {
     }
 
     public drawBar(task: any, index: number) {
-        let style = {};
+        let style: any = {};
 
         if (this.zoomLevel === Zooming[Zooming.hours]) {
             style = this.ganttService.calculateBar(task, index, this.timeScale, true);
         } else {
             style = this.ganttService.calculateBar(task, index, this.timeScale);
         }
+
+        style.left = this.scalePixelValue(style.left);
+        style.width = this.scalePixelValue(style.width);
+
         return style;
     }
 
     public drawProgress(task: any, bar: any):any {
         var barStyle = this.ganttService.getBarProgressStyle(task.status);
-        var width = this.ganttService.calculateBarProgress(this.ganttService.getComputedStyle(bar, 'width'), task.percentComplete);
+        var percent = typeof task.percentComplete === 'number' ? task.percentComplete : 0;
+        percent = Math.min(100, Math.max(0, percent));
 
         return {
-            'width': width,
+            'width': percent + '%',
             'background-color': barStyle["background-color"],
         };
+    }
+
+    public setContainerStyle(): any {
+        return {
+            'height': this.dimensions.height + 'px',
+            'width': this.dimensions.width + 'px'
+        };
+    }
+
+    private scalePixelValue(value: string): string {
+        return Math.round(parseFloat(value) * this.timelineZoom) + 'px';
     }
 
     private addMouseEventListeners(dragFn: any) {

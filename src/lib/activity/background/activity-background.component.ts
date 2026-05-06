@@ -45,6 +45,7 @@ export class GanttActivityBackgroundComponent implements OnInit {
     @Input() timeScale:any;
     @Input() zoom: any;
     @Input() zoomLevel: string;
+    @Input() timelineZoom: number = 1;
 
     @ViewChild('bg') bg: ElementRef;
 
@@ -80,7 +81,7 @@ export class GanttActivityBackgroundComponent implements OnInit {
         }
 
         return {
-            'width': width + 'px'
+            'width': Math.round(width * this.timelineZoom) + 'px'
         };
     }
 

@@ -14,7 +14,7 @@ import { Zooming } from '../../shared/interfaces';
             @if (zoomLevel === 'hours') {
             <div class="time_scale_line" [ngStyle]="setTimescaleLineStyle('1px solid #cecece')">
                 @for (hour of getHours(); track $index) {
-                <div class="time_scale_cell" [ngStyle]="{ 'width': ganttService.hourCellWidth + 'px' }">{{hour}}</div>
+                <div class="time_scale_cell" [ngStyle]="setHourCellStyle()">{{hour}}</div>
                 }
             </div>
             }
@@ -60,6 +60,7 @@ export class GanttTimeScaleComponent implements OnInit {
     @Input() dimensions: any;
     @Input() zoom: any;
     @Input() zoomLevel: any;
+    @Input() timelineZoom: number = 1;
 
     constructor(public ganttService: GanttService) { }
 
@@ -94,7 +95,13 @@ export class GanttTimeScaleComponent implements OnInit {
         }
 
         return {            
-            'width': width + 'px'
+            'width': Math.round(width * this.timelineZoom) + 'px'
+        };
+    }
+
+    public setHourCellStyle() {
+        return {
+            'width': Math.round(this.ganttService.hourCellWidth * this.timelineZoom) + 'px'
         };
     }
 

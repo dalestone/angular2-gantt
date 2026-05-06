@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, AfterViewInit, ViewChild, ChangeDetectionStrategy, OnChanges, DoCheck } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ChangeDetectionStrategy, DoCheck } from '@angular/core';
 
 import { GanttService } from '../shared/services/gantt.service';
-import { GanttConfig } from '../shared/services/gantt-config.service';
-import { IGanttOptions, Zooming } from '../shared/interfaces';
+import { Zooming } from '../shared/interfaces';
 
 @Component({
     selector: 'gantt-activity',
@@ -12,6 +11,11 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
         <div class="toolbar" aria-label="Gantt controls">
             <button class="toolbar_button" [class.active]="zoomLevel === 'hours'" (click)="zoomTasks('hours')" type="button">Hour</button>
             <button class="toolbar_button" [class.active]="zoomLevel === 'days'" (click)="zoomTasks('days')" type="button">Day</button>
+            <span class="toolbar_divider"></span>
+            <button class="toolbar_button icon_button zoom_button" [disabled]="timelineZoom <= minTimelineZoom" (click)="zoomTimeline(-timelineZoomStep)" type="button" aria-label="Zoom out" title="Zoom out">-</button>
+            <button class="toolbar_button zoom_value" (click)="resetTimelineZoom()" type="button" aria-label="Reset zoom" title="Reset zoom">{{ getTimelineZoomLabel() }}</button>
+            <button class="toolbar_button icon_button zoom_button" [disabled]="timelineZoom >= maxTimelineZoom" (click)="zoomTimeline(timelineZoomStep)" type="button" aria-label="Zoom in" title="Zoom in">+</button>
+            <span class="toolbar_divider"></span>
             <button class="toolbar_button icon_button" (click)="expand()" type="button" [innerHTML]="activityActions.expandedIcon" aria-label="Toggle expanded view"></button>
         </div>
     </div>
@@ -45,11 +49,19 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
         </div>
     }
     </div>
-    </div><div class="gantt_activity" (window:resize)="onResize($event)" [ngStyle]="{ 'height': ganttActivityHeight, 'width': ganttActivityWidth - 18 + 'px'}">
-        <time-scale [zoom]="zoom" [zoomLevel]="zoomLevel" [timeScale]="ganttService.TIME_SCALE" [dimensions]="dimensions"></time-scale>
+    </div><div
+        #ganttActivity
+        class="gantt_activity"
+        (window:resize)="onResize($event)"
+        (wheel)="onTimelineWheel($event, ganttActivity)"
+        (dblclick)="resetTimelineZoom(ganttActivity)"
+        [ngStyle]="{ 'height': ganttActivityHeight, 'width': ganttActivityWidth - 18 + 'px'}"
+        title="Ctrl, Cmd, or Alt + wheel to zoom. Double-click to reset."
+    >
+        <time-scale [zoom]="zoom" [zoomLevel]="zoomLevel" [timelineZoom]="timelineZoom" [timeScale]="ganttService.TIME_SCALE" [dimensions]="dimensions"></time-scale>
         <div class="gantt_activity_area" #ganttActivityArea [ngStyle]="{ 'height': ganttService.calculateGanttHeight(), 'width': containerWidth + 'px'}">
-            <activity-background [zoom]="zoom" [zoomLevel]="zoomLevel" [timeScale]="ganttService.TIME_SCALE" [tasks]="ganttService.TASK_CACHE"></activity-background>
-            <activity-bars [zoom]="zoom" [zoomLevel]="zoomLevel" [timeScale]="ganttService.TIME_SCALE" [dimensions]="dimensions" [tasks]="ganttService.TASK_CACHE"></activity-bars>
+            <activity-background [zoom]="zoom" [zoomLevel]="zoomLevel" [timelineZoom]="timelineZoom" [timeScale]="ganttService.TIME_SCALE" [tasks]="ganttService.TASK_CACHE"></activity-background>
+            <activity-bars [zoom]="zoom" [zoomLevel]="zoomLevel" [timelineZoom]="timelineZoom" [timeScale]="ganttService.TIME_SCALE" [dimensions]="dimensions" [tasks]="ganttService.TASK_CACHE"></activity-bars>
         </div>
     </div>
     <div class="gantt_vertical_scroll" #verticalScroll (scroll)="onVerticalScroll(verticalScroll, ganttGrid, ganttActivityArea)" [ngStyle]="{'display': activityActions.expanded === true ? 'none' : 'block' }">
@@ -222,12 +234,35 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
             color: #fff;
         }
 
+        .toolbar_button:disabled {
+            cursor: not-allowed;
+            opacity: 0.45;
+        }
+
         .icon_button,
         .tree_toggle {
             min-width: 28px;
             width: 28px;
             padding: 0;
             font-size: 14px;
+        }
+
+        .zoom_button {
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .zoom_value {
+            min-width: 52px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .toolbar_divider {
+            display: block;
+            width: 1px;
+            height: 18px;
+            margin: 0 2px;
+            background: var(--gantt-border-soft);
         }
 
         .gantt_tree_content {
@@ -256,6 +291,11 @@ export class GanttActivityComponent implements OnInit, DoCheck {
     public upTriangle: string = '&#x25b2;' // BLACK UP-POINTING TRIANGLE
     public downTriangle: string = '&#x25bc;'; // BLACK DOWN-POINTING TRIANGLE
     public zoom: EventEmitter<string> = new EventEmitter<string>();
+    public timelineZoom: number = 1;
+    public minTimelineZoom: number = 0.5;
+    public maxTimelineZoom: number = 2;
+    public timelineZoomStep: number = 0.25;
+    public wheelTimelineZoomStep: number = 0.1;
     public activityActions = {
         expanded: false,
         expandedIcon: this.downTriangle
@@ -483,6 +523,57 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         (document.querySelector('.gantt_activity') as HTMLElement).scrollLeft = 0 // reset scroll left, replace with @ViewChild?
     }
 
+    zoomTimeline(delta: number): void {
+        this.setTimelineZoom(this.timelineZoom + delta);
+    }
+
+    resetTimelineZoom(scrollContainer?: HTMLElement): void {
+        this.setTimelineZoom(1, scrollContainer);
+    }
+
+    onTimelineWheel(event: WheelEvent, scrollContainer: HTMLElement): void {
+        if (!event.ctrlKey && !event.metaKey && !event.altKey) {
+            return;
+        }
+
+        event.preventDefault();
+
+        const delta = event.deltaY > 0 ? -this.wheelTimelineZoomStep : this.wheelTimelineZoomStep;
+        this.setTimelineZoom(this.timelineZoom + delta, scrollContainer, event.clientX);
+    }
+
+    getTimelineZoomLabel(): string {
+        return `${Math.round(this.timelineZoom * 100)}%`;
+    }
+
+    private setTimelineZoom(nextZoom: number, scrollContainer?: HTMLElement, focalClientX?: number): void {
+        const previousWidth = this.containerWidth || this.calculateContainerWidth();
+        const clampedZoom = Math.min(this.maxTimelineZoom, Math.max(this.minTimelineZoom, Number(nextZoom.toFixed(2))));
+
+        if (clampedZoom === this.timelineZoom) {
+            return;
+        }
+
+        let anchorRatio: number | null = null;
+        let focalOffset = 0;
+
+        if (scrollContainer && previousWidth > 0) {
+            const rect = scrollContainer.getBoundingClientRect();
+            focalOffset = focalClientX == null ? scrollContainer.clientWidth / 2 : focalClientX - rect.left;
+            anchorRatio = (scrollContainer.scrollLeft + focalOffset) / previousWidth;
+        }
+
+        this.timelineZoom = clampedZoom;
+        this.containerWidth = this.calculateContainerWidth();
+        this.setDimensions();
+
+        if (scrollContainer && anchorRatio !== null) {
+            window.requestAnimationFrame(() => {
+                scrollContainer.scrollLeft = Math.max(0, anchorRatio * this.containerWidth - focalOffset);
+            });
+        }
+    }
+
     /** Expand the gantt grid and activity area height */
     expand(force?: boolean): void {
         var verticalScroll = document.querySelector('.gantt_vertical_scroll') as HTMLElement;
@@ -550,11 +641,15 @@ export class GanttActivityComponent implements OnInit, DoCheck {
     }
 
     public calculateContainerWidth(): number {
+        let width: number;
+
         if (this.zoomLevel === Zooming[Zooming.hours]) {
-            return this.ganttService.TIME_SCALE.length * this.ganttService.hourCellWidth * 24 + this.ganttService.hourCellWidth
+            width = this.ganttService.TIME_SCALE.length * this.ganttService.hourCellWidth * 24 + this.ganttService.hourCellWidth
         } else {
-            return this.ganttService.TIME_SCALE.length * this.ganttService.cellWidth + this.ganttService.cellWidth;
+            width = this.ganttService.TIME_SCALE.length * this.ganttService.cellWidth + this.ganttService.cellWidth;
         }
+
+        return Math.round(width * this.timelineZoom);
     }
 
     public setSizes(): void {
