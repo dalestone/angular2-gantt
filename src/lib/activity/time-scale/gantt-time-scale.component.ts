@@ -7,11 +7,17 @@ import { Zooming } from '../../shared/interfaces';
     template: `
         <div class="time_scale" [ngStyle]="setTimescaleStyle()">
             <div class="time_scale_line" [ngStyle]="setTimescaleLineStyle('none')">
-                <div class="time_scale_cell" *ngFor="let date of timeScale" [ngStyle]="setTimescaleCellStyle()" [ngClass]="(isDayWeekend(date)) ? 'weekend' : ''">{{date | date: 'dd-MM-yyyy'}}</div>
+                @for (date of timeScale; track date.getTime()) {
+                <div class="time_scale_cell" [ngStyle]="setTimescaleCellStyle()" [ngClass]="(isDayWeekend(date)) ? 'weekend' : ''">{{date | date: 'dd-MM-yyyy'}}</div>
+                }
             </div>
-            <div *ngIf="zoomLevel === 'hours'" class="time_scale_line" [ngStyle]="setTimescaleLineStyle('1px solid #cecece')">
-                <div class="time_scale_cell" *ngFor="let hour of getHours()" [ngStyle]="{ 'width': ganttService.hourCellWidth + 'px' }">{{hour}}</div>
+            @if (zoomLevel === 'hours') {
+            <div class="time_scale_line" [ngStyle]="setTimescaleLineStyle('1px solid #cecece')">
+                @for (hour of getHours(); track $index) {
+                <div class="time_scale_cell" [ngStyle]="{ 'width': ganttService.hourCellWidth + 'px' }">{{hour}}</div>
+                }
             </div>
+            }
         </div>`,
     styles: [`
         .weekend {
@@ -43,7 +49,8 @@ import { Zooming } from '../../shared/interfaces';
     ],
     providers: [
         GanttService
-    ]
+    ],
+    standalone: false
 })
 export class GanttTimeScaleComponent implements OnInit {
     @Input() timeScale: any;
@@ -51,7 +58,7 @@ export class GanttTimeScaleComponent implements OnInit {
     @Input() zoom: any;
     @Input() zoomLevel: any;
 
-    constructor(private ganttService: GanttService) { }
+    constructor(public ganttService: GanttService) { }
 
     ngOnInit() {
         this.zoom.subscribe((zoomLevel: string) => {
@@ -59,13 +66,13 @@ export class GanttTimeScaleComponent implements OnInit {
         });;
     }
 
-    private setTimescaleStyle() {
+    public setTimescaleStyle() {
         return {
             'width': this.dimensions.width + 'px'
         };
     }
 
-    private setTimescaleLineStyle(borderTop: string) {
+    public setTimescaleLineStyle(borderTop: string) {
         return {
             'height': this.ganttService.rowHeight + 'px',
             'line-height': this.ganttService.rowHeight + 'px',
@@ -74,7 +81,7 @@ export class GanttTimeScaleComponent implements OnInit {
         };
     }
 
-    private setTimescaleCellStyle() {
+    public setTimescaleCellStyle() {
         var width = this.ganttService.cellWidth;
         var hoursInDay = 24;
         var hourSeperatorPixels = 23; // we don't include the first 
@@ -88,11 +95,11 @@ export class GanttTimeScaleComponent implements OnInit {
         };
     }
 
-    private isDayWeekend(date: Date): boolean {
+    public isDayWeekend(date: Date): boolean {
         return this.ganttService.isDayWeekend(date);
     }
 
-    private getHours(): string[] {
+    public getHours(): string[] {
         return this.ganttService.getHours(this.timeScale.length);
     }
 }

@@ -20,15 +20,18 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
     </div>
     <div class="grid" #ganttGrid [ngStyle]="{ 'height': ganttActivityHeight, 'width': ganttService.gridWidth + 'px'}">
     <div class="grid_scale" [ngStyle]="setGridScaleStyle()">
-        <div class="grid_head_cell" *ngFor="let column of gridColumns" [style.width]="column.width + 'px'" [style.left]="column.left + 'px'">
-            <label>{{column.name}} <span *ngIf="column.name === 'Duration'" style="font-weight:bold">{{ ganttService.calculateTotalDuration(ganttService.TASK_CACHE) }}</span></label>            
+        @for (column of gridColumns; track column.name) {
+        <div class="grid_head_cell" [style.width]="column.width + 'px'" [style.left]="column.left + 'px'">
+            <label>{{column.name}} @if (column.name === 'Duration') { <span style="font-weight:bold">{{ ganttService.calculateTotalDuration(ganttService.TASK_CACHE) }}</span> }</label>            
         </div>
+        }
         <div class="grid_head_cell">
             <button (click)="toggleAllChildren()" style="background-color:whitesmoke; border:none; font-size:21px; cursor:pointer">{{ treeExpanded ? '&#x25b2;' : '&#x25bc;' }}</button>
         </div>
     </div>
     <div class="grid_data" #ganttGridData [ngStyle]="{ 'height': ganttService.calculateGanttHeight() }">
-    <div #row *ngFor="let data of ganttService.groupData(ganttService.TASK_CACHE)" (click)="toggleChildren(row, data)" class="grid_row" [ngStyle]="setGridRowStyle(ganttService.isParent(data.treePath))" [attr.data-id]="ganttService.setIdPrefix(data.id)"  [attr.data-isParent]="ganttService.isParent(data.treePath)" [attr.data-parentid]="ganttService.setIdPrefix(data.parentId)">
+    @for (data of ganttService.groupData(ganttService.TASK_CACHE); track data.id) {
+    <div #row (click)="toggleChildren(row, data)" class="grid_row" [ngStyle]="setGridRowStyle(ganttService.isParent(data.treePath))" [attr.data-id]="ganttService.setIdPrefix(data.id)"  [attr.data-isParent]="ganttService.isParent(data.treePath)" [attr.data-parentid]="ganttService.setIdPrefix(data.parentId)">
             <div class="grid_cell" [ngStyle]="{ 'width': gridColumns[0].width + 'px' }">
                 <div [innerHTML]="getStatusIcon(data.status, data.percentComplete)" [style.color]="getStatusIconColor(data.status, data.percentComplete)"></div>
             </div>
@@ -43,6 +46,7 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
                 <div> {{ ganttService.calculateDuration(data) }}</div>
             </div>
         </div>
+    }
     </div>
     </div><div class="gantt_activity" (window:resize)="onResize($event)" [ngStyle]="{ 'height': ganttActivityHeight, 'width': ganttActivityWidth - 18 + 'px'}">
         <time-scale [zoom]="zoom" [zoomLevel]="zoomLevel" [timeScale]="ganttService.TIME_SCALE" [dimensions]="dimensions"></time-scale>
@@ -167,6 +171,7 @@ import { IGanttOptions, Zooming } from '../shared/interfaces';
             padding-left:15px;
         }
     `],
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.Default
 })
 export class GanttActivityComponent implements OnInit, DoCheck {
@@ -174,39 +179,39 @@ export class GanttActivityComponent implements OnInit, DoCheck {
     @Input() options: any;
     @Output() onGridRowClick: EventEmitter<any> = new EventEmitter<any>();
 
-    private upTriangle: string = '&#x25b2;' // BLACK UP-POINTING TRIANGLE
-    private downTriangle: string = '&#x25bc;'; // BLACK DOWN-POINTING TRIANGLE
-    private zoom: EventEmitter<string> = new EventEmitter<string>();
-    private activityActions = {
+    public upTriangle: string = '&#x25b2;' // BLACK UP-POINTING TRIANGLE
+    public downTriangle: string = '&#x25bc;'; // BLACK DOWN-POINTING TRIANGLE
+    public zoom: EventEmitter<string> = new EventEmitter<string>();
+    public activityActions = {
         expanded: false,
         expandedIcon: this.downTriangle
     }
 
-    private timeScale: any;
+    public timeScale: any;
 
-    private start: Date;
-    private end: Date;
-    private containerHeight: any;
-    private containerWidth: any;
+    public start: Date;
+    public end: Date;
+    public containerHeight: any;
+    public containerWidth: any;
 
-    private activityContainerSizes: any;
-    private ganttActivityHeight: any;
-    private ganttActivityWidth: any;
-    private zoomLevel: string = Zooming[Zooming.hours];
+    public activityContainerSizes: any;
+    public ganttActivityHeight: any;
+    public ganttActivityWidth: any;
+    public zoomLevel: string = Zooming[Zooming.hours];
 
-    private treeExpanded = false;
+    public treeExpanded = false;
 
-    private scale: any = {
+    public scale: any = {
         start: null,
         end: null
     };
 
-    private dimensions = {
+    public dimensions = {
         height: 0,
         width: 0
     };
 
-    private data: any[] = [];
+    public data: any[] = [];
 
     public gridColumns: any[] = [
         { name: '', left: 0, width: 16 },
@@ -217,7 +222,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
 
     constructor(
         public elem: ElementRef,
-        private ganttService: GanttService) {
+        public ganttService: GanttService) {
     }
 
     ngOnInit() {
@@ -263,7 +268,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         try {
             let isParent: boolean = "true" === rowElem.getAttribute('data-isparent');
             let parentId: string = rowElem.getAttribute('data-parentid').replace("_", ""); // remove id prefix
-            let children: any = document.querySelectorAll('[data-parentid=' + rowElem.getAttribute('data-parentid') + '][data-isparent=false]');
+            let children: any = document.querySelectorAll('[data-parentid="' + rowElem.getAttribute('data-parentid') + '"][data-isparent=false]');
 
             // use the task cache to allow deleting of items without polluting the project.tasks array
             if (isParent) {
@@ -401,12 +406,12 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         this.zoom.emit(this.zoomLevel);
         this.containerWidth = this.calculateContainerWidth();
         this.setDimensions();
-        document.querySelector('.gantt_activity').scrollLeft = 0 // reset scroll left, replace with @ViewChild?
+        (document.querySelector('.gantt_activity') as HTMLElement).scrollLeft = 0 // reset scroll left, replace with @ViewChild?
     }
 
     /** Expand the gantt grid and activity area height */
     expand(force?: boolean): void {
-        var verticalScroll = document.querySelector('.gantt_vertical_scroll');
+        var verticalScroll = document.querySelector('.gantt_vertical_scroll') as HTMLElement;
         var ganttActivityHeight: string = `${this.ganttService.TASK_CACHE.length * this.ganttService.rowHeight + this.ganttService.rowHeight * 3}px`;
 
         if (force && this.activityActions.expanded) {
@@ -452,7 +457,7 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         return '';
     }
 
-    private setGridScaleStyle() {
+    public setGridScaleStyle() {
         var height = this.ganttService.rowHeight;
 
         if (this.zoomLevel === Zooming[Zooming.hours]) {
@@ -466,11 +471,11 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         };
     }
 
-    private calculateContainerHeight(): number {
+    public calculateContainerHeight(): number {
         return this.ganttService.TASK_CACHE.length * this.ganttService.rowHeight;
     }
 
-    private calculateContainerWidth(): number {
+    public calculateContainerWidth(): number {
         if (this.zoomLevel === Zooming[Zooming.hours]) {
             return this.ganttService.TIME_SCALE.length * this.ganttService.hourCellWidth * 24 + this.ganttService.hourCellWidth
         } else {
@@ -478,120 +483,8 @@ export class GanttActivityComponent implements OnInit, DoCheck {
         }
     }
 
-    private setSizes(): void {
+    public setSizes(): void {
         this.ganttActivityHeight = this.activityContainerSizes.height + 'px';
         this.ganttActivityWidth = this.activityContainerSizes.width;
     }
-
 }
-
-
-//** <tree-builder [nodes]="ganttService.transformData(project.tasks)"></tree-builder> */
-// @Component({
-//     selector: 'tree-builder',
-//     template: '<tree-parent-repeater *ngFor="let node of nodes" [node]="node"></tree-parent-repeater>'
-// })
-// export class TreeBuilder {
-//     _nodes: any = [
-//         {
-//             name: "testing", children: [
-//                 { name: "testing2", children: [{ name: "testing4", children: [] }] }
-//             ]
-//         },
-//         {
-//             name: "testing3", children: []
-//         }
-//     ];
-
-//     @Input() nodes: any;
-// }
-
-// @Component({
-//     selector: 'tree-parent-repeater',
-//     styles: [`
-//         .grid_row {
-//             box-sizing: border-box;
-//             border-bottom: 1px solid #e0e0e0;
-//             background-color: #fff;
-//             position: relative;
-//             -webkit-user-select: none;
-//             cursor:pointer;
-//             height:25px;
-//             line-height:25px;
-//             font-size:16px;
-//         }
-
-//         .grid_row:hover {
-//             background-color: whitesmoke;
-//         }
-//   `],
-//     template: `
-//     <div>
-//         <div (click)="toggle()" class="grid_row">
-//             <div style="display:inline-block; width:10px; padding-left:4px; font-size:14px">{{ expanded !== true ? '&#x25b6;' : '&#x25bc;' }}</div>
-//             <div style="display:inline-block; width:350px">{{ node.name }}</div>
-//             <div style="display:inline-block; width:40px">{{ node.percentComplete }}</div>
-//             <div style="display:inline-block; width:40px">0</div>
-//         </div>
-//         <tree-children-repeater *ngIf="expanded" [root]="node"></tree-children-repeater>
-//     </div>
-//   `
-// })
-// export class TreeParentRepeater {
-//     @Input() node: any;
-//     expanded: boolean = true;
-
-//     toggle = () => {
-//         if (this.expanded) {
-//             this.expanded = false;
-//         } else {
-//             this.expanded = true;
-//         }
-//     }
-// }
-
-// @Component({
-//     selector: 'tree-children-repeater',
-//     styles: [`
-//         .grid_row {
-//             box-sizing: border-box;
-//             border-bottom: 1px solid #e0e0e0;
-//             background-color: #fff;
-//             position: relative;
-//             -webkit-user-select: none;
-//             cursor:pointer;
-//             height:25px;
-//             line-height:25px;
-//             font-size:16px;
-//         }
-
-//         .grid_row:hover {
-//             background-color: whitesmoke;
-//         }
-//   `],
-//     template: `
-//     <div *ngIf="root.children.length > 0">
-//       <div *ngFor="let child of root.children" style="padding-left:20px">
-//           <div (click)="toggle()" class="grid_row">
-//             <div style="display:inline-block; width:10px; padding-left:4px; font-size:14px">{{ expanded !== true ? '&#x25b6;' : '&#x25bc;' }}</div>
-//             <div style="display:inline-block; width:330px">{{ child.name }}</div>
-//             <div style="display:inline-block; width:40px">{{ child.percentComplete }}</div>
-//             <div style="display:inline-block; width:40px">0</div>
-//           </div>
-//           <tree-children-repeater *ngIf="expanded" [root]="child"></tree-children-repeater>
-//       </div>
-//     </div>
-//   `
-// })
-// export class TreeChildrenRepeater {
-//     @Input() root: any;
-//     expanded: boolean = true;
-
-//     toggle = () => {
-//         if (this.expanded) {
-//             this.expanded = false;
-//         } else {
-//             this.expanded = true;
-//         }
-//     }
-// }

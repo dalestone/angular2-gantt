@@ -6,7 +6,8 @@ import { Zooming } from '../../shared/interfaces';
     selector: 'activity-bars',
     template: `
     <div class="gantt_activity_bars_area" [ngStyle]="{ 'height': containerHeight + 'px', 'width': containerWidth + 'px' }">
-        <div #bar class="gantt_activity_line" *ngFor="let task of ganttService.groupData(tasks); let i = index" [ngStyle]="drawBar(task, i)">
+        @for (task of ganttService.groupData(tasks); track task.id; let i = $index) {
+        <div #bar class="gantt_activity_line" [ngStyle]="drawBar(task, i)">
             <div class="gantt_activity_progress" [ngStyle]="drawProgress(task, bar)"></div>
             <div class="gantt_activity_progress_drag" style="left: 518px"></div>
             <div class="gantt_activity_content"></div>
@@ -17,6 +18,7 @@ import { Zooming } from '../../shared/interfaces';
                 <div class="gantt_link_point"></div>
             </div>
         </div>
+        }
     </div>
     `,
     styles: [`
@@ -91,7 +93,8 @@ import { Zooming } from '../../shared/interfaces';
     `],
     providers: [
         GanttService
-    ]
+    ],
+    standalone: false
 })
 export class GanttActivityBarsComponent implements OnInit {
     @Input() timeScale: any;
@@ -100,10 +103,10 @@ export class GanttActivityBarsComponent implements OnInit {
     @Input() zoom: any;
     @Input() zoomLevel: any;
 
-    private containerHeight: number = 0;
-    private containerWidth: number = 0;
+    public containerHeight: number = 0;
+    public containerWidth: number = 0;
 
-    constructor(private ganttService: GanttService) { }
+    constructor(public ganttService: GanttService) { }
 
     ngOnInit() {
         this.containerHeight = this.dimensions.height;
@@ -125,11 +128,11 @@ export class GanttActivityBarsComponent implements OnInit {
 
         function doDrag(e: any) {
             let cellWidth = ganttService.cellWidth;
-            let barWidth = startBarWidth - e.clientX + startX;
+            let barWidth = parseFloat(startBarWidth) - e.clientX + startX;
             let days = Math.round(barWidth / cellWidth);
 
             bar.style.width = days * cellWidth + days;
-            bar.style.left = (startBarLeft - (days * cellWidth) - days);
+            bar.style.left = (parseFloat(startBarLeft) - (days * cellWidth) - days) + 'px';
         }
 
         this.addMouseEventListeners(doDrag);
@@ -148,7 +151,7 @@ export class GanttActivityBarsComponent implements OnInit {
 
         function doDrag(e: any) {
             let cellWidth = ganttService.cellWidth;
-            let barWidth = startBarWidth + e.clientX - startX;
+            let barWidth = parseFloat(startBarWidth) + e.clientX - startX;
             let days = Math.round(barWidth / cellWidth);
 
             if (barWidth < cellWidth) {
@@ -172,7 +175,7 @@ export class GanttActivityBarsComponent implements OnInit {
 
         function doDrag(e: any) {
             let cellWidth = ganttService.cellWidth;
-            let barLeft = startBarLeft + e.clientX - startX;
+            let barLeft = parseFloat(startBarLeft) + e.clientX - startX;
             let days = Math.round(barLeft / cellWidth);
 
             // TODO: determine how many days the bar can be moved
@@ -194,7 +197,7 @@ export class GanttActivityBarsComponent implements OnInit {
         return false;
     }
 
-    private drawBar(task: any, index: number) {
+    public drawBar(task: any, index: number) {
         let style = {};
 
         if (this.zoomLevel === Zooming[Zooming.hours]) {
@@ -205,7 +208,7 @@ export class GanttActivityBarsComponent implements OnInit {
         return style;
     }
 
-    private drawProgress(task: any, bar: any):any {
+    public drawProgress(task: any, bar: any):any {
         var barStyle = this.ganttService.getBarProgressStyle(task.status);
         var width = this.ganttService.calculateBarProgress(this.ganttService.getComputedStyle(bar, 'width'), task.percentComplete);
 

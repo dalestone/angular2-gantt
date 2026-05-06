@@ -1,7 +1,7 @@
 {
     "name": "ng2-gantt",
     "version": "1.11.1-alpha.9",
-    "description": "Angular 2 Gantt",
+    "description": "Angular Gantt component",
     "repository": {
         "type": "git",
         "url": "https://github.com/dalestone/angular2-gantt.git"
@@ -9,9 +9,7 @@
     "private": false,
     "keywords": [
         "angular",
-        "material",
         "gantt",
-        "angular2",
         "gantt html"
     ],
     "license": "MIT",
@@ -20,9 +18,8 @@
     },
     "homepage": "https://github.com/dalestone/angular2-gantt/#readme",
     "peerDependencies": {
-        "@angular/common": "2.4.5",
-        "@angular/compiler": "2.4.5",
-        "@angular/core": "2.4.5"
+        "@angular/common": "^21.2.0",
+        "@angular/core": "^21.2.0"
     },
     "dependencies": {
         

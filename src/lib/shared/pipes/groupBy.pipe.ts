@@ -8,7 +8,10 @@ import { Pipe, PipeTransform } from '@angular/core';
  *   {{ [ { id: '1'}] |  groupBy: }}
  *   formats to: []
 */
-@Pipe({name: 'groupBy'})
+@Pipe({
+  name: 'groupBy',
+  standalone: false
+})
 export class GroupByPipe implements PipeTransform {
   transform(array: any[], f: any): any[] {
       var groups = {};

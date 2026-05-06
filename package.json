@@ -1,16 +1,15 @@
 {
   "name": "angular2-gantt",
   "version": "1.0.0-alpha.1",
-  "description": "Gantt component for Angular 2",
+  "description": "Gantt component demo built with modern Angular",
   "bugs": "https://github.com/dalestone/angular2-gantt/issues",
   "license": "MIT",
-  "angular-cli": {},
+  "type": "module",
   "scripts": {
     "start": "ng serve",
-    "lint": "tslint \"src/**/*.ts\"",
-    "test": "ng test",
-    "pree2e": "webdriver-manager update",
-    "e2e": "protractor"
+    "dev": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development"
   },
   "repository": {
     "type": "git",
@@ -18,36 +17,22 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/common": "^2.4.5",
-    "@angular/compiler": "^2.4.5",
-    "@angular/core": "^2.4.5",
-    "@angular/forms": "^2.4.5",
-    "@angular/http": "^2.4.5",
-    "@angular/platform-browser": "^2.4.5",
-    "@angular/platform-browser-dynamic": "^2.4.5",
-    "@angular/router": "^3.4.5",
-    "angular2-tree-component": "^2.7.0",
-    "core-js": "^2.4.1",
-    "ng2-gantt": "1.0.0-alpha.1",
-    "rxjs": "5.0.0-beta.12",
-    "ts-helpers": "^1.1.1",
-    "zone.js": "^0.6.23"
+    "@angular/common": "^21.2.0",
+    "@angular/compiler": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@angular/forms": "^21.2.0",
+    "@angular/platform-browser": "^21.2.0",
+    "@tailwindcss/postcss": "^4.2.4",
+    "postcss": "^8.5.14",
+    "rxjs": "^7.8.2",
+    "tailwindcss": "^4.2.4",
+    "tslib": "^2.8.1",
+    "zone.js": "^0.15.1"
   },
   "devDependencies": {
-    "@types/jasmine": "^2.2.30",
-    "@types/node": "^6.0.42",
-    "angular-cli": "1.0.0-beta.18",
-    "codelyzer": "1.0.0-beta.1",
-    "jasmine-core": "2.4.1",
-    "jasmine-spec-reporter": "2.5.0",
-    "karma": "1.2.0",
-    "karma-chrome-launcher": "^2.0.0",
-    "karma-cli": "^1.0.1",
-    "karma-jasmine": "^1.0.2",
-    "karma-remap-istanbul": "^0.2.1",
-    "protractor": "4.0.9",
-    "ts-node": "1.2.1",
-    "tslint": "3.13.0",
-    "typescript": "~2.0.3"
+    "@angular/build": "^21.2.0",
+    "@angular/cli": "^21.2.0",
+    "@angular/compiler-cli": "^21.2.0",
+    "typescript": "~5.9.3"
   }
 }

@@ -30,7 +30,8 @@ import { Component, Input } from '@angular/core';
             float: right;
             padding: 6px;
         }
-    `] 
+    `],
+    standalone: false
 })
 export class GanttHeaderComponent {
     @Input() name:any;

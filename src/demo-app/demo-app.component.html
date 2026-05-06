@@ -1,46 +1,119 @@
-<h1>Angular 2 Gantt Demo</h1>
-<gantt [project]="project" [options]="options" (onGridRowClick)="gridRowClicked($event)"></gantt>
+<main class="min-h-screen bg-[#f6f7f9] px-4 py-6 text-slate-950 sm:px-6 lg:px-8">
+    <div class="mx-auto flex max-w-7xl flex-col gap-6">
+        <header class="flex flex-col gap-4 border-b border-slate-200 pb-5 lg:flex-row lg:items-end lg:justify-between">
+            <div class="max-w-3xl">
+                <p class="text-sm font-medium uppercase tracking-wide text-cyan-700">Angular Gantt</p>
+                <h1 class="mt-1 text-3xl font-semibold tracking-normal text-slate-950 sm:text-4xl">Project Timeline</h1>
+                <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+                    A modern Angular demo shell for editing task data and previewing timeline changes in the Gantt component.
+                </p>
+            </div>
 
-<div *ngIf="project">
-    <h1>Project</h1>
-    <input type="text" [(ngModel)]="project.name"/>
-    <table>
-        <thead>
-            <tr>
-                <td>Id</td>
-                <td>Name</td>
-                <td>Tree Path</td>
-                <td>Percent Complete</td>
-                <td>Start Date</td>
-                <td>End Date</td>
-                <td></td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let task of project.tasks">
-                <td><input style="width:100%" type="text" [(ngModel)]="task.id"/></td>
-                <td><input style="width:100%" type="text" [(ngModel)]="task.name"/></td>
-                <td><input type="width:100%" type="text" [(ngModel)]="task.treePath"/></td>
-                <td><input type="number" [(ngModel)]="task.percentComplete" min="0" max="100"/>
-                <td><input type="text" [(ngModel)]="task.start"/></td>
-                <td><input type="text" [(ngModel)]="task.end"/></td>
-            </tr>
-        </tbody>
-    </table>
+            <div class="grid grid-cols-3 gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                <div>
+                    <p class="text-xs font-medium text-slate-500">Tasks</p>
+                    <p class="mt-1 text-xl font-semibold text-slate-950">{{ project.tasks.length }}</p>
+                </div>
+                <div>
+                    <p class="text-xs font-medium text-slate-500">Scale</p>
+                    <p class="mt-1 text-xl font-semibold text-slate-950">{{ options.zooming }}</p>
+                </div>
+                <div>
+                    <p class="text-xs font-medium text-slate-500">Started</p>
+                    <p class="mt-1 text-sm font-semibold text-slate-950">{{ project.startDate | date: 'MMM d' }}</p>
+                </div>
+            </div>
+        </header>
 
-    <h1>Playground</h1>
-    Task Status: 
-    <select #taskStatus>
-        <option>Error</option>
-        <option>Warning</option>
-        <option>Information</option>
-        <option>Completed</option>
-    </select>
-    <button (click)="createTask(taskStatus)">Create Task</button>
-    <button (click)="updateTasks()">Update Tasks Percent Complete</button>
-    <button (click)="loadBigDataSet()">Load big dataset</button>
+        <section class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+            <gantt [project]="project" [options]="options" (onGridRowClick)="gridRowClicked($event)"></gantt>
+        </section>
 
-    <h1>Output</h1>
-    <p>{{ project | json }}</p>
+        @if (project) {
+        <section class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+            <div class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+                <div class="flex flex-col gap-3 border-b border-slate-200 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <h2 class="text-lg font-semibold text-slate-950">Project Tasks</h2>
+                        <p class="mt-1 text-sm text-slate-500">Edit task fields and the chart updates from the same project model.</p>
+                    </div>
+                    <input
+                        class="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-950 shadow-sm outline-none transition focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20 sm:w-72"
+                        type="text"
+                        [(ngModel)]="project.name"
+                        aria-label="Project name"
+                    />
+                </div>
 
-</div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-[1040px] divide-y divide-slate-200 text-left text-sm">
+                        <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                            <tr>
+                                <th class="px-4 py-3">Id</th>
+                                <th class="px-4 py-3">Name</th>
+                                <th class="px-4 py-3">Tree Path</th>
+                                <th class="px-4 py-3">Percent</th>
+                                <th class="px-4 py-3">Start Date</th>
+                                <th class="px-4 py-3">End Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 bg-white">
+                            @for (task of project.tasks; track task.id) {
+                            <tr class="transition hover:bg-cyan-50/60">
+                                <td class="px-4 py-3">
+                                    <input class="w-44 rounded-md border border-slate-200 bg-white px-2 py-1.5 text-xs text-slate-700 outline-none focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20" type="text" [(ngModel)]="task.id"/>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <input class="w-56 rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 outline-none focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20" type="text" [(ngModel)]="task.name"/>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <input class="w-52 rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-700 outline-none focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20" type="text" [(ngModel)]="task.treePath"/>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <input class="w-24 rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-900 outline-none focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20" type="number" [(ngModel)]="task.percentComplete" min="0" max="100"/>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <input class="w-52 rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-700 outline-none focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20" type="text" [(ngModel)]="task.start"/>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <input class="w-52 rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-700 outline-none focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20" type="text" [(ngModel)]="task.end"/>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <aside class="flex flex-col gap-6">
+                <section class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+                    <h2 class="text-lg font-semibold text-slate-950">Playground</h2>
+
+                    <label class="mt-4 block text-sm font-medium text-slate-700" for="taskStatus">Task Status</label>
+                    <select
+                        class="mt-2 h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-950 shadow-sm outline-none transition focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20"
+                        id="taskStatus"
+                        #taskStatus
+                    >
+                        <option>Error</option>
+                        <option>Warning</option>
+                        <option>Information</option>
+                        <option>Completed</option>
+                    </select>
+
+                    <div class="mt-4 grid gap-2">
+                        <button class="rounded-md bg-cyan-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2" (click)="createTask(taskStatus)">Create Task</button>
+                        <button class="rounded-md border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2" (click)="updateTasks()">Update Progress</button>
+                        <button class="rounded-md border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2" (click)="loadBigDataSet()">Load Big Dataset</button>
+                    </div>
+                </section>
+
+                <section class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+                    <h2 class="text-lg font-semibold text-slate-950">Output</h2>
+                    <pre class="mt-4 max-h-96 overflow-auto rounded-md bg-slate-950 p-4 text-xs leading-5 text-slate-100">{{ project | json }}</pre>
+                </section>
+            </aside>
+        </section>
+        }
+    </div>
+</main>

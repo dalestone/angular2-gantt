@@ -1,39 +1,96 @@
-# Angular 2 Gantt 
-[![npm version](https://badge.fury.io/js/angular2-gantt.svg)](https://www.npmjs.com/package/angular2-gantt)
-[![Build Status](https://travis-ci.org/dalestone/angular2-gantt.svg?branch=master)](https://travis-ci.org/dalestone/angular2-gantt)
+# Angular Gantt
 
-This is the home for the Angular 2 gantt component. This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.18.
+A Gantt chart demo application built with modern Angular. The project started as an Angular 2 component experiment and has been migrated to the current Angular CLI application build system with Tailwind CSS for the demo UI.
 
-The aim of this project is to make a material design angular 2 gantt component.
+## Stack
 
-### Project status
-Angular 2 gantt is currently in alpha and under active development.
-During alpha, breaking API and behaviour changes will be occuring regularly.
+- Angular 21
+- Angular CLI application builder
+- Vite-backed Angular dev server
+- Tailwind CSS 4
+- TypeScript 5.9
+- RxJS 7
 
-### Getting Started
-If you want to view the and modify the source directly do the following:
+## Getting Started
 
-1. git clone https://github.com/dalestone/angular2-gantt.git
-2. npm install -g angular-cli
-2. npm install
-3. npm start
+Install dependencies:
 
-### Install Angular 2 Gantt (Webpack only)
-`npm install ng2-gantt --save`
-
-Import the `ng2-gantt` NgModule into your app module
-
+```bash
+npm install
 ```
-import { GanttModule } from 'ng2-gantt';
-// other imports
-@NgModule({
-    imports: [ GanttModule ]
-})
-export class AppModule { }
+
+Run the local development server:
+
+```bash
+npm start
 ```
+
+Open the app at:
+
+```text
+http://127.0.0.1:4200/
+```
+
+You can also run:
+
+```bash
+npm run dev
+```
+
+## Build
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+Build output is written to:
+
+```text
+dist/angular2-gantt/browser
+```
+
+## Project Structure
+
+```text
+src/demo-app
+```
+
+Contains the Angular demo application shell, global styles, and sample project/task data.
+
+```text
+src/lib
+```
+
+Contains the reusable Gantt module, components, services, pipes, and shared interfaces.
+
+Important files:
+
+- `angular.json` - Angular workspace and build configuration
+- `tsconfig.json` - shared TypeScript configuration
+- `tsconfig.app.json` - application TypeScript entrypoints
+- `.postcssrc.json` - Tailwind CSS PostCSS integration
+- `src/demo-app/styles.css` - global styles and Tailwind import
+
+## Styling
+
+Tailwind CSS is wired through PostCSS:
+
+```css
+@import "tailwindcss";
+```
+
+The demo shell uses Tailwind utility classes for layout, tables, controls, and panels. The Gantt component still keeps most of its original component-local styles so the chart internals remain self-contained.
 
 ## Demo
+
 ![Demo](./docs/images/demo.gif)
 
-## Browser support
-Angular 2 Gantt supports the most recent versions of major browsers: Chrome (including Android), Firefox, Safari (including iOS), and IE11 / Edge.
+## Status
+
+This project is still alpha-quality and intended as a working demo/migration base. The API and component internals may change as the Gantt component is modernized further.
+
+## License
+
+MIT

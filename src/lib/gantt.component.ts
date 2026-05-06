@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { NgStyle } from '@angular/common';
 import { GanttService } from './shared/services/gantt.service';
 import { IGanttOptions, Project } from './shared/interfaces';
 
@@ -24,11 +23,12 @@ import { IGanttOptions, Project } from './shared/interfaces';
             margin-top: 0px;
         }
     `],
+    standalone: false,
     providers: []
 })
 export class GanttComponent implements OnInit {
-    private _project: Project;
-    private _options: IGanttOptions;
+    public _project: Project;
+    public _options: IGanttOptions;
 
     //TODO(dale): this may be causing an issue in the tree builder?
     @Input()
@@ -53,7 +53,7 @@ export class GanttComponent implements OnInit {
 
     @Output() onGridRowClick: EventEmitter<any> = new EventEmitter<any>();
     
-    private ganttContainerWidth: number;
+    public ganttContainerWidth: number;
 
     constructor(private ganttService: GanttService) { }
 

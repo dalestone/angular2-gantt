@@ -13,7 +13,8 @@ import { Component, Input } from '@angular/core';
         .gantt-footer-actions {
             float:right;
         }
-    `]
+    `],
+    standalone: false
 })
 export class GanttFooterComponent {
     @Input() project: any;

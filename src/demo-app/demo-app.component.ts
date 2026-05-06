@@ -4,6 +4,7 @@ import { Project, IGanttOptions, Zooming, Task } from '../lib';
 @Component({
     selector: 'demo-app',
     templateUrl: './demo-app.component.html',
+    standalone: false,
 })
 export class DemoAppComponent {
 
